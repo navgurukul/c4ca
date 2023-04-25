@@ -1,9 +1,39 @@
+/* import google font-family for logo */
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Bubbles&display=swap');
+
 @font-face {
-  font-family: "Amber";
+  font-family: "Amazon Ember";
   src: url("/fonts/Amazon-Ember-Medium.ttf") format("truetype");
-  font-weight: bold;
+  font-weight: normal;
   font-style: normal;
 }
-h1 {
-  font-family: "Amber";
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Amazon Ember';
+}
+
+main{
+  width: 100%;
+  padding: 64px 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.show{
+  display: block;
+}
+
+.hide{
+  display: none;
 }
