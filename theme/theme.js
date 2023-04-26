@@ -33,7 +33,7 @@ theme = createTheme(theme, {
       fontSize: "18px",
       fontWeight: 500,
       lineHeight: "170%",
-      letterSpacing: 0,
+      letterSpacing: -0.5,
       [theme.breakpoints.down("sm")]: {
         fontSize: "16px",
       },
@@ -82,7 +82,7 @@ theme.components = {
     styleOverrides: {
       select: {padding: '8px 16px', border: '1px solid #2E2E2E'}
     }
-  }
+  },
 };
 
 export default theme
