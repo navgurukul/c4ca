@@ -18,6 +18,7 @@ const InputControl = (props) => {
     <Box sx={{ display: "grid", gap: 1 }}>
       {props.label && <Typography variant="body2">{props.label}</Typography>}
       <Input {...props} />
+      
     </Box>
   );
 };
