@@ -90,6 +90,7 @@ const Profile = () => {
       {router.asPath == "/profile/profile-update" ? (
         <Button
           className="Button"
+          color="primary"
           sx={{ minWidth: 240, display: "block", margin: "32px auto 0" }}
         >
           <Link href="">Save Profile</Link>
@@ -97,6 +98,7 @@ const Profile = () => {
       ) : (
         <Button
           className="Button"
+          color="primary"
           sx={{ minWidth: 240, display: "block", margin: "32px auto 0" }}
         >
           <Link href="/dashboard">Save & Proceed</Link>

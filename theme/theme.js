@@ -5,6 +5,97 @@ let theme = createTheme();
 
 theme = createTheme(theme, {
   breakpoints,
+  palette: {
+    mode: "light",
+    default: {
+      main: "#FFFFFF",
+      light: "#0066FF",
+      // main: "#fff",
+      // dark: will be calculated from palette.secondary.main,
+      contrastText: "#ffffff",
+    },
+    primary: {
+      //Midnight Blue
+      main: "#29458C",
+      light: "#D4DAE8",
+      dark: "#192954",
+    },
+
+    secondary: {
+      // Incandescent
+      main: "#F55C38",
+      light: "#FDDED7",
+      dark: "#933722",
+      contrastText: "#ffffff",
+    },
+
+    pink: {
+      main: "#F091B2",
+      light: "#FCE9F0",
+      dark: "#90576B",
+      contrastText: "#ffffff",
+    },
+
+    typhoon: {
+      main: "#049796",
+      light: "#CDEAEA",
+      dark: "#025B5A",
+      contrastText: "#ffffff",
+    },
+
+    orange: {
+      main: "#FFAD33",
+      light: "#FFEFD6",
+      dark: "#99681F",
+      contrastText: "#ffffff",
+    },
+
+    twilight: {
+      main: "#FFF2F2",
+      light: "#FFF7F7",
+      dark: "#999191",
+      contrastText: "#ffffff",
+    },
+
+    error: {
+      main: "#F44336",
+      light: "#FFE5E3",
+      dark: "#C3362B",
+      contrastText: "#ffffff",
+    },
+
+    success: {
+      main: "#48A145",
+      light: "#E9F5E9",
+      dark: "#3A8137",
+      contrastText: "#ffffff",
+    },
+
+    Grey: {
+      main: "#949494",
+      light: "#DEDEDE",
+      // dark: "#3A8137",
+      contrastText: "#ffffff",
+    },
+
+    text: {
+      primary: "#2E2E2E",
+      secondary: "#6D6D6D",
+      disabled: "#BDBDBD",
+      hint: "#BDBDBD",
+    },
+
+    background: {
+      default: "#FFFFFF",
+      paper: "#FFFFFF",
+    },
+    black: {
+      main: "#2E2E2E",
+      contrastText: "#FFFFFF",
+    },
+    divider: "#949494",
+  },
+
   typography: {
     fontFamily: ["Amazon Ember", "Amazon Ember Display"].join(","),
     fontSize: 18,
