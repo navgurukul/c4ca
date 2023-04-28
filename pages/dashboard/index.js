@@ -29,7 +29,7 @@ const Dashboard = () => {
               index
             ) => {
               return (
-                <Grid item key={index} md={4} sm={6} xs={12}>
+                <Grid item key={index} lg={4} md={6} sm={6} xs={12}>
                   <PathwayCard
                     image={image}
                     title={title}
@@ -56,7 +56,7 @@ const Dashboard = () => {
               index
             ) => {
               return (
-                <Grid item key={index} md={4} sm={6} xs={12}>
+                <Grid item key={index} lg={4} md={6} sm={6} xs={12}>
                   <PathwayCard
                     image={image}
                     title={title}

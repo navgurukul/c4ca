@@ -1,7 +1,7 @@
-import Profile from "@/components/forms/Profile";
-import ProfileUpdateBox from "@/components/forms/ProfileUpdateBox";
-import { Container } from "@mui/material";
 import React from "react";
+import { Container } from "@mui/material";
+import ProfileUpdateBox from "@/components/forms/ProfileUpdateBox";
+import Profile from "@/components/forms/Profile";
 
 const ProfileUpdate = () => {
   return (

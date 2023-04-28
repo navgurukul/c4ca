@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "@/theme/theme";
 import Header from "@/components/header/Header";
 import "@/styles/globals.css";

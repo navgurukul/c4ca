@@ -26,8 +26,8 @@ export const LearnAndPracticePathways = [
   },
   {
     image: '/assets/coding.svg',
-    title: 'Past Lesson Recordings',
-    subtitle: 'Videos',
+    title: 'Practice Scratch on Meraki Web',
+    subtitle: '',
     bgcolor: '#D4DAE8',
     bgcolor1: '#29458C',
   },

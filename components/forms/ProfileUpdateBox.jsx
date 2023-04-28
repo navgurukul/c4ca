@@ -4,15 +4,13 @@ import { useRouter } from "next/router";
 import { breakpoints } from "@/theme/constants";
 import Link from "next/link";
 
-
-const Box = styled('div')({
-  width: "fit-content",
+const Box = styled("div")({
   margin: "0 auto",
   display: "flex",
   alignItems: "center",
   gap: "16px",
   background: "#D4DAE8",
-})
+});
 
 const ProfileUpdateBox = () => {
   const router = useRouter();
@@ -24,25 +22,22 @@ const ProfileUpdateBox = () => {
   return (
     <Box
       sx={{
+        width: isMobileActive ? "100%" : "fit-content",
         flexDirection: isMobileActive ? "column" : "row",
         padding: isMobileActive ? 2 : "8px 8px 8px 32px",
         borderRadius: isMobileActive ? "8px" : "100px",
       }}
     >
-      {router.asPath == "/profile-update" ? (
+      {router.asPath == "/profile/profile-update" ? (
         <>
           <Typography variant="subtitle1">
             Are you a teacher helping students in the hackathon?
           </Typography>
           <Button
-            sx={{
-              minWidth: isMobileActive ? "100%" : 240,
-              background: "#29458c",
-              color: "#ffffff",
-              borderRadius: "100px",
-            }}
+            sx={{ minWidth: isMobileActive ? "100%" : 240 }}
+            className="Button"
           >
-            <Link href="/">Convert to Teacher Profile</Link>
+            <Link href="">Convert to Teacher Profile</Link>
           </Button>
         </>
       ) : (
@@ -51,14 +46,10 @@ const ProfileUpdateBox = () => {
             Please add your personal and team details to complete registration
           </Typography>
           <Button
-            sx={{
-              width: isMobileActive ? "100%" : 240,
-              background: "#29458c",
-              color: "#ffffff",
-              borderRadius: "100px",
-            }}
+            sx={{ minWidth: isMobileActive ? "100%" : 240 }}
+            className="Button"
           >
-            <Link href="/profile-update">Go to Profile</Link>
+            <Link href="/profile/profile-update">Go to Profile</Link>
           </Button>
         </>
       )}

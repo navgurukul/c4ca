@@ -1,12 +1,12 @@
 const { createTheme } = require("@mui/material");
 import { breakpoints } from "./constants";
 
-let theme = createTheme()
+let theme = createTheme();
 
 theme = createTheme(theme, {
   breakpoints,
   typography: {
-    fontFamily: "Amazon Ember",
+    fontFamily: ["Amazon Ember", "Amazon Ember Display"].join(","),
     fontSize: 18,
     h6: {
       fontFamily: "Amazon Ember Display",
@@ -33,7 +33,7 @@ theme = createTheme(theme, {
       fontSize: "18px",
       fontWeight: 500,
       lineHeight: "170%",
-      letterSpacing: -0.5,
+      letterSpacing: -0.3,
       [theme.breakpoints.down("sm")]: {
         fontSize: "16px",
       },
@@ -53,17 +53,16 @@ theme = createTheme(theme, {
       textTransform: "unset",
     },
   },
-})
+});
 
 theme.components = {
   MuiButton: {
     styleOverrides: {
       root: {
-        minWidth: 240,
         height: "48px",
-        padding: "8px 16px",
         "&:hover": {
           backgroundColor: "#29458c",
+          color: "#ffffff",
         },
       },
     },
@@ -80,9 +79,16 @@ theme.components = {
   },
   MuiSelect: {
     styleOverrides: {
-      select: {padding: '8px 16px', border: '1px solid #2E2E2E'}
-    }
+      select: { padding: "8px 16px", border: "1px solid #2E2E2E" },
+    },
+  },
+  MuiContainer: {
+    styleOverrides: {
+      root: {
+        "&.MuiContainer-maxWidthSm": { padding: "0 15px" },
+      },
+    },
   },
 };
 
-export default theme
+export default theme;

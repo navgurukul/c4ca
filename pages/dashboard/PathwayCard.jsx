@@ -37,7 +37,6 @@ const PathwayCard = ({
     <Card
       className={styles.Card}
       sx={{
-        width: isMobileActive ? "100%" : 368,
         padding: isMobileActive ? 2 : 3,
         background: bgcolor,
       }}
