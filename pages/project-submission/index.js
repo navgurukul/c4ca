@@ -1,12 +1,16 @@
-import Completed from "@/components/submission/Completed";
 import React from "react";
+// import Completed from "@/components/submission/Completed";
+import ReSubmission from "@/components/forms/ReSubmission";
+// import Submission from "@/components/forms/Submission";
 
 const ProjectSubmitForm = () => {
-  return(
+  return (
     <>
-      <Completed />
+      {/* <Completed /> */}
+      {/* <Submission /> */}
+      <ReSubmission />
     </>
-  )
-}
+  );
+};
 
-export default ProjectSubmitForm
+export default ProjectSubmitForm;
