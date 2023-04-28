@@ -152,7 +152,7 @@ theme.components = {
       root: {
         height: "48px",
         "&:hover": {
-          backgroundColor: "#29458c",
+          backgroundColor: " #29458C",
           color: "#ffffff",
         },
       },
