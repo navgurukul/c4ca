@@ -1,0 +1,13 @@
+.Card{
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.Icon{
+  width: 24px;
+  height: 24px;
+  align-self: flex-end;
+}
