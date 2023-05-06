@@ -5,7 +5,7 @@ import InputControl from "./InputControl";
 const Team = () => {
   return (
     <Container maxWidth="sm" sx={{ display: "grid", rowGap: 4 }}>
-      <Typography variant="h6" sx={{ textAlign: "center" }}>
+      <Typography align="center" variant="h6">
         Team Details
       </Typography>
 
