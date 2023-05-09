@@ -26,8 +26,9 @@ const Submission = () => {
       <DropZone label="Or, Upload project file" type="text" />
 
       <Button
-        className="Button"
-        sx={{ minWidth: 240, display: "block", margin: "32px auto 0" }}>
+        color="primary"
+        variant="contained"
+        sx={{ minWidth: 240, margin: "32px auto 0", mb: 3 }}>
         Submit Project
       </Button>
     </Container>

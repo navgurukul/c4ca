@@ -2,7 +2,7 @@ import React from "react";
 
 import InputControl from "./InputControl";
 import DropZone from "./DropZone";
-import styles from "./style.module.css";
+
 
 import { Container, Typography, Grid, Button } from "@mui/material";
 
@@ -30,7 +30,8 @@ const ReSubmission = () => {
       <Grid container spacing={4} sx={{ mb: 4 }}>
         <Grid item md={6} xs={12}>
           <Button
-            className="Button"
+            color="primary"
+            variant="contained"
             sx={{
               minWidth: 240,
               display: "block",
@@ -41,14 +42,13 @@ const ReSubmission = () => {
         </Grid>
         <Grid item md={6} xs={12}>
           <Button
+            color="primary"
+            variant="outlined"
             sx={{
               minWidth: 240,
               display: "block",
               margin: "30px auto 0",
-              borderRadius: "100px",
-            }}
-            variant="outlined"
-            className={styles.CancelButton}>
+            }}>
             Cancel
           </Button>
         </Grid>

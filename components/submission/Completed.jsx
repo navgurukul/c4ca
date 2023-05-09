@@ -6,16 +6,16 @@ const Completed = () => {
   return (
     <main>
       <Container maxWidth="sm">
-        <Typography variant="h6" sx={{ textAlign: "center" }}>
+        <Typography align="center" variant="h6">
           Your Submission
         </Typography>
 
         <Box sx={{ margin: "32px 0", display: "grid", gap: 4 }}>
           <Typography
             variant="body1"
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
-          >
-            <CheckCircle sx={{ color: "#219464" }} />
+            align="center"
+            sx={{ display: "flex", gap: 1 }}>
+            <CheckCircle color="success" />
             Submitted on 8 April 2023
           </Typography>
 
@@ -43,15 +43,16 @@ const Completed = () => {
         </Box>
 
         <Button
-          className="Button"
-          sx={{ minWidth: 240, display: "block", margin: "32px auto 0" }}
-        >
+          // className="Button"
+          color="primary"
+          variant="contained"
+          sx={{ minWidth: 240, display: "block", margin: "32px auto 0" }}>
           Re-Submit Project
         </Button>
         <Typography
           variant="body2"
-          sx={{ textAlign: "center", color: "#949494", mt: 2 }}
-        >
+          align="center"
+          sx={{  color: "#949494", mt: 2 }}>
           You may do as many submissions as necessary until 15th June 2023
         </Typography>
       </Container>

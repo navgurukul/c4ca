@@ -20,11 +20,11 @@ const Profile = () => {
     <>
       <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
         {router.asPath == "/profile/profile-update" ? (
-          <Typography variant="h6" sx={{ textAlign: "center" }}>
+          <Typography align="center" variant="h6">
             Personal Details
           </Typography>
         ) : (
-          <Typography variant="h6" sx={{ textAlign: "center" }}>
+          <Typography align="center" variant="h6">
             Set Up Your Profile
           </Typography>
         )}
@@ -51,7 +51,10 @@ const Profile = () => {
             <Grid container spacing={4}>
               <Grid item md={6} sm={6} xs={12}>
                 <InputControl label="Phone Number" type="tel" />
-                <Typography variant="body2" sx={{ color: "#949494" }}>
+                <Typography
+                  color="Grey"
+                  variant="body2"
+                  sx={{ color: "#949494" }}>
                   As a student, you can enter your parent's phone number
                 </Typography>
               </Grid>
@@ -64,7 +67,10 @@ const Profile = () => {
             </Grid>
           </Box>
 
-          <Box className={router.asPath == "/profile/profile-update" ? "show" : "hide"}>
+          <Box
+            className={
+              router.asPath == "/profile/profile-update" ? "show" : "hide"
+            }>
             <Grid container spacing={4}>
               <Grid item md={6} sm={6} xs={12}>
                 <InputControl label="School" type="text" />
@@ -82,25 +88,25 @@ const Profile = () => {
 
       <Container
         sx={{ mt: 8 }}
-        className={router.asPath == "/profile/profile-update" ? "show" : "hide"}
-      >
+        className={
+          router.asPath == "/profile/profile-update" ? "show" : "hide"
+        }>
         <Team />
       </Container>
 
       {router.asPath == "/profile/profile-update" ? (
         <Button
-          className="Button"
+          // className="Button"
+          variant="contained"
           color="primary"
-          sx={{ minWidth: 240, display: "block", margin: "32px auto 0" }}
-        >
+          sx={{ minWidth: 240, display: "block", margin: "32px auto 0" }}>
           <Link href="">Save Profile</Link>
         </Button>
       ) : (
         <Button
           className="Button"
           color="primary"
-          sx={{ minWidth: 240, display: "block", margin: "32px auto 0" }}
-        >
+          sx={{ minWidth: 240, display: "block", margin: "32px auto 0" }}>
           <Link href="/dashboard">Save & Proceed</Link>
         </Button>
       )}

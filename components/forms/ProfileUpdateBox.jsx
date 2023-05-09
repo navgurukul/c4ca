@@ -26,8 +26,7 @@ const ProfileUpdateBox = () => {
         flexDirection: isMobileActive ? "column" : "row",
         padding: isMobileActive ? 2 : "8px 8px 8px 32px",
         borderRadius: isMobileActive ? "8px" : "100px",
-      }}
-    >
+      }}>
       {router.asPath == "/profile/profile-update" ? (
         <>
           <Typography variant="subtitle1">
@@ -35,8 +34,7 @@ const ProfileUpdateBox = () => {
           </Typography>
           <Button
             sx={{ minWidth: isMobileActive ? "100%" : 240 }}
-            className="Button"
-          >
+            className="Button">
             <Link href="">Convert to Teacher Profile</Link>
           </Button>
         </>
@@ -47,8 +45,9 @@ const ProfileUpdateBox = () => {
           </Typography>
           <Button
             sx={{ minWidth: isMobileActive ? "100%" : 240 }}
-            className="Button"
-          >
+            // className="Button"
+            variant="contained"
+            color="primary">
             <Link href="/profile/profile-update">Go to Profile</Link>
           </Button>
         </>

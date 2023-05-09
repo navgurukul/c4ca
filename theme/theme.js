@@ -150,9 +150,11 @@ theme.components = {
   MuiButton: {
     styleOverrides: {
       root: {
+        borderRadius: "100px",
         height: "48px",
+
         "&:hover": {
-          backgroundColor: " #29458C",
+          backgroundColor: "#29458C",
           color: "#ffffff",
         },
       },
