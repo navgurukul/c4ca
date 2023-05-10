@@ -6,48 +6,71 @@ import Link from "next/link";
 
 // Learning Cards
 export const LearnCards = ({
-  image,
+  webImage,
+  mobileImage,
   title,
   subtitle,
-  progress,
-  btnText1,
-  btnText2,
-  color,
-  textColor,
   bgImage_web,
   bgImage_mobile,
+  className_web,
+  className_mobile,
 }) => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
   return (
-    <>
-      {/* <Box>
-        <img src={image} alt="image" style={{width:'100%'}}/>
+    <Box sx={{ width: "fit-content", position: "relative" }} className="m-Auto">
+      <img
+        src={isMobile ? bgImage_mobile : bgImage_web}
+        alt="bg_image"
+        style={{ width: "100%" }}
+      />
 
-        <Box sx={{display: "grid", gap: isMobile ? 3 : 10}}>
-          <Box sx={{display:'grid', gap:2}}>
-            <Typography variant="h6" sx={{ textAlign: "start" }}>{title}</Typography>
-            <Typography variant="body1" sx={{ color: textColor }}>{subtitle}</Typography>
-            <Box>
-              <Typography variant="body2" sx={{ color: textColor }}>
-                 Progress: {progress}
+      <Box
+        className={`contentBox ${isMobile ? className_mobile : className_web}`}
+        sx={{ flexDirection: isMobile ? "column" : "row" }}
+      >
+        <Box
+          sx={{ width: "100%", alignSelf: "center", textAlign: "center" }}
+          className="p-4"
+        >
+          <img
+            src={isMobile ? mobileImage : webImage}
+            alt="image"
+            style={{ height: "100%", borderRadius: "14px" }}
+          />
+        </Box>
+
+        <Box
+          sx={{ width: "100%", display: "grid", gap: isMobile ? 4 : 10 }}
+          className={isMobile ? "p-16" : "p-32"}
+        >
+          <Box sx={{ display: "grid", gap: 2 }}>
+            <Typography variant="h6" align="start" color="primary">
+              {title}
+            </Typography>
+            <Typography variant="body1" color="text.primary">
+              {subtitle}
+            </Typography>
+            <Box sx={{ display: "grid", gap: 1 }}>
+              <Typography variant="body2" color="text.primary">
+                Progress: 10%
               </Typography>
-            <ProgressBar progress={progress}/>
+              <ProgressBar progress="10%" />
             </Box>
           </Box>
 
-          <Box sx={{display:'flex', gap:2}}>
-            <Button className="button" sx={{ border: `1px solid ${color}` }}>
-              <Typography variant="ButtonLarge" sx={{color:color}}>{btnText1}</Typography>
+          <Box className="btnGrp">
+            <Button variant="outlined" sx={{ border: "1px solid" }}>
+              <Typography variant="ButtonLarge">View Classes</Typography>
             </Button>
-            <Button className="button" sx={{ border: `1px solid ${color}` }}>
-              <Typography variant="ButtonLarge" sx={{color:color}}>{btnText2}</Typography>
-              <Launch sx={{color:color}}/>
+            <Button variant="outlined" sx={{ border: "1px solid" }}>
+              <Typography variant="ButtonLarge">Learn Now</Typography>
+              <Launch />
             </Button>
           </Box>
         </Box>
-      </Box> */}
-    </>
+      </Box>
+    </Box>
   );
 };
 
@@ -75,7 +98,10 @@ export const ScratchPracticeCards = ({
           {title}
         </Typography>
         <img src={image} alt="" />
-        <Button className="button" sx={{ border: `1px solid ${color}` }}>
+        <Button
+          variant="outlined"
+          sx={{ borderColor: color, "&:hover": { borderColor: color } }}
+        >
           <Typography variant="ButtonLarge" sx={{ color: color }}>
             {btnText}
           </Typography>
@@ -112,7 +138,10 @@ export const ProjectAwardCards = ({
         <Typography variant="ButtonLarge" sx={{ color: color }}>
           {title}
         </Typography>
-        <Button sx={{ border: `1px solid ${color}` }}>
+        <Button
+          variant="outlined"
+          sx={{ borderColor: color, "&:hover": { borderColor: color } }}
+        >
           <Link href={path}>
             <Typography variant="ButtonLarge" sx={{ color: color }}>
               {btnText}

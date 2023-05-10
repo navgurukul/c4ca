@@ -31,10 +31,6 @@ a {
   text-decoration: none;
 }
 
-img {
-  object-fit: fill;
-}
-
 .textCenter {
   text-align: center;
 }
@@ -51,16 +47,22 @@ img {
   display: none;
 }
 
-.button {
+.btnGrp {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+/* .button {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-}
+} */
 
 .profileBtn {
   background: linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%);
-  color: #ffffff;
+  color: #FFFFFF;
 }
 
 /************************ header CSS ************************/
@@ -128,37 +130,42 @@ header .box {
   margin: 64px 0;
 }
 
-.climateBlock_Web {
+.contentBox {
+  width: 100%;
+  display: flex;
   position: absolute;
-  top: 9%;
+  overflow: hidden;
+}
+
+.p-32 {
+  padding: 32px;
+}
+
+.p-16 {
+  padding: 32px 16px;
+}
+
+.p-4 {
+  padding: 4px 4px 2px 4px;
+}
+
+.climateBlock_Web {
+  top: 4%;
 }
 
 .climateBlock_Mobile {
-  position: absolute;
-  top: 15%;
+  top: 17%;
 }
 
 .scratchBlock_Web {
-  position: absolute;
   top: 10%;
-  right: 0;
-  left: 0;
 }
 .scratchBlock_Mobile {
-  position: absolute;
-  top: 6.6%;
-  right: 0;
-  left: 0;
+  top: 6.5%;
 }
 
 
 /************************ Profile-Update Page CSS ************************/
-.teamBtnGrp {
-  display: flex;
-  justify-content: flex-start;
-  gap: 16px;
-}
-
 .teamBtn {
   width: 48px;
   height: 48px;

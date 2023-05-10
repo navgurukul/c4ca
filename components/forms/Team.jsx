@@ -15,7 +15,7 @@ const Team = () => {
       <Box sx={{ display: "grid", gap: 1 }}>
         <Typography variant="body2">Select Team Size</Typography>
 
-        <Box className="teamBtnGrp">
+        <Box className="btnGrp">
           <Typography className="teamBtn" variant="subtitle1">
             3
           </Typography>

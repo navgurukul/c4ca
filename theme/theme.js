@@ -10,19 +10,16 @@ theme = createTheme(theme, {
     default: {
       main: "#FFFFFF",
       light: "#0066FF",
-      // main: "#fff",
-      // dark: will be calculated from palette.secondary.main,
       contrastText: "#ffffff",
     },
     primary: {
-      //Midnight Blue
       main: "#29458C",
       light: "#D4DAE8",
       dark: "#192954",
+      contrastText: '#FFFFFF'
     },
 
     secondary: {
-      // Incandescent
       main: "#F55C38",
       light: "#FDDED7",
       dark: "#933722",
@@ -47,7 +44,7 @@ theme = createTheme(theme, {
       main: "#FFAD33",
       light: "#FFEFD6",
       dark: "#99681F",
-      contrastText: "#ffffff",
+      contrastText: "#2E2E2E",
     },
 
     twilight: {
@@ -117,7 +114,7 @@ theme = createTheme(theme, {
       lineHeight: "150%",
       letterSpacing: 0,
       textAlign: "center",
-      [theme.breakpoints.down("md")]: {
+      [theme.breakpoints.down("sm")]: {
         fontSize: "1.25rem",
       },
     },
@@ -183,10 +180,14 @@ theme.components = {
   MuiButton: {
     styleOverrides: {
       root: {
-        width: "max-content",
+        minWidth: "max-content",
         height: "48px",
         borderRadius: "100px",
-        padding: "10px 20px",
+        padding: "8px 16px",
+        display:'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
       },
     },
   },

@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Container, Grid, Typography, useMediaQuery } from "@mui/material";
 import ProfileUpgradeBox from "@/components/forms/ProfileUpgradeBox";
 import { breakpoints } from "@/theme/constant";
 import {
@@ -18,8 +11,6 @@ import {
   ProjectAwardsPathways,
   ScratchPracticePathways,
 } from "./data";
-import ProgressBar from "@/components/progressBar/ProgressBar";
-import { Launch } from "@mui/icons-material";
 
 const Dashboard = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
@@ -28,128 +19,57 @@ const Dashboard = () => {
       <ProfileUpgradeBox />
 
       <main>
-        <Container maxWidth="lg" sx={{ display: "grid", gap: 6 }}>
-          <Typography variant="h5" sx={{ color: "#29458C" }}>
+        <Container
+          maxWidth="lg"
+          disableGutters
+          sx={{
+            display: "grid",
+            placeContent: "center",
+            gap: isMobile ? 4 : 6,
+          }}
+        >
+          <Typography variant="h5" color="primary">
             Learn With Meraki
           </Typography>
 
-          <Box sx={{ width: "fit-content", position:"relative" }} className="m-Auto">
-            <img
-              src={
-                isMobile
-                  ? "/assets/climate_mobile_bg.svg"
-                  : "/assets/climate_web_bg.svg"
+          <Grid container>
+            {LearnPathways.map(
+              (
+                {
+                  webImage,
+                  mobileImage,
+                  title,
+                  subtitle,
+                  progress,
+                  bgImage_web,
+                  bgImage_mobile,
+                  className_web,
+                  className_mobile,
+                },
+                index
+              ) => {
+                return (
+                  <Grid item key={index} md={12} sm={12} xs={12}>
+                    <LearnCards
+                      webImage={webImage}
+                      mobileImage={mobileImage}
+                      title={title}
+                      subtitle={subtitle}
+                      progress={progress}
+                      bgImage_web={bgImage_web}
+                      bgImage_mobile={bgImage_mobile}
+                      className_web={className_web}
+                      className_mobile={className_mobile}
+                    />
+                  </Grid>
+                );
               }
-              alt=""
-              style={{width:'100%'}}
-            />
-
-            <Box sx={{width:'100%', height:'fit-content', display:'flex', gap:4, flexDirection: isMobile?'column':'row',padding:2}} className={isMobile?'climateBlock_Mobile':'climateBlock_Web'}>
-              <Box sx={{width:'100%', alignSelf:'center'}}>
-                <img src='/assets/climate_action.svg' alt="image" style={{width:'100%'}}/>
-              </Box>
-
-              <Box
-                sx={{ width: "100%", display: "grid", gap: isMobile ? 4 : 10 }}
-              >
-                <Box sx={{display:'grid', gap: 2}}>
-                  <Typography variant="h6" sx={{ textAlign: "start" }}>
-                    Climate Action
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: "#2E2E2E" }}>
-                    Learn about climate change and steps to counter them
-                  </Typography>
-                  <Box>
-                    <Typography variant="body2" sx={{ color: "#2E2E2E" }}>
-                      Progress: 10%
-                    </Typography>
-                    <ProgressBar progress="10%" />
-                  </Box>
-                </Box>
-
-                <Box sx={{ display: "flex", gap: 2, justifyContent:isMobile?'space-between':'flex-start' }}>
-                  <Button
-                    className="button"
-                    sx={{ border: `1px solid #29458C` }}
-                  >
-                    <Typography variant="ButtonLarge" sx={{ color: "#29458C" }}>
-                      View Classes
-                    </Typography>
-                  </Button>
-                  <Button
-                    className="button"
-                    sx={{ border: `1px solid #29458C` }}
-                  >
-                    <Typography variant="ButtonLarge" sx={{ color: "#29458C" }}>
-                      Learn Now
-                    </Typography>
-                    <Launch sx={{ color: "#29458C" }} />
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-
-          <Box sx={{ width: "fit-content", position:"relative" }} className="m-Auto">
-            <img
-              src={
-                isMobile
-                  ? "/assets/scratch_mobile_bg.svg"
-                  : "/assets/scratch_web_bg.svg"
-              }
-              alt=""
-              style={{width:'100%'}}
-            />
-
-            <Box sx={{width:'100%', height:'fit-content', display:'flex', gap:4, flexDirection: isMobile?'column':'row'}} className={isMobile?'scratchBlock_Mobile':'scratchBlock_Web'}>
-              <Box sx={{width:'100%', padding:0.5}}>
-                <img src='/assets/scratch.svg' alt="image" style={{width:'100%', borderRadius:'14px', objectFit:'contain'}}/>
-              </Box>
-
-              <Box
-                sx={{ width: "100%", display: "grid", gap: isMobile ? 4 : 10, padding:isMobile?'0 16px':'16px' }}
-              >
-                <Box sx={{display:'grid', gap: 2}}>
-                  <Typography variant="h6" sx={{ textAlign: "start" }}>
-                  Scratch - Block Based Programming
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: "#2E2E2E" }}>
-                  Drag and drop gamified learning
-                  </Typography>
-                  <Box sx={{display:'grid', gap: 1}}>
-                    <Typography variant="body2" sx={{ color: "#2E2E2E" }}>
-                      Progress: 10%
-                    </Typography>
-                    <ProgressBar progress="10%" />
-                  </Box>
-                </Box>
-
-                <Box sx={{ display: "flex", gap: 2, justifyContent:isMobile?'space-between':'flex-start' }}>
-                  <Button
-                    className="button"
-                    sx={{ border: `1px solid #29458C` }}
-                  >
-                    <Typography variant="ButtonLarge" sx={{ color: "#29458C" }}>
-                      View Classes
-                    </Typography>
-                  </Button>
-                  <Button
-                    className="button"
-                    sx={{ border: `1px solid #29458C` }}
-                  >
-                    <Typography variant="ButtonLarge" sx={{ color: "#29458C" }}>
-                      Learn Now
-                    </Typography>
-                    <Launch sx={{ color: "#29458C" }} />
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
+            )}
+          </Grid>
         </Container>
 
         {/* Practice Scratch Cards */}
-        <Box className='practiceCardBlock'>
+        <Container maxWidth="xl" disableGutters className="practiceCardBlock">
           <Grid container>
             {ScratchPracticePathways.map(
               ({ title, image, btnText, bgColor, color }, index) => {
@@ -167,18 +87,21 @@ const Dashboard = () => {
               }
             )}
           </Grid>
-        </Box>
+        </Container>
 
         {/* Project & Award Cards */}
         <Container maxWidth="lg" sx={{ display: "grid", gap: 6 }}>
-          <Typography variant="h5" sx={{ color: "#F55C38" }}>
+          <Typography variant="h5" color="secondary">
             Project & Awards
           </Typography>
 
           <Box sx={{ width: "fit-content" }} className="m-Auto">
             <Grid container spacing={4}>
               {ProjectAwardsPathways.map(
-                ({ title, image, btnText, bgColor, color, border, path }, index) => {
+                (
+                  { title, image, btnText, bgColor, color, border, path },
+                  index
+                ) => {
                   return (
                     <Grid item key={index} md={6} sm={6} xs={12}>
                       <ProjectAwardCards
