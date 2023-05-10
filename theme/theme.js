@@ -62,7 +62,7 @@ theme = createTheme(theme, {
     },
 
     success: {
-      main: "#48A145",
+      main: "#219464",
       light: "#E9F5E9",
       dark: "#3A8137",
       contrastText: "#ffffff",
@@ -168,7 +168,7 @@ theme = createTheme(theme, {
       fontSize: "1.125rem",
       fontWeight: 700,
       lineHeight: "170%",
-      letterSpacing: 0,
+      letterSpacing: 1,
       [theme.breakpoints.down("sm")]: {
         fontSize: "1rem",
       },

@@ -12,7 +12,8 @@ const Header = () => {
           <Link href='/dashboard'>
             <Typography
               variant="subtitle1"
-              sx={{ padding: "8px 16px", color: "#29458c", cursor: "pointer" }}
+              color='primary'
+              sx={{ padding: "8px 16px", cursor: "pointer" }}
             >
               Dashboard
             </Typography>

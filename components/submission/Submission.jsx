@@ -23,9 +23,10 @@ const Submission = (props) => {
       {!show ? (
         <Container
           maxWidth="lg"
+          disableGutters
           sx={{ display: "grid", placeItems: "center", gap: 4 }}
         >
-          <Typography variant="h5">Your Submission</Typography>
+          <Typography variant="h5" color='text.primary'>Your Submission</Typography>
 
           <Container
             maxWidth="sm"

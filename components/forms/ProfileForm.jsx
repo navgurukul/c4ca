@@ -21,9 +21,14 @@ const ProfileForm = () => {
     <>
       <Container
         maxWidth="lg"
+        disableGutters
         sx={{ display: "grid", placeItems: "center", gap: 4 }}
       >
-        <Typography variant="h5">Set Up Your Profile</Typography>
+        <Typography variant="h5" color="text.primary">
+          {router.asPath === "/profile/profile-update"
+            ? "Personal Details"
+            : "Set Up Your Profile"}
+        </Typography>
 
         <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
           <Box className="AvatarBox">
@@ -47,13 +52,13 @@ const ProfileForm = () => {
             <Grid container spacing={isMobile ? 2 : 4}>
               <Grid item md={6} sm={6} xs={12}>
                 <InputControl label="Phone Number" type="tel" maxLength={10} />
-                <Typography variant="body2" sx={{ color: "#949494" }}>
+                <Typography variant="body2" color="Grey.main">
                   As a student, you can enter your parent's phone number
                 </Typography>
               </Grid>
               <Grid item md={6} sm={6} xs={12}>
                 <InputControl label="Date of Birth" type="date" />
-                <Typography variant="body2" sx={{ color: "#949494" }}>
+                <Typography variant="body2" color="Grey.main">
                   On or after 1 April 1995
                 </Typography>
               </Grid>
@@ -81,15 +86,17 @@ const ProfileForm = () => {
 
         {router.asPath === "/profile/profile-update" ? <Team /> : null}
 
-        {router.asPath === "/profile/profile-update" ? (
-          <Link href="/profile/profile-update">
-            <Button className="profileBtn">Save Profile</Button>
-          </Link>
-        ) : (
-          <Link href="/dashboard">
-            <Button className="profileBtn">Save & Proceed</Button>
-          </Link>
-        )}
+        <Button className="profileBtn">
+          {router.asPath === "/profile/profile-update" ? (
+            <Link href="/profile/profile-update">
+              <Typography variant="ButtonLarge">Save Profile</Typography>
+            </Link>
+          ) : (
+            <Link href="/dashboard">
+              <Typography variant="ButtonLarge">Save & Proceed</Typography>
+            </Link>
+          )}
+        </Button>
       </Container>
     </>
   );

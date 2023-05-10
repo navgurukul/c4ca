@@ -5,7 +5,7 @@ const InputControl = (props) => {
   return(
     <>
       <Box sx={{ display: "grid", gap: 1 }}>
-        {props.label && <Typography variant="body2">{props.label}</Typography>}
+        {props.label && <Typography variant="body2" color='text.primary'>{props.label}</Typography>}
         <TextField {...props}/>
       </Box>
     </>

@@ -59,7 +59,10 @@ export const LearnCards = ({
             </Box>
           </Box>
 
-          <Box className="btnGrp">
+          <Box
+            className="btnGrp"
+            sx={{ justifyContent: isMobile ? "space-between" : "flex-start" }}
+          >
             <Button variant="outlined" sx={{ border: "1px solid" }}>
               <Typography variant="ButtonLarge">View Classes</Typography>
             </Button>

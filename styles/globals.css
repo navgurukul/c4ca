@@ -49,16 +49,8 @@ a {
 
 .btnGrp {
   display: flex;
-  justify-content: flex-start;
   gap: 16px;
 }
-
-/* .button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-} */
 
 .profileBtn {
   background: linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%);
@@ -103,7 +95,6 @@ header .box {
 
 /************************ profile upgrade box CSS ************************/
 .upgradeBox {
-  width: 100%;
   padding: 16px;
   background: #d4dae8;
   display: flex;
@@ -171,9 +162,10 @@ header .box {
   height: 48px;
   padding: 8px;
   border-radius: 8px;
-  text-align: center;
   border: 1px solid #29458C;
   color: #29458C;
+  display: grid;
+  place-items: center;
   cursor: pointer;
 }
 

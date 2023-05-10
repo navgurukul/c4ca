@@ -3,7 +3,6 @@ import { GoogleBtn } from "@/styles/style";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-
 const LoginPage = () => {
   return (
     <main>
@@ -21,13 +20,15 @@ const LoginPage = () => {
           />
 
           <Box sx={{ display: "grid", gap: 2 }}>
-            <Typography variant="body1" sx={{ textAlign: "center" }}>
+            <Typography variant="body1" align="center" color="text.primary">
               Continue to C4CA
             </Typography>
             <Link href="/profile">
               <GoogleBtn>
                 <img src="/Google.svg" />
-                <Typography variant="ButtonLarge">Login with Google</Typography>
+                <Typography variant="ButtonLarge" color="text.primary">
+                  Login with Google
+                </Typography>
               </GoogleBtn>
             </Link>
           </Box>

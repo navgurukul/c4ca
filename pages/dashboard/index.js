@@ -32,7 +32,7 @@ const Dashboard = () => {
             Learn With Meraki
           </Typography>
 
-          <Grid container>
+          <Grid container spacing={isMobile?4:6}>
             {LearnPathways.map(
               (
                 {

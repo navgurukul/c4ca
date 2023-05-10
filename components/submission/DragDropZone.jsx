@@ -36,7 +36,7 @@ const DragDropZone = (props) => {
             <Box key={index} className="drop-file-preview__item">
               <Box className="drop-file-preview__item__info">
                 <img src="/project.svg" alt="" />
-                <Typography variant="body1">{item.name}</Typography>
+                <Typography variant="body1" color='text.primary'>{item.name}</Typography>
               </Box>
 
               <HighlightOff
@@ -58,10 +58,10 @@ const DragDropZone = (props) => {
         <Box className="drop-file-input__label">
           <img src="/file_upload.svg" alt="" />
           <Box sx={{display:'grid', gap:1}}>
-            <Typography variant="body1" sx={{ color: "#29458c" }}>
+            <Typography variant="body1" color='primary'>
               Upload or Drag File
             </Typography>
-            <Typography variant="caption" sx={{ color: "#6D6D6D" }}>
+            <Typography variant="caption" color='text.secondary'>
               .sb3 format accepted
             </Typography>
           </Box>
