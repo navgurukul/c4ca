@@ -1,77 +1,127 @@
-import React from "react";
-import ProfileUpdateBox from "@/components/forms/ProfileUpdateBox";
-import { Container, Grid, Typography } from "@mui/material";
-import PathwayCard from "./PathwayCard";
-import { LearnAndPracticePathways, ProjectPathways } from "@/constants";
+import { Box, Container, Grid, Typography, useMediaQuery } from "@mui/material";
+import ProfileUpgradeBox from "@/components/forms/ProfileUpgradeBox";
+import { breakpoints } from "@/theme/constant";
+import {
+  LearnCards,
+  ProjectAwardCards,
+  ScratchPracticeCards,
+} from "./PathwayCard";
+import {
+  LearnPathways,
+  ProjectAwardsPathways,
+  ScratchPracticePathways,
+} from "./data";
 
 const Dashboard = () => {
+  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   return (
-    <main>
-      <Container maxWidth="lg">
-        <ProfileUpdateBox />
-      </Container>
+    <>
+      <ProfileUpgradeBox />
 
-      <Container maxWidth="lg" sx={{ mt: 8 }}>
-        <Typography variant="h6">Learn & Practice</Typography>
+      <main>
+        <Container
+          maxWidth="lg"
+          disableGutters
+          sx={{
+            display: "grid",
+            placeContent: "center",
+            gap: isMobile ? 4 : 6,
+          }}
+        >
+          <Typography variant="h5" color="primary">
+            Learn With Meraki
+          </Typography>
 
-        <Grid container spacing={4} sx={{ mt: -2 }}>
-          {LearnAndPracticePathways.map(
-            (
-              {
-                image,
-                title,
-                subtitle,
-                bgcolor,
-                bgcolor1,
-                progressBarColor,
-                progressBar,
-              },
-              index
-            ) => {
-              return (
-                <Grid item key={index} lg={4} md={6} sm={6} xs={12}>
-                  <PathwayCard
-                    image={image}
-                    title={title}
-                    subtitle={subtitle}
-                    bgcolor={bgcolor}
-                    bgcolor1={bgcolor1}
-                    progressBarColor={progressBarColor}
-                    progressBar={progressBar}
-                  />
-                </Grid>
-              );
-            }
-          )}
-        </Grid>
-      </Container>
+          <Grid container spacing={isMobile?4:6}>
+            {LearnPathways.map(
+              (
+                {
+                  webImage,
+                  mobileImage,
+                  title,
+                  subtitle,
+                  progress,
+                  bgImage_web,
+                  bgImage_mobile,
+                  className_web,
+                  className_mobile,
+                },
+                index
+              ) => {
+                return (
+                  <Grid item key={index} md={12} sm={12} xs={12}>
+                    <LearnCards
+                      webImage={webImage}
+                      mobileImage={mobileImage}
+                      title={title}
+                      subtitle={subtitle}
+                      progress={progress}
+                      bgImage_web={bgImage_web}
+                      bgImage_mobile={bgImage_mobile}
+                      className_web={className_web}
+                      className_mobile={className_mobile}
+                    />
+                  </Grid>
+                );
+              }
+            )}
+          </Grid>
+        </Container>
 
-      <Container maxWidth="lg" sx={{ mt: 8 }}>
-        <Typography variant="h6">Project</Typography>
+        {/* Practice Scratch Cards */}
+        <Container maxWidth="xl" disableGutters className="practiceCardBlock">
+          <Grid container>
+            {ScratchPracticePathways.map(
+              ({ title, image, btnText, bgColor, color }, index) => {
+                return (
+                  <Grid item key={index} md={6} sm={6} xs={12}>
+                    <ScratchPracticeCards
+                      title={title}
+                      image={image}
+                      btnText={btnText}
+                      bgColor={bgColor}
+                      color={color}
+                    />
+                  </Grid>
+                );
+              }
+            )}
+          </Grid>
+        </Container>
 
-        <Grid container spacing={4} sx={{ mt: "-16px" }}>
-          {ProjectPathways.map(
-            (
-              { image, title, subtitle, bgcolor, bgcolor1, projectPath },
-              index
-            ) => {
-              return (
-                <Grid item key={index} lg={4} md={6} sm={6} xs={12}>
-                  <PathwayCard
-                    image={image}
-                    title={title}
-                    subtitle={subtitle}
-                    bgcolor={bgcolor}
-                    bgcolor1={bgcolor1}
-                    projectPath={projectPath}
-                  />
-                </Grid>
-              );
-            }
-          )}
-        </Grid>
-      </Container>
-    </main>
+        {/* Project & Award Cards */}
+        <Container maxWidth="lg" sx={{ display: "grid", gap: 6 }}>
+          <Typography variant="h5" color="secondary">
+            Project & Awards
+          </Typography>
+
+          <Box sx={{ width: "fit-content" }} className="m-Auto">
+            <Grid container spacing={4}>
+              {ProjectAwardsPathways.map(
+                (
+                  { title, image, btnText, bgColor, color, border, path },
+                  index
+                ) => {
+                  return (
+                    <Grid item key={index} md={6} sm={6} xs={12}>
+                      <ProjectAwardCards
+                        title={title}
+                        image={image}
+                        btnText={btnText}
+                        bgColor={bgColor}
+                        color={color}
+                        border={border}
+                        path={path}
+                      />
+                    </Grid>
+                  );
+                }
+              )}
+            </Grid>
+          </Box>
+        </Container>
+      </main>
+    </>
   );
 };
 

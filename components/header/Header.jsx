@@ -1,47 +1,38 @@
-import React from "react";
-import { AppBar, Avatar, Box, Typography, styled } from "@mui/material";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
-const Toolbar = styled("div")({
-  width: "100%",
-  height: "100%",
-  padding: "8px 32px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-});
-
-const Logo = styled("h1")({
-  fontFamily: "Rubik Bubbles, cursive",
-  background: "linear-gradient(90deg, #29458c 72%, #192542 100%)",
-  backgroundClip: "text",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-});
 
 const Header = () => {
   const router = useRouter();
   return (
-    <AppBar
-      sx={{ minWidth: "100%", height: 70, background: "#FCE9F0" }}
-      className={router.asPath == "/" ? "hide" : "show"}
-    >
-      <Toolbar>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Link href="/dashboard">
-            <Logo>C4CA</Logo>
+    <>
+      <header>
+        <Box className="box">
+          <img src="/C4CA_logo.svg" alt="c4ca_logo" />
+          <Link href='/dashboard'>
+            <Typography
+              variant="subtitle1"
+              color='primary'
+              sx={{ padding: "8px 16px", cursor: "pointer" }}
+            >
+              Dashboard
+            </Typography>
           </Link>
-          <Typography
-            variant="subtitle1"
-            sx={{ color: "#29458C", padding: "8px 16px" }}
-          >
-            <Link href="/dashboard">Dashboard</Link>
-          </Typography>
         </Box>
-        <Avatar src="/avatar.svg" />
-      </Toolbar>
-    </AppBar>
+
+        {router.asPath === "/" ? (
+          <Link href="/login">
+            <Button sx={{ display: "block", width: 100, m: "auto" }}>
+              Login
+            </Button>
+          </Link>
+        ) : (
+          <Box>
+            <Avatar src="/avatar.svg" />
+          </Box>
+        )}
+      </header>
+    </>
   );
 };
 

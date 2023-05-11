@@ -1,16 +1,16 @@
-import React from "react";
-
-const ProgressBar = ({ height, progress, bgcolor1, progressBarColor }) => {
+const ProgressBar = ({progress}) => {
   const parentDiv = {
     width: "100%",
-    height: `${height}px`,
-    background: progressBarColor,
+    height: 4,
+    background: "#F7F7F7",
+    borderRadius: "8px",
   };
 
   const childDiv = {
-    width: `${progress}px`,
+    width: `${progress}`,
     height: "100%",
-    background: bgcolor1,
+    background: "#29458C",
+    borderRadius: "8px",
   };
 
   return (

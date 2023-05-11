@@ -1,10 +1,12 @@
 import Head from "next/head";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import theme from "@/theme/theme";
-import Header from "@/components/header/Header";
+import { useRouter } from "next/router";
 import "@/styles/globals.css";
+import Header from "@/components/header/Header";
 
 export default function App({ Component, pageProps }) {
+  const router = useRouter()
   return (
     <>
       <Head>
@@ -15,7 +17,7 @@ export default function App({ Component, pageProps }) {
       </Head>
 
       <ThemeProvider theme={theme}>
-        <Header />
+        {router.asPath === '/login' ? null : <Header />}
         <Component {...pageProps} />
       </ThemeProvider>
     </>

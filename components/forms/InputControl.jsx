@@ -1,25 +1,16 @@
-import React from "react";
-import { Box, Typography, styled } from "@mui/material";
-
-const Input = styled("input")({
-  width: "100%",
-  height: '48px',
-  padding: "8px 16px",
-  borderRadius: "100px",
-  border: "1px solid #2E2E2E",
-  fontFamily: 'Amazon Ember',
-  fontSize: '18px',
-  color:'#2E2E2E',
-  outline: 'none'
-});
+import { TextField } from "@/styles/style"
+import { Box, Typography } from "@mui/material"
 
 const InputControl = (props) => {
-  return (
-    <Box sx={{ display: "grid", gap: 1 }}>
-      {props.label && <Typography variant="body2">{props.label}</Typography>}
-      <Input {...props} />
-    </Box>
-  );
-};
+  return(
+    <>
+      <Box sx={{ display: "grid", gap: 1 }}>
+        {props.label && <Typography variant="body2" color='text.primary'>{props.label}</Typography>}
+        <TextField {...props}/>
+      </Box>
+    </>
+  )
+}
 
-export default InputControl;
+
+export default InputControl

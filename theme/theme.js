@@ -1,5 +1,5 @@
 const { createTheme } = require("@mui/material");
-import { breakpoints } from "./constants";
+import { breakpoints } from "./constant";
 
 let theme = createTheme();
 
@@ -10,19 +10,16 @@ theme = createTheme(theme, {
     default: {
       main: "#FFFFFF",
       light: "#0066FF",
-      // main: "#fff",
-      // dark: will be calculated from palette.secondary.main,
       contrastText: "#ffffff",
     },
     primary: {
-      //Midnight Blue
       main: "#29458C",
       light: "#D4DAE8",
       dark: "#192954",
+      contrastText: '#FFFFFF'
     },
 
     secondary: {
-      // Incandescent
       main: "#F55C38",
       light: "#FDDED7",
       dark: "#933722",
@@ -47,7 +44,7 @@ theme = createTheme(theme, {
       main: "#FFAD33",
       light: "#FFEFD6",
       dark: "#99681F",
-      contrastText: "#ffffff",
+      contrastText: "#2E2E2E",
     },
 
     twilight: {
@@ -65,7 +62,7 @@ theme = createTheme(theme, {
     },
 
     success: {
-      main: "#48A145",
+      main: "#219464",
       light: "#E9F5E9",
       dark: "#3A8137",
       contrastText: "#ffffff",
@@ -99,49 +96,82 @@ theme = createTheme(theme, {
   typography: {
     fontFamily: ["Amazon Ember", "Amazon Ember Display"].join(","),
     fontSize: 18,
+    h5: {
+      fontFamily: "Amazon Ember Display",
+      fontSize: "2rem",
+      fontWeight: 800,
+      lineHeight: "130%",
+      letterSpacing: 0,
+      textAlign: "center",
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "1.5rem",
+      },
+    },
     h6: {
       fontFamily: "Amazon Ember Display",
-      fontSize: "24px",
+      fontSize: "1.5rem",
       fontWeight: 800,
-      lineHeight: "28px",
+      lineHeight: "150%",
       letterSpacing: 0,
+      textAlign: "center",
       [theme.breakpoints.down("sm")]: {
-        fontSize: "20px",
+        fontSize: "1.25rem",
       },
     },
     subtitle1: {
       fontFamily: "Amazon Ember",
-      fontSize: "18px",
+      fontSize: "1.125rem",
       fontWeight: 700,
       lineHeight: "170%",
       letterSpacing: 0,
       [theme.breakpoints.down("sm")]: {
-        fontSize: "16px",
+        fontSize: "1rem",
       },
     },
     body1: {
       fontFamily: "Amazon Ember",
-      fontSize: "18px",
+      fontSize: "1.125rem",
       fontWeight: 500,
       lineHeight: "170%",
-      letterSpacing: -0.3,
+      letterSpacing: 0,
       [theme.breakpoints.down("sm")]: {
-        fontSize: "16px",
+        fontSize: "1rem",
       },
     },
     body2: {
       fontFamily: "Amazon Ember",
-      fontSize: "14px",
+      fontSize: "0.875rem",
       fontWeight: 500,
       lineHeight: "170%",
       letterSpacing: 0,
     },
-    button: {
+    caption: {
       fontFamily: "Amazon Ember",
-      fontSize: "18px",
+      fontSize: "0.75rem",
+      fontWeight: 500,
+      lineHeight: "150%",
+      letterSpacing: 0,
+    },
+    button: {
+      fontFamily: "Noto Sans",
+      fontSize: "1.125rem",
+      fontWeight: 600,
+      lineHeight: "170%",
+      letterSpacing: 0,
+      textTransform: "unset",
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "1rem",
+      },
+    },
+    ButtonLarge: {
+      fontFamily: "Amazon Ember",
+      fontSize: "1.125rem",
       fontWeight: 700,
       lineHeight: "170%",
-      textTransform: "unset",
+      letterSpacing: 1,
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "1rem",
+      },
     },
   },
 });
@@ -150,35 +180,14 @@ theme.components = {
   MuiButton: {
     styleOverrides: {
       root: {
-        borderRadius: "100px",
+        minWidth: "max-content",
         height: "48px",
-
-        "&:hover": {
-          backgroundColor: "#29458C",
-          color: "#ffffff",
-        },
-      },
-    },
-  },
-  MuiCard: {
-    styleOverrides: {
-      root: { boxShadow: "none" },
-    },
-  },
-  MuiAppBar: {
-    styleOverrides: {
-      root: { height: "70px", boxShadow: "none", position: "static" },
-    },
-  },
-  MuiSelect: {
-    styleOverrides: {
-      select: { padding: "8px 16px", border: "1px solid #2E2E2E" },
-    },
-  },
-  MuiContainer: {
-    styleOverrides: {
-      root: {
-        "&.MuiContainer-maxWidthSm": { padding: "0 15px" },
+        borderRadius: "100px",
+        padding: "8px 16px",
+        display:'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
       },
     },
   },
