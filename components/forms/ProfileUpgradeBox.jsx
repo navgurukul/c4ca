@@ -15,7 +15,7 @@ const ProfileUpgradeBox = () => {
       sx={{ flexDirection: isMobile ? "column" : "row" }}
     >
       <Typography variant="subtitle1" color="text.primary">
-        {router.asPath === "/profile/profile-update"
+        {router.asPath === "/profile-update"
           ? `Are you a teacher helping students in the hackathon?`
           : `Please add your personal and team details`}
       </Typography>
@@ -24,14 +24,14 @@ const ProfileUpgradeBox = () => {
         className="profileBtn"
         sx={{ width: isMobile ? "100%" : "max-content" }}
       >
-        {router.asPath === "/profile/profile-update" ? (
+        {router.asPath === "/profile-update" ? (
           <Link href="">
             <Typography variant="ButtonLarge">
               Convert to Teacher Profile
             </Typography>
           </Link>
         ) : (
-          <Link href="/profile/profile-update">
+          <Link href="/profile-update">
             <Typography variant="ButtonLarge">Go to Profile</Typography>
           </Link>
         )}

@@ -7,13 +7,10 @@ import {
 } from "@mui/material";
 import InputControl from "./InputControl";
 import { breakpoints } from "@/theme/constant";
+import { useState } from "react";
 
 const Team = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
-
-  const handleClick = (e) => {
-    console.log(e.target.textContent);
-  };
 
   return (
     <Container maxWidth="sm" sx={{ display: "grid", gap: isMobile ? 2 : 4 }}>
@@ -27,13 +24,13 @@ const Team = () => {
         </Typography>
 
         <Box className="btnGrp">
-          <Button className="teamBtn" variant="subtitle1" onClick={handleClick}>
+          <Button className="teamBtn">
             3
           </Button>
-          <Button className="teamBtn" variant="subtitle1" onClick={handleClick}>
+          <Button className="teamBtn">
             4
           </Button>
-          <Button className="teamBtn" variant="subtitle1" onClick={handleClick}>
+          <Button className="teamBtn">
             5
           </Button>
         </Box>

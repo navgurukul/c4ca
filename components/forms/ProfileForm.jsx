@@ -26,7 +26,7 @@ const ProfileForm = () => {
         sx={{ display: "grid", placeItems: "center", gap: 4 }}
       >
         <Typography variant="h5" color="text.primary">
-          {router.asPath === "/profile/profile-update"
+          {router.asPath === "/profile-update"
             ? "Personal Details"
             : "Set Up Your Profile"}
         </Typography>
@@ -68,7 +68,7 @@ const ProfileForm = () => {
 
           <Box
             className={
-              router.asPath === "/profile/profile-update" ? "show" : "hide"
+              router.asPath === "/profile-update" ? "show" : "hide"
             }
           >
             <Grid container spacing={isMobile ? 2 : 4}>
@@ -85,11 +85,11 @@ const ProfileForm = () => {
           </Box>
         </Container>
 
-        {router.asPath === "/profile/profile-update" ? <Team /> : null}
+        {router.asPath === "/profile-update" ? <Team /> : null}
 
         <Button className="profileBtn">
-          {router.asPath === "/profile/profile-update" ? (
-            <Link href="/profile/profile-update">
+          {router.asPath === "/profile-update" ? (
+            <Link href="/profile-update">
               <Typography variant="ButtonLarge">Save Profile</Typography>
             </Link>
           ) : (
