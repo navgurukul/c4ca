@@ -106,7 +106,6 @@ header .box {
 }
 
 /************************ Dashboard CSS ************************/
-
 .projectCard {
   height: 100%;
   padding: 32px;
@@ -177,7 +176,7 @@ header .box {
   cursor: pointer;
 }
 
-.teamBtn:hover {
+.teamBtn_bgColor, .teamBtn:hover {
   background: #D4DAE8;
 }
 
