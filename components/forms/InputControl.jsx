@@ -1,16 +1,41 @@
-import { TextField } from "@/styles/style"
-import { Box, Typography } from "@mui/material"
+import { TextField } from "@/styles/style";
+import { Box, MenuItem, Select, Typography } from "@mui/material";
 
 const InputControl = (props) => {
-  return(
+  return (
     <>
       <Box sx={{ display: "grid", gap: 1 }}>
-        {props.label && <Typography variant="body2" color='text.primary'>{props.label}</Typography>}
-        <TextField {...props}/>
+        {props.label && (
+          <Typography variant="body2" color="text.primary">
+            {props.label}
+          </Typography>
+        )}
+        <TextField {...props} />
       </Box>
     </>
-  )
-}
+  );
+};
 
+export default InputControl;
 
-export default InputControl
+// Select-Dropdown
+export const SelectBox = (props) => {
+  return (
+    <>
+      <Box sx={{ display: "grid", gap: 1 }}>
+        {props.label && (
+          <Typography variant="body2" color="text.primary">
+            {props.label}
+          </Typography>
+        )}
+          <Select variant="outlined">
+            {props.data.map((data, index) => (
+              <MenuItem value={data} key={index}>
+                {data}
+              </MenuItem>
+            ))}
+          </Select>
+      </Box>
+    </>
+  );
+};

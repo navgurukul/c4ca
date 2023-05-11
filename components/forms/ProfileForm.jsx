@@ -8,11 +8,12 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Camera } from "@mui/icons-material";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { breakpoints } from "@/theme/constant";
-import InputControl from "./InputControl";
+import InputControl, { SelectBox } from "./InputControl";
 import Team from "./Team";
+import { classesData, statesData } from "@/constant";
 
 const ProfileForm = () => {
   const router = useRouter();
@@ -75,10 +76,10 @@ const ProfileForm = () => {
                 <InputControl label="School" type="text" />
               </Grid>
               <Grid item md={6} sm={6} xs={12}>
-                <InputControl label="Class" type="text" />
+                <SelectBox label="Class" data={classesData} />
               </Grid>
               <Grid item md={12} sm={12} xs={12}>
-                <InputControl label="State" type="text" />
+                <SelectBox label="State" data={statesData} />
               </Grid>
             </Grid>
           </Box>

@@ -16,7 +16,7 @@ theme = createTheme(theme, {
       main: "#29458C",
       light: "#D4DAE8",
       dark: "#192954",
-      contrastText: '#FFFFFF'
+      contrastText: "#FFFFFF",
     },
 
     secondary: {
@@ -177,6 +177,7 @@ theme = createTheme(theme, {
 });
 
 theme.components = {
+  // customize mui button
   MuiButton: {
     styleOverrides: {
       root: {
@@ -184,10 +185,32 @@ theme.components = {
         height: "48px",
         borderRadius: "100px",
         padding: "8px 16px",
-        display:'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "8px",
+      },
+    },
+  },
+
+  // customize select component
+  MuiSelect: {
+    styleOverrides: {
+      root: {
+        width: "100%",
+        height: "48px",
+        borderRadius: "100px",
+        border: "1px solid #2E2E2E",
+      },
+    },
+  },
+  MuiPaper: {
+    styleOverrides: {
+      root: {
+        height: "calc(38.5% + 8px)",
+        background: "#4Fc3F7",
+        color: '#FFFFFF',
+        borderRadius: "8px",
       },
     },
   },
