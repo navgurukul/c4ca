@@ -1,8 +1,8 @@
 import { Box, Button, Typography, useMediaQuery } from "@mui/material";
+import Link from "next/link";
 import { Launch } from "@mui/icons-material";
 import { breakpoints } from "@/theme/constant";
 import ProgressBar from "@/components/progressBar/ProgressBar";
-import Link from "next/link";
 
 // Learning Cards
 export const LearnCards = ({
@@ -29,10 +29,7 @@ export const LearnCards = ({
         className={`contentBox ${isMobile ? className_mobile : className_web}`}
         sx={{ flexDirection: isMobile ? "column" : "row" }}
       >
-        <Box
-          sx={{ width: "100%", alignSelf: "center", textAlign: "center" }}
-          className="p-4"
-        >
+        <Box className="imgBox p-4">
           <img
             src={isMobile ? mobileImage : webImage}
             alt="image"
@@ -41,11 +38,11 @@ export const LearnCards = ({
         </Box>
 
         <Box
-          sx={{ width: "100%", display: "grid", gap: isMobile ? 4 : 10 }}
+          sx={{ width:'100%', display: "grid", gap: isMobile ? 4 : 10 }}
           className={isMobile ? "p-16" : "p-32"}
         >
           <Box sx={{ display: "grid", gap: 2 }}>
-            <Typography variant="h6" align="start" color="primary">
+            <Typography variant="h6" align="left" color="primary">
               {title}
             </Typography>
             <Typography variant="body1" color="text.primary">
@@ -61,7 +58,6 @@ export const LearnCards = ({
 
           <Box
             className="btnGrp"
-            sx={{ justifyContent: isMobile ? "space-between" : "flex-start" }}
           >
             <Button variant="outlined" sx={{ border: "1px solid" }}>
               <Typography variant="ButtonLarge">View Classes</Typography>
@@ -138,7 +134,7 @@ export const ProjectAwardCards = ({
       <img src={image} alt="image" />
 
       <Box sx={{ display: "grid", placeItems: "center", gap: 2 }}>
-        <Typography variant="ButtonLarge" sx={{ color: color }}>
+        <Typography variant="subtitle1" sx={{ color: color }}>
           {title}
         </Typography>
         <Button

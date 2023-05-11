@@ -1,29 +1,25 @@
-import theme from "@/theme/theme";
-
-
 export const LearnPathways = [
   {
-    webImage: '/assets/climate_action_web.svg',
-    mobileImage: '/assets/climate_action_mobile.svg',
-    title: 'Climate Action',
-    subtitle: 'Learn about climate change and steps to counter them',
-    bgImage_web: '/assets/climate_web_bg.svg',
-    bgImage_mobile: '/assets/climate_mobile_bg.svg',
-    className_web: 'climateBlock_Web',
-    className_mobile: 'climateBlock_Mobile',
+    webImage: "/assets/climate_action_web.svg",
+    mobileImage: "/assets/climate_action_mobile.svg",
+    title: "Climate Action",
+    subtitle: "Learn about climate change and steps to counter them",
+    bgImage_web: "/assets/climate_web_bg.svg",
+    bgImage_mobile: "/assets/climate_mobile_bg.svg",
+    className_web: "climateBlock_Web",
+    className_mobile: "climateBlock_Mobile",
   },
   {
-    webImage: '/assets/scratch_web.svg',
-    mobileImage: '/assets/scratch_mobile.svg',
-    title: 'Scratch - Block Based Programming',
-    subtitle: 'Drag and drop gamified learning',
-    bgImage_web: '/assets/scratch_web_bg.svg',
-    bgImage_mobile: '/assets/scratch_mobile_bg.svg',
-    className_web: 'scratchBlock_Web',
-    className_mobile: 'scratchBlock_Mobile',
+    webImage: "/assets/scratch_web.svg",
+    mobileImage: "/assets/scratch_mobile.svg",
+    title: "Scratch - Block Based Programming",
+    subtitle: "Drag and drop gamified learning",
+    bgImage_web: "/assets/scratch_web_bg.svg",
+    bgImage_mobile: "/assets/scratch_mobile_bg.svg",
+    className_web: "scratchBlock_Web",
+    className_mobile: "scratchBlock_Mobile",
   },
-]
-
+];
 
 export const ScratchPracticePathways = [
   {
@@ -50,7 +46,7 @@ export const ProjectAwardsPathways = [
     bgColor: "#29458C",
     color: "#FFFFFF",
     border: "#192954",
-    path: '/submission'
+    path: "/submission",
   },
   {
     title: "Win Prices and Receive Certificates",
@@ -59,6 +55,6 @@ export const ProjectAwardsPathways = [
     bgColor: "#FFAD33",
     border: "#99681F",
     color: "#2E2E2E",
-    path: '/submission'
+    path: "/submission",
   },
 ];

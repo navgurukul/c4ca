@@ -11,6 +11,7 @@ import { CalendarMonth } from "@mui/icons-material";
 import { breakpoints } from "@/theme/constant";
 import DragDropZone from "./DragDropZone";
 import ProjectSubmitted from "./Completed";
+import Link from "next/link";
 
 const Submission = (props) => {
   const [show, setShow] = useState(false);
@@ -26,7 +27,9 @@ const Submission = (props) => {
           disableGutters
           sx={{ display: "grid", placeItems: "center", gap: 4 }}
         >
-          <Typography variant="h5" color='text.primary'>Your Submission</Typography>
+          <Typography variant="h5" color="text.primary">
+            {props.show ? "Re-Submit Project" : "Your Submission"}
+          </Typography>
 
           <Container
             maxWidth="sm"
@@ -55,17 +58,37 @@ const Submission = (props) => {
               ></textarea>
             </Box>
 
+            {/* project link submission zone */}
             <InputControl label="Share Scratch Project Link" type="text" />
 
+            {/* project drag-drop zone */}
             <Box sx={{ display: "grid", gap: 1 }}>
               <Typography variant="body2">Or, Upload project file</Typography>
               <DragDropZone />
             </Box>
           </Container>
 
-          <Button className="profileBtn" onClick={handleShow}>
-            <Typography variant="ButtonLarge">Submit Project</Typography>
-          </Button>
+          <Container maxWidth="sm" align="center">
+            {props.show ? (
+              <Box className="btnGrp" sx={{ justifyContent: "space-evenly" }}>
+                <Button className="profileBtn" onClick={handleShow}>
+                  <Typography variant="ButtonLarge">Submit Project</Typography>
+                </Button>
+                <Button
+                  variant="outlined"
+                  sx={{ minWidth: isMobile ? 120 : 200 }}
+                >
+                  <Link href="/dashboard">
+                    <Typography variant="ButtonLarge">Cancel</Typography>
+                  </Link>
+                </Button>
+              </Box>
+            ) : (
+              <Button className="profileBtn" onClick={handleShow}>
+                <Typography variant="ButtonLarge">Submit Project</Typography>
+              </Button>
+            )}
+          </Container>
         </Container>
       ) : (
         <ProjectSubmitted />

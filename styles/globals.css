@@ -48,11 +48,13 @@ a {
 }
 
 .btnGrp {
+  width: 100%;
   display: flex;
   gap: 16px;
 }
 
 .profileBtn {
+  min-width: 200px;
   background: linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%);
   color: #FFFFFF;
 }
@@ -126,6 +128,12 @@ header .box {
   display: flex;
   position: absolute;
   overflow: hidden;
+}
+
+.imgBox {
+  width: 100%;
+  align-self: center;
+  text-align: center;
 }
 
 .p-32 {

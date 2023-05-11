@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
 import { CheckCircle } from "@mui/icons-material";
 import Submission from "./Submission";
-// import ProjectReSubmission from "./ReSubmission";
 
 const ProjectSubmitted = () => {
   const [show, setShow] = useState(false);
@@ -63,7 +62,7 @@ const ProjectSubmitted = () => {
             You may do as many submissions as necessary until 15th June 2023
           </Typography>
         </Container>
-      ) : <Submission />}
+      ) : <Submission show={handleShow}/>}
     </>
   );
 };
