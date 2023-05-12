@@ -1,4 +1,4 @@
-export const LearnPathways = [
+const LearnPathways = [
   {
     webImage: "/assets/climate_action_web.svg",
     mobileImage: "/assets/climate_action_mobile.svg",
@@ -21,7 +21,7 @@ export const LearnPathways = [
   },
 ];
 
-export const ScratchPracticePathways = [
+const ScratchPracticePathways = [
   {
     title: "Practice Scratch on the Web",
     image: "/assets/practice_scratch_web.svg",
@@ -38,7 +38,7 @@ export const ScratchPracticePathways = [
   },
 ];
 
-export const ProjectAwardsPathways = [
+const ProjectAwardsPathways = [
   {
     title: "Sharing the Exciting Ideas",
     image: "/assets/experiment_lab.svg",
@@ -58,3 +58,6 @@ export const ProjectAwardsPathways = [
     path: "/submission",
   },
 ];
+
+
+export {LearnPathways, ScratchPracticePathways, ProjectAwardsPathways}

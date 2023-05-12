@@ -28,7 +28,7 @@ export const SelectBox = (props) => {
             {props.label}
           </Typography>
         )}
-          <Select variant="outlined">
+          <Select variant="outlined" name={props.name} value={props.value} onChange={props.onChange}>
             {props.data.map((data, index) => (
               <MenuItem value={data} key={index}>
                 {data}

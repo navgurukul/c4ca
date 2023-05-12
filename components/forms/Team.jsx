@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import InputControl from "./InputControl";
 import { breakpoints } from "@/theme/constant";
-import { useState } from "react";
 
 const Team = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");

@@ -168,7 +168,7 @@ theme = createTheme(theme, {
       fontSize: "1.125rem",
       fontWeight: 700,
       lineHeight: "170%",
-      letterSpacing: 1,
+      letterSpacing: 0.5,
       [theme.breakpoints.down("sm")]: {
         fontSize: "1rem",
       },
@@ -207,7 +207,6 @@ theme.components = {
   MuiPaper: {
     styleOverrides: {
       root: {
-        height: "calc(38.5% + 8px)",
         background: "#4Fc3F7",
         color: '#FFFFFF',
         borderRadius: "8px",

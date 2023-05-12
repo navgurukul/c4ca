@@ -93,6 +93,20 @@ header .box {
   position: absolute;
   right: 0;
   bottom: 0;
+  cursor: pointer;
+}
+
+.profile_picture_box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #FFFFFF;
+  padding: 15px 30px;
+  border: none;
+  display: grid;
+  place-items: center;
+  gap: 32px;
 }
 
 /************************ profile upgrade box CSS ************************/

@@ -1,5 +1,5 @@
+import { useState } from "react";
 import {
-  Avatar,
   Box,
   Container,
   Typography,
@@ -7,15 +7,31 @@ import {
   Button,
   useMediaQuery,
 } from "@mui/material";
-import { Camera } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { breakpoints } from "@/theme/constant";
+import ProfilePicture from "./ProfilePicture";
+import { classesData, statesData } from "@/constant";
 import InputControl, { SelectBox } from "./InputControl";
 import Team from "./Team";
-import { classesData, statesData } from "@/constant";
+
+const initialFormValues = {
+  Class: "",
+  state: "",
+};
 
 const ProfileForm = () => {
+  const [formValues, setFormValues] = useState(initialFormValues);
+
+  const handleValueChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   return (
@@ -32,15 +48,13 @@ const ProfileForm = () => {
         </Typography>
 
         <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
-          <Box className="AvatarBox">
-            <Avatar src="/avatar.svg" sx={{ width: "100%", height: "100%" }} />
-            <Camera className="Camera" />
-          </Box>
+          <ProfilePicture />
 
           <InputControl
             label="Full Name"
             type="text"
             placeholder="Enter Your Name"
+            // value='Abhishek'
           />
 
           <InputControl
@@ -67,19 +81,29 @@ const ProfileForm = () => {
           </Box>
 
           <Box
-            className={
-              router.asPath === "/profile-update" ? "show" : "hide"
-            }
+            className={router.asPath === "/profile-update" ? "show" : "hide"}
           >
             <Grid container spacing={isMobile ? 2 : 4}>
               <Grid item md={6} sm={6} xs={12}>
                 <InputControl label="School" type="text" />
               </Grid>
               <Grid item md={6} sm={6} xs={12}>
-                <SelectBox label="Class" data={classesData} />
+                <SelectBox
+                  label="Class"
+                  data={classesData}
+                  name="Class"
+                  value={formValues.Class}
+                  onChange={handleValueChange}
+                />
               </Grid>
               <Grid item md={12} sm={12} xs={12}>
-                <SelectBox label="State" data={statesData} />
+                <SelectBox
+                  label="State"
+                  data={statesData}
+                  name="state"
+                  value={formValues.state}
+                  onChange={handleValueChange}
+                />
               </Grid>
             </Grid>
           </Box>

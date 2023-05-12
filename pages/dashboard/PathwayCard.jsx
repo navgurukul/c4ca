@@ -5,7 +5,7 @@ import { breakpoints } from "@/theme/constant";
 import ProgressBar from "@/components/progressBar/ProgressBar";
 
 // Learning Cards
-export const LearnCards = ({
+const LearnCards = ({
   webImage,
   mobileImage,
   title,
@@ -74,7 +74,7 @@ export const LearnCards = ({
 };
 
 // Practice Scratch Cards
-export const ScratchPracticeCards = ({
+const ScratchPracticeCards = ({
   title,
   image,
   btnText,
@@ -112,7 +112,7 @@ export const ScratchPracticeCards = ({
 };
 
 // Project & Award Cards
-export const ProjectAwardCards = ({
+const ProjectAwardCards = ({
   title,
   image,
   btnText,
@@ -151,3 +151,6 @@ export const ProjectAwardCards = ({
     </Box>
   );
 };
+
+
+export {LearnCards, ScratchPracticeCards, ProjectAwardCards}
