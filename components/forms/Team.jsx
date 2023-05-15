@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Container,
   Button,
@@ -10,6 +11,46 @@ import { breakpoints } from "@/theme/constant";
 
 const Team = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
+  const [count, setCount] = useState(0);
+  const [teamForm, setTeamForm] = useState([]);
+
+  const handleClick = (e) => {
+    const value = e.target.textContent;
+    setCount(value);
+  };
+
+  useEffect(
+    () =>
+      setTeamForm(
+        Array.from({ length: count }).map((item, index) => {
+          if (index == 0) {
+            return (
+              <Box key={index} sx={{ display: "grid", gap: 1 }}>
+                <Typography variant="body2" color="text.primary">
+                  Team Member {index + 1}
+                </Typography>
+                <Typography variant="body1" color="text.primary">
+                  User Name (You)
+                </Typography>
+              </Box>
+            );
+          } else if (index > 0) {
+            return (
+              <Box key={index} sx={{ display: "grid", gap: 1 }}>
+                <Typography variant="body2" color="text.primary">
+                  Team Member {index + 1}
+                </Typography>
+                <InputControl label="Full Name" type="text" />
+                <InputControl label="Email Address" type="email" />
+              </Box>
+            );
+          } else {
+            return null;
+          }
+        })
+      ),
+    [count]
+  );
 
   return (
     <Container maxWidth="sm" sx={{ display: "grid", gap: isMobile ? 2 : 4 }}>
@@ -23,13 +64,13 @@ const Team = () => {
         </Typography>
 
         <Box className="btnGrp">
-          <Button className="teamBtn">
+          <Button className="teamBtn" onClick={handleClick}>
             3
           </Button>
-          <Button className="teamBtn">
+          <Button className="teamBtn" onClick={handleClick}>
             4
           </Button>
-          <Button className="teamBtn">
+          <Button className="teamBtn" onClick={handleClick}>
             5
           </Button>
         </Box>
@@ -42,28 +83,8 @@ const Team = () => {
 
       <InputControl label="Team Name" type="text" />
 
-      <Box sx={{ display: "grid", gap: 1 }}>
-        <Typography variant="body2" color="text.primary">
-          Team Member 1
-        </Typography>
-        <Typography variant="body1" color="text.primary">
-          User Name (You)
-        </Typography>
-      </Box>
-      <Box sx={{ display: "grid", gap: 1 }}>
-        <Typography variant="body2" color="text.primary">
-          Team Member 2
-        </Typography>
-        <InputControl label="Full Name" type="text" />
-        <InputControl label="Email Address" type="email" />
-      </Box>
-      <Box sx={{ display: "grid", gap: 1 }}>
-        <Typography variant="body2" color="text.primary">
-          Team Member 3
-        </Typography>
-        <InputControl label="Full Name" type="text" />
-        <InputControl label="Email Address" type="email" />
-      </Box>
+      {/* set dynamic form fields for adding team members */}
+      {teamForm}
     </Container>
   );
 };
