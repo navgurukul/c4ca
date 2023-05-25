@@ -6,7 +6,7 @@ import "@/styles/globals.css";
 import Header from "@/components/header/Header";
 
 export default function App({ Component, pageProps }) {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }) {
       </Head>
 
       <ThemeProvider theme={theme}>
-        {router.asPath === '/login' ? null : <Header />}
+        {router.asPath === "/login" ? null : <Header />}
         <Component {...pageProps} />
       </ThemeProvider>
     </>

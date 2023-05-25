@@ -1,6 +1,6 @@
 const { styled } = require("@mui/material");
 
-export const GoogleBtn = styled("Button")({
+export const GoogleBtn = styled("button")({
   width: "240px",
   height: "48px",
   margin: "auto",
