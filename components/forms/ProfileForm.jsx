@@ -1,39 +1,41 @@
-import { useState } from "react";
+import { breakpoints } from "@/theme/constant";
 import {
   Box,
-  Container,
-  Typography,
-  Grid,
   Button,
+  Container,
+  Grid,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import { breakpoints } from "@/theme/constant";
+import { useForm, FormProvider } from "react-hook-form";
 import ProfilePicture from "./ProfilePicture";
-import { classesData, statesData } from "@/constant";
-import InputControl, { SelectBox } from "./InputControl";
+import InputControl from "./InputControl";
+import Link from "next/link";
 import Team from "./Team";
-
-const initialFormValues = {
-  Class: "",
-  state: "",
-};
+import {
+  DOB_Validation,
+  Email_Validation,
+  Full_Name_Validation,
+  Phone_Number_Validation,
+  School_Validation,
+} from "../validation";
+import { useState } from "react";
 
 const ProfileForm = () => {
-  const [formValues, setFormValues] = useState(initialFormValues);
-
-  const handleValueChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  };
+  const methods = useForm();
+  const [success, setSuccess] = useState(false);
+  const onSubmit = methods.handleSubmit((data) => {
+    setSuccess(true);
+    console.log(success);
+    console.log(data);
+  });
 
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
+
+  const handlePath = () => router.push('/dashboard')
+
   return (
     <>
       <Container
@@ -50,78 +52,58 @@ const ProfileForm = () => {
         <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
           <ProfilePicture />
 
-          <InputControl
-            label="Full Name"
-            type="text"
-            placeholder="Enter Your Name"
-            // value='Abhishek'
-          />
+          <FormProvider {...methods}>
+            <form onSubmit={(e) => e.preventDefault()} noValidate autoComplete="off">
+              <InputControl {...Full_Name_Validation} />
 
-          <InputControl
-            label="Email Address"
-            type="Email"
-            placeholder="Enter Email Address"
-          />
+              <InputControl {...Email_Validation} />
 
-          <Box>
-            <Grid container spacing={isMobile ? 2 : 4}>
-              <Grid item md={6} sm={6} xs={12}>
-                <InputControl label="Phone Number" type="tel" maxLength={10} />
-                <Typography variant="body2" color="Grey.main">
-                  As a student, you can enter your parent's phone number
-                </Typography>
-              </Grid>
-              <Grid item md={6} sm={6} xs={12}>
-                <InputControl label="Date of Birth" type="date" />
-                <Typography variant="body2" color="Grey.main">
-                  On or after 1 April 1995
-                </Typography>
-              </Grid>
-            </Grid>
-          </Box>
+              <Box>
+                <Grid container spacing={isMobile ? 2 : 4}>
+                  <Grid item md={6} sm={6} xs={12}>
+                    <InputControl {...Phone_Number_Validation} />
+                    <Typography variant="body2" color="Grey.main">
+                      As a student, you can enter your parent's phone number
+                    </Typography>
+                  </Grid>
+                  <Grid item md={6} sm={6} xs={12}>
+                    <InputControl {...DOB_Validation} />
+                    <Typography variant="body2" color="Grey.main">
+                      On or after 1 April 1995
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Box>
 
-          <Box
-            className={router.asPath === "/profile-update" ? "show" : "hide"}
-          >
-            <Grid container spacing={isMobile ? 2 : 4}>
-              <Grid item md={6} sm={6} xs={12}>
-                <InputControl label="School" type="text" />
-              </Grid>
-              <Grid item md={6} sm={6} xs={12}>
-                <SelectBox
-                  label="Class"
-                  data={classesData}
-                  name="Class"
-                  value={formValues.Class}
-                  onChange={handleValueChange}
-                />
-              </Grid>
-              <Grid item md={12} sm={12} xs={12}>
-                <SelectBox
-                  label="State"
-                  data={statesData}
-                  name="state"
-                  value={formValues.state}
-                  onChange={handleValueChange}
-                />
-              </Grid>
-            </Grid>
-          </Box>
+              <Box
+                className={
+                  router.asPath === "/profile-update" ? "show" : "hide"
+                }
+              >
+                <Grid container spacing={isMobile ? 2 : 4}>
+                  <Grid item md={6} sm={6} xs={12}>
+                    <InputControl {...School_Validation} />
+                  </Grid>
+                </Grid>
+              </Box>
+
+              {router.asPath === "/profile-update" ? <Team /> : null}
+
+              <Button className="profileBtn" onClick={onSubmit}>
+                {router.asPath === "/profile-update" ? (
+                  <Typography variant="ButtonLarge">Save Profile</Typography>
+                ) : (
+                  <Typography
+                    variant="ButtonLarge"
+                    onClick={handlePath}
+                  >
+                    Save & Proceed
+                  </Typography>
+                )}
+              </Button>
+            </form>
+          </FormProvider>
         </Container>
-
-        {router.asPath === "/profile-update" ? <Team /> : null}
-
-        <Button className="profileBtn">
-          {router.asPath === "/profile-update" ? (
-            <Link href="/profile-update">
-              <Typography variant="ButtonLarge">Save Profile</Typography>
-            </Link>
-          ) : (
-            <Link href="/dashboard">
-              <Typography variant="ButtonLarge">Save & Proceed</Typography>
-            </Link>
-          )}
-        </Button>
       </Container>
     </>
   );

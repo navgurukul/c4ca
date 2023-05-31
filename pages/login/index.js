@@ -1,9 +1,85 @@
+import { useEffect } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import { GoogleBtn } from "@/styles/style";
-import { useRouter } from "next/router";
-import Link from "next/link";
+import axios from "axios";
 
 const LoginPage = () => {
+  const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  const handleLoginSuccess = () => {
+    if (typeof gapi !== "undefined") {
+      gapi.load("auth2", () => {
+        gapi.auth2
+          .init({
+            client_id: CLIENT_ID,
+          })
+          .then((authInstance) => {
+            return authInstance.signIn();
+          })
+          .then((googleUser) => {
+            const idToken = googleUser.getAuthResponse().id_token;
+            sendGoogleUserData(idToken);
+          })
+          .catch((error) => {
+            console.log("Login failed", error);
+          });
+      });
+    }
+  };
+
+  const sendGoogleUserData = (token) => {
+    return axios({
+      url: `${BASE_URL}/users/auth/google`,
+      method: "post",
+      headers: { accept: "application/json", Authorization: token },
+      data: { idToken: token, mode: "web" },
+    })
+      .then((res) => {
+        localStorage.setItem("AUTH", JSON.stringify(res.data));
+        axios({
+          method: "get",
+          url: `${BASE_URL}/users/me`,
+          headers: {
+            accept: "application/json",
+            Authorization: res.data.token,
+          },
+        }).then((res) => {
+          console.log(res.status);
+          window.location.href = "/profile";
+        });
+      })
+      .catch((err) => {
+        console.log("error in google data", err);
+      });
+  };
+
+  const loadGoogleSignInAPI = () => {
+    const script = document.createElement("script");
+    script.src = "https://apis.google.com/js/platform.js";
+    script.onload = () => {
+      window.gapi.load("auth2", () => {
+        window.gapi.auth2.init({
+          client_id: CLIENT_ID,
+        });
+      });
+    };
+    document.body.appendChild(script);
+  };
+
+  useEffect(() => {
+    loadGoogleSignInAPI();
+
+    return () => {
+      const script = document.querySelector(
+        "script[src='https://apis.google.com/js/platform.js']"
+      );
+      if (script) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
+
   return (
     <main>
       <Container
@@ -23,14 +99,12 @@ const LoginPage = () => {
             <Typography variant="body1" align="center" color="text.primary">
               Continue to C4CA
             </Typography>
-            <Link href="/profile">
-              <GoogleBtn>
-                <img src="/Google.svg" />
-                <Typography variant="ButtonLarge" color="text.primary">
-                  Login with Google
-                </Typography>
-              </GoogleBtn>
-            </Link>
+            <GoogleBtn onClick={handleLoginSuccess}>
+              <img src="/Google.svg" />
+              <Typography variant="ButtonLarge" color="text.primary">
+                Login with Google
+              </Typography>
+            </GoogleBtn>
           </Box>
         </Box>
       </Container>

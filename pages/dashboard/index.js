@@ -6,11 +6,7 @@ import {
   ProjectAwardCards,
   ScratchPracticeCards,
 } from "./PathwayCard";
-import {
-  LearnPathways,
-  ProjectAwardsPathways,
-  ScratchPracticePathways,
-} from "./data";
+import { LearnPathways, ProjectAwardsPathways, ScratchPracticePathways } from "@/constant";
 
 const Dashboard = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");

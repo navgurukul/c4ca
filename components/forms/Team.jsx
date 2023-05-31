@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
-import {
-  Container,
-  Button,
-  Typography,
-  Box,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import InputControl from "./InputControl";
 import { breakpoints } from "@/theme/constant";
+import { Team_Name_Validation } from "../validation";
 
 const Team = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
@@ -25,7 +20,7 @@ const Team = () => {
         Array.from({ length: count }).map((item, index) => {
           if (index == 0) {
             return (
-              <Box key={index} sx={{ display: "grid", gap: 1 }}>
+              <Box key={index + 1} sx={{ display: "grid", gap: 1 }}>
                 <Typography variant="body2" color="text.primary">
                   Team Member {index + 1}
                 </Typography>
@@ -36,12 +31,22 @@ const Team = () => {
             );
           } else if (index > 0) {
             return (
-              <Box key={index} sx={{ display: "grid", gap: 1 }}>
+              <Box key={index + 1} sx={{ display: "grid", gap: 1 }}>
                 <Typography variant="body2" color="text.primary">
                   Team Member {index + 1}
                 </Typography>
-                <InputControl label="Full Name" type="text" />
-                <InputControl label="Email Address" type="email" />
+                <InputControl
+                  label="Full Name"
+                  type="text"
+                  id="full-name"
+                  name="Member Name"
+                />
+                <InputControl
+                  label="Email Address"
+                  type="email"
+                  id="email"
+                  name="Member Email"
+                />
               </Box>
             );
           } else {
@@ -53,7 +58,7 @@ const Team = () => {
   );
 
   return (
-    <Container maxWidth="sm" sx={{ display: "grid", gap: isMobile ? 2 : 4 }}>
+    <Box sx={{ display: "grid", gap: isMobile ? 2 : 4 }}>
       <Typography variant="h5" color="text.primary">
         Team Details
       </Typography>
@@ -81,11 +86,11 @@ const Team = () => {
         if they already registered on the platform
       </Typography>
 
-      <InputControl label="Team Name" type="text" />
+      <InputControl {...Team_Name_Validation} />
 
       {/* set dynamic form fields for adding team members */}
       {teamForm}
-    </Container>
+    </Box>
   );
 };
 

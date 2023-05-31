@@ -54,9 +54,55 @@ a {
 }
 
 .profileBtn {
-  min-width: 200px;
   background: linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%);
   color: #FFFFFF;
+}
+
+form {
+  width: 100%;
+  padding: 0 20px;
+  display: grid;
+  gap: 32px;
+}
+
+label {
+  font-family: 'Amazon Ember';
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 170%;
+  letter-spacing: 0;
+  color: #2E2E2E;
+}
+
+input {
+  width: 100%;
+  height: 48px;
+  padding: 8px 16px;
+  border: 1px solid #2E2E2E;
+  border-radius: 100px;
+  font-family: 'Amazon Ember';
+  font-size: 18px;
+  color: #2E2E2E;
+  cursor: text;
+  outline: none;
+}
+
+form .profileBtn {
+  min-width: 240px;
+  margin: 0 auto;
+}
+
+.errorMsg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  font-family: 'Amazon Ember';
+  font-size: 0.875rem;
+  color: #EF4444;
+  background: #FEE2E2;
+  font-weight: 600;
+  border-radius: 8px;
 }
 
 /************************ header CSS ************************/
