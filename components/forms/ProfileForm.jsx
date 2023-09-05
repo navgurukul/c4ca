@@ -26,6 +26,9 @@ const ProfileForm = () => {
     email: "",
   });
 
+  const [phone, setPhone] = useState(""); // State for Phone Number
+  const [dob, setDob] = useState(""); // State for Date of Birth
+
   useEffect(() => {
     // Retrieve the token from localStorage
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
@@ -50,6 +53,36 @@ const ProfileForm = () => {
         });
     }
   }, []);
+
+  // Function to handle saving data and redirection
+  const handleSaveAndProceed = () => {
+    // Create a data object to send in the POST request
+    const postData = {
+      name: userData.name,
+      email: userData.email,
+      phone: phone,
+      dob: dob,
+    };
+
+    // Send a POST request to the API
+    Axios.post("https://merd-api.merakilearn.org/c4ca/teacher_profile", postData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("AUTH_TOKEN")}`, // Retrieve token from localStorage
+      },
+    })
+      .then((response) => {
+        // Check for a successful response here, you can customize this part
+        if (response.status === 200) {
+          // Redirect to the dashboard page upon success
+          router.push("/dashboard");
+        } else {
+          console.error("Error saving data:", response);
+        }
+      })
+      .catch((error) => {
+        console.error("Error saving data:", error);
+      });
+  };
 
   return (
     <>
@@ -90,13 +123,24 @@ const ProfileForm = () => {
           <Box>
             <Grid container spacing={isMobile ? 2 : 4}>
               <Grid item md={6} sm={6} xs={12}>
-                <InputControl label="Phone Number" type="tel" maxLength={10} />
+                <InputControl
+                  label="Phone Number"
+                  type="tel"
+                  maxLength={10}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
                 <Typography variant="body2" color="Grey.main">
                   As a student, you can enter your parent's phone number
                 </Typography>
               </Grid>
               <Grid item md={6} sm={6} xs={12}>
-                <InputControl label="Date of Birth" type="date" />
+                <InputControl
+                  label="Date of Birth"
+                  type="date"
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
+                />
                 <Typography variant="body2" color="Grey.main">
                   On or after 1 April 1995
                 </Typography>
@@ -125,16 +169,8 @@ const ProfileForm = () => {
 
         {router.asPath === "/profile/profile-update" ? <Team /> : null}
 
-        <Button className="profileBtn">
-          {router.asPath === "/profile/profile-update" ? (
-            <Link href="/profile/profile-update">
-              <Typography variant="ButtonLarge">Save Profile</Typography>
-            </Link>
-          ) : (
-            <Link href="/dashboard">
-              <Typography variant="ButtonLarge">Save & Proceed</Typography>
-            </Link>
-          )}
+        <Button className="profileBtn" onClick={handleSaveAndProceed}>
+          <Typography variant="ButtonLarge">Save & Proceed</Typography>
         </Button>
       </Container>
     </>
