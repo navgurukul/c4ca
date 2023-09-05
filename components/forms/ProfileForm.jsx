@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import Axios from "axios";
 import {
   Avatar,
   Box,
@@ -17,6 +19,38 @@ import Team from "./Team";
 const ProfileForm = () => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
+
+  // State to store user data
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    // Retrieve the token from localStorage
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+
+    // Check if the token exists
+    if (authToken && authToken.token) {
+      // Fetch user data from the API using Axios with the token
+      Axios.get("https://merd-api.merakilearn.org/users/me", {
+        headers: {
+          Authorization: `Bearer ${authToken.token}`,
+        },
+      })
+        .then((response) => {
+          // Update the state with user data
+          setUserData({
+            name: response.data.user.name,
+            email: response.data.user.email,
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
+  }, []);
+
   return (
     <>
       <Container
@@ -32,7 +66,10 @@ const ProfileForm = () => {
 
         <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
           <Box className="AvatarBox">
-            <Avatar src="/avatar.svg" sx={{ width: "100%", height: "100%" }} />
+            <Avatar
+              src="https://merakilearn.s3.ap-south-1.amazonaws.com/assets/avatars/2a.png"
+              sx={{ width: "100%", height: "100%" }}
+            />
             <Camera className="Camera" />
           </Box>
 
@@ -40,12 +77,14 @@ const ProfileForm = () => {
             label="Full Name"
             type="text"
             placeholder="Enter Your Name"
+            value={userData.name}
           />
 
           <InputControl
             label="Email Address"
             type="Email"
             placeholder="Enter Email Address"
+            value={userData.email}
           />
 
           <Box>
