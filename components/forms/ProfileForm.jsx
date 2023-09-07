@@ -6,6 +6,10 @@ import {
   Grid,
   Button,
   useMediaQuery,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { Camera } from "@mui/icons-material";
 import Link from "next/link";
@@ -48,19 +52,59 @@ const ProfileForm = () => {
             placeholder="Enter Email Address"
           />
 
+          <InputControl
+            label="Phone Number"
+            type="Phone"
+            placeholder="Enter Phone Number"
+          />
+
+          <InputControl
+            label="School"
+            type="Phone"
+            placeholder="Enter School "
+          />
+
           <Box>
             <Grid container spacing={isMobile ? 2 : 4}>
               <Grid item md={6} sm={6} xs={12}>
-                <InputControl label="Phone Number" type="tel" maxLength={10} />
-                <Typography variant="body2" color="Grey.main">
-                  As a student, you can enter your parent's phone number
+                <Typography style={{marginBottom: 10}} variant="body2" color="text.primary">
+                  District
                 </Typography>
+                <FormControl fullWidth>
+                  <InputLabel  id="district">Select District</InputLabel>
+                  <Select
+                    style={{ borderRadius: 100 }}
+                    labelId="district"
+                    id="demo-simple-select"
+                    // value={age}
+                    label="Select District"
+                    // onChange={handleChange}
+                  >
+                    <MenuItem value={10}>Nagpur</MenuItem>
+                    <MenuItem value={20}>Bhandara</MenuItem>
+                    <MenuItem value={30}>Akola</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item md={6} sm={6} xs={12}>
-                <InputControl label="Date of Birth" type="date" />
-                <Typography variant="body2" color="Grey.main">
-                  On or after 1 April 1995
+                <Typography style={{marginBottom: 10}} variant="body2" color="text.primary">
+                  Select State
                 </Typography>
+                <FormControl style={{borderColor: "black"}} fullWidth>
+                  <InputLabel id="state">Select State</InputLabel>
+                  <Select
+                    style={{ borderRadius: 100 }}
+                    labelId="state"
+                    id="demo-simple-select"
+                    // value={age}
+                    label="Select State"
+                    // onChange={handleChange}
+                  >
+                    <MenuItem value={10}>Maharashtra</MenuItem>
+                    <MenuItem value={20}>Madhya Pradesh</MenuItem>
+                    <MenuItem value={30}>Himachal Pradesh</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
           </Box>
