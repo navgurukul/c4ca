@@ -8,6 +8,10 @@ import {
   Grid,
   Button,
   useMediaQuery,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { Camera } from "@mui/icons-material";
 import Link from "next/link";
@@ -20,14 +24,17 @@ const ProfileForm = () => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
-  // State to store user data
   const [userData, setUserData] = useState({
     name: "",
     email: "",
   });
 
-  const [phone, setPhone] = useState(""); // State for Phone Number
-  const [dob, setDob] = useState(""); // State for Date of Birth
+  const [formData, setFormData] = useState({
+    phoneNumber: "",
+    school: "",
+    district: "",
+    state: "",
+  });
 
   useEffect(() => {
     // Retrieve the token from localStorage
@@ -54,33 +61,29 @@ const ProfileForm = () => {
     }
   }, []);
 
-  // Function to handle saving data and redirection
-  const handleSaveAndProceed = () => {
-    // Create a data object to send in the POST request
-    const postData = {
-      name: userData.name,
-      email: userData.email,
-      phone: phone,
-      dob: dob,
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSaveProfile = () => {
+    // Combine user data and form data
+    const profileData = {
+      ...userData,
+      ...formData,
     };
 
-    // Send a POST request to the API
-    Axios.post("https://merd-api.merakilearn.org/c4ca/teacher_profile", postData, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("AUTH_TOKEN")}`, // Retrieve token from localStorage
-      },
-    })
+    // Make a POST request to save the profile data
+    Axios.post("https://merd-api.merakilearn.org/c4ca/teacher_profile", profileData)
       .then((response) => {
-        // Check for a successful response here, you can customize this part
-        if (response.status === 200) {
-          // Redirect to the dashboard page upon success
-          router.push("/dashboard");
-        } else {
-          console.error("Error saving data:", response);
-        }
+        // Redirect to the dashboard if there are no errors
+        router.push("/dashboard");
       })
       .catch((error) => {
-        console.error("Error saving data:", error);
+        console.error("Error saving profile data:", error);
       });
   };
 
@@ -100,7 +103,7 @@ const ProfileForm = () => {
         <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
           <Box className="AvatarBox">
             <Avatar
-              src="https://merakilearn.s3.ap-south-1.amazonaws.com/assets/avatars/2a.png"
+              src="/avatar.svg"
               sx={{ width: "100%", height: "100%" }}
             />
             <Camera className="Camera" />
@@ -115,53 +118,70 @@ const ProfileForm = () => {
 
           <InputControl
             label="Email Address"
-            type="Email"
+            type="email"
             placeholder="Enter Email Address"
             value={userData.email}
+          />
+
+          <InputControl
+            label="Phone Number"
+            type="tel"
+            placeholder="Enter Phone Number"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleInputChange}
+          />
+
+          <InputControl
+            label="School"
+            type="text"
+            placeholder="Enter School"
+            name="school"
+            value={formData.school}
+            onChange={handleInputChange}
           />
 
           <Box>
             <Grid container spacing={isMobile ? 2 : 4}>
               <Grid item md={6} sm={6} xs={12}>
-                <InputControl
-                  label="Phone Number"
-                  type="tel"
-                  maxLength={10}
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
-                <Typography variant="body2" color="Grey.main">
-                  As a student, you can enter your parent's phone number
+                <Typography style={{ marginBottom: 10 }} variant="body2" color="text.primary">
+                  District
                 </Typography>
+                <FormControl fullWidth>
+                  <InputLabel id="district">Select District</InputLabel>
+                  <Select
+                    style={{ borderRadius: 100 }}
+                    labelId="district"
+                    id="district"
+                    name="district"
+                    value={formData.district}
+                    onChange={handleInputChange}
+                  >
+                    <MenuItem value="Nagpur">Nagpur</MenuItem>
+                    <MenuItem value="Bhandara">Bhandara</MenuItem>
+                    <MenuItem value="Akola">Akola</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item md={6} sm={6} xs={12}>
-                <InputControl
-                  label="Date of Birth"
-                  type="date"
-                  value={dob}
-                  onChange={(e) => setDob(e.target.value)}
-                />
-                <Typography variant="body2" color="Grey.main">
-                  On or after 1 April 1995
+                <Typography style={{ marginBottom: 10 }} variant="body2" color="text.primary">
+                  Select State
                 </Typography>
-              </Grid>
-            </Grid>
-          </Box>
-
-          <Box
-            className={
-              router.asPath === "/profile/profile-update" ? "show" : "hide"
-            }
-          >
-            <Grid container spacing={isMobile ? 2 : 4}>
-              <Grid item md={6} sm={6} xs={12}>
-                <InputControl label="School" type="text" />
-              </Grid>
-              <Grid item md={6} sm={6} xs={12}>
-                <InputControl label="Class" type="text" />
-              </Grid>
-              <Grid item md={12} sm={12} xs={12}>
-                <InputControl label="State" type="text" />
+                <FormControl style={{ borderColor: "black" }} fullWidth>
+                  <InputLabel id="state">Select State</InputLabel>
+                  <Select
+                    style={{ borderRadius: 100 }}
+                    labelId="state"
+                    id="state"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleInputChange}
+                  >
+                    <MenuItem value="Maharashtra">Maharashtra</MenuItem>
+                    <MenuItem value="Madhya Pradesh">Madhya Pradesh</MenuItem>
+                    <MenuItem value="Himachal Pradesh">Himachal Pradesh</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
           </Box>
@@ -169,8 +189,16 @@ const ProfileForm = () => {
 
         {router.asPath === "/profile/profile-update" ? <Team /> : null}
 
-        <Button className="profileBtn" onClick={handleSaveAndProceed}>
-          <Typography variant="ButtonLarge">Save & Proceed</Typography>
+        <Button className="profileBtn" onClick={handleSaveProfile}>
+          {router.asPath === "/profile/profile-update" ? (
+            <Link href="/profile/profile-update">
+              <Typography variant="ButtonLarge">Save Profile</Typography>
+            </Link>
+          ) : (
+            <Link href="/dashboard">
+              <Typography variant="ButtonLarge">Save & Proceed</Typography>
+            </Link>
+          )}
         </Button>
       </Container>
     </>
