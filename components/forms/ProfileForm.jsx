@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Avatar,
   Box,
@@ -17,8 +18,21 @@ import { useRouter } from "next/router";
 import { breakpoints } from "@/theme/constant";
 import InputControl from "./InputControl";
 import Team from "./Team";
+import SelectControl from "./SelectControl";
 
 const ProfileForm = () => {
+  
+  const options = [
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+    { label: "Option 3", value: "option3" },
+  ];
+
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   return (
@@ -26,8 +40,7 @@ const ProfileForm = () => {
       <Container
         maxWidth="lg"
         disableGutters
-        sx={{ display: "grid", placeItems: "center", gap: 4 }}
-      >
+        sx={{ display: "grid", placeItems: "center", gap: 4 }}>
         <Typography variant="h5" color="text.primary">
           {router.asPath === "/profile/profile-update"
             ? "Personal Details"
@@ -112,8 +125,7 @@ const ProfileForm = () => {
           <Box
             className={
               router.asPath === "/profile/profile-update" ? "show" : "hide"
-            }
-          >
+            }>
             <Grid container spacing={isMobile ? 2 : 4}>
               <Grid item md={6} sm={6} xs={12}>
                 <InputControl label="School" type="text" />
