@@ -2,7 +2,6 @@ import { TextField } from "@/styles/style"
 import { Box, Typography } from "@mui/material"
 
 const InputControl = (props) => {
-  console.log(props, 'props')
   return(
     <>
       <Box sx={{ display: "grid", gap: 1,backgroundColor:"pink" }}>
