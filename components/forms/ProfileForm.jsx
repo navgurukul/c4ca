@@ -145,7 +145,7 @@ const ProfileForm = () => {
     <Container
             maxWidth="lg"
             disableGutters
-            sx={{ display: "grid", placeItems: "center" }}
+            sx={{ display: "grid", placeItems: "center", gap  : "20px"}}
        >
       <Typography variant="h5" color="text.primary">
         {router.asPath === "/profile/profile-update"
@@ -167,7 +167,7 @@ const ProfileForm = () => {
             fullWidth
             id="name"
             name="name"
-           placeholder='Eg. Albert Einstein'
+           placeholder='Name'
             variant="outlined"
             margin="normal"
             value={formData.name}
@@ -190,7 +190,7 @@ const ProfileForm = () => {
             fullWidth
             id="email"
             name="email"
-            placeholder='Eg. albtein@gmail.com'
+            placeholder='Email'
             variant="outlined"
             margin="normal"
             value={formData.email}
@@ -214,7 +214,7 @@ const ProfileForm = () => {
             id="phoneNumber"
             name="phoneNumber"
             // label="Phone Number"
-            placeholder='Eg. 9999900000'
+            placeholder='Phone Number'
             variant="outlined"
             margin="normal"
             value={formData.phoneNumber}
@@ -237,7 +237,7 @@ const ProfileForm = () => {
             fullWidth
             id="schoolName"
             name="schoolName"
-            placeholder='Eg.Vidya Bharti'
+            placeholder='School Name'
             variant="outlined"
             margin="normal"
             value={formData.schoolName}
