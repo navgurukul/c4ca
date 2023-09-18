@@ -127,6 +127,7 @@ const ProfileForm = () => {
       ...prevErrors,
       [name]: '',
     }));
+    if(name === 'phoneNumber' && value.length > 10) return;
 
     setFormData((prevData) => ({
       ...prevData,
