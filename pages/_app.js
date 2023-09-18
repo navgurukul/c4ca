@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }) {
         <title>C4CA Board</title>
         <meta name="description" content="Created by Navgurukul" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/c4ca.svg"/>
       </Head>
 
       <ThemeProvider theme={theme}>
