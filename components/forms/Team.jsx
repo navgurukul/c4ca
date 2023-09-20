@@ -9,12 +9,13 @@ import {
 import InputControl from "./InputControl";
 import { breakpoints } from "@/theme/constant";
 import SelectControl from "./SelectControl";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import stateDistrict from "../../data/state.json";
 
 const Team = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
+  const [values, setValues] = useState({});
   const sizeList = [3, 4, 5];
 
   return (
@@ -31,14 +32,25 @@ const Team = () => {
       <Grid spacing={5} container>
         <Grid xs={6} item>
           <SelectControl
+            onChange={(e) => setValues({ ...values, state: e.target.value })}
             label="State"
-            options={[{ label: "Maharashtra", value: "MH" }]}
+            options={Object.keys(stateDistrict).map((state) => ({
+              label: state,
+              value: state,
+            }))}
           />
         </Grid>
         <Grid xs={6} item>
           <SelectControl
             label="District"
-            options={[{ label: "Bhandara", value: "36" }]}
+            options={
+              values.state
+                ? stateDistrict[values.state].map((district) => ({
+                    label: district,
+                    value: district,
+                  }))
+                : []
+            }
           />
         </Grid>
       </Grid>
