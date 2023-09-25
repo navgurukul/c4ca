@@ -355,9 +355,9 @@ const ProfileForm = () => {
          
           
          
-            {/* {router.asPath === "/profile/profile-update" ? <Team /> : null}
+            {router.asPath === "/profile/profile-update" ? <Team /> : null}
   
-            {router.asPath === "/profile/profile-update" ? (
+            {/* {router.asPath === "/profile/profile-update" ? (
              <Link href="/profile/profile-update">
                <Typography variant="ButtonLarge">Save Profile</Typography>
              </Link>

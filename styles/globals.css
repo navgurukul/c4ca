@@ -179,7 +179,10 @@ header .box {
 .teamBtn_bgColor, .teamBtn:hover {
   background: #D4DAE8;
 }
-
+.selected {
+  background-color:#D4DAE8;
+  color: #29458C;
+}
 
 /************************ Project Submission Page CSS ************************/
 textarea{
