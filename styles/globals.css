@@ -176,6 +176,10 @@ header .box {
   cursor: pointer;
 }
 
+.teamBtn-selected{
+  background-color: #c5d6f9
+}
+
 .teamBtn_bgColor, .teamBtn:hover {
   background: #D4DAE8;
 }

@@ -38,7 +38,7 @@ export const LearnCards = ({
         </Box>
 
         <Box
-          sx={{ width:'100%', display: "grid", gap: isMobile ? 4 : 10 }}
+          sx={{ width: "100%", display: "grid", gap: isMobile ? 4 : 10 }}
           className={isMobile ? "p-16" : "p-32"}
         >
           <Box sx={{ display: "grid", gap: 2 }}>
@@ -56,9 +56,7 @@ export const LearnCards = ({
             </Box>
           </Box>
 
-          <Box
-            className="btnGrp"
-          >
+          <Box className="btnGrp">
             <Button variant="outlined" sx={{ border: "1px solid" }}>
               <Typography variant="ButtonLarge">View Classes</Typography>
             </Button>
@@ -151,3 +149,5 @@ export const ProjectAwardCards = ({
     </Box>
   );
 };
+
+export default ProjectAwardCards;
