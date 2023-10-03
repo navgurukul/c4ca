@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import { GoogleBtn } from "@/styles/style";
 import axios from "axios";
+import Link from "next/link";
 
 const LoginPage = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -99,12 +100,14 @@ const LoginPage = () => {
             <Typography variant="body1" align="center" color="text.primary">
               Continue to C4CA
             </Typography>
+            <Link href={"/teacher/profile"}>
             <GoogleBtn onClick={handleLoginSuccess}>
               <img src="/Google.svg" />
               <Typography variant="ButtonLarge" color="text.primary">
                 Login with Google
               </Typography>
             </GoogleBtn>
+            </Link>
           </Box>
         </Box>
       </Container>

@@ -5,12 +5,12 @@ import {
   LearnCards,
   ProjectAwardCards,
   ScratchPracticeCards,
-} from "./PathwayCard";
+} from "../../components/PathwayCard";
 import {
   LearnPathways,
   ProjectAwardsPathways,
   ScratchPracticePathways,
-} from "./data";
+} from "../../data/data";
 
 const Dashboard = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");

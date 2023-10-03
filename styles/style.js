@@ -18,7 +18,6 @@ export const GoogleBtn = styled("button")({
   cursor: "pointer",
 });
 
-
 export const TextField = styled("input")({
   width: "100%",
   height: "48px",
@@ -29,5 +28,18 @@ export const TextField = styled("input")({
   fontSize: "18px",
   color: "#2E2E2E",
   cursor: "text",
+  outline: "none",
+});
+
+export const SelectControl = styled("slete")({
+  width: "100%",
+  height: "48px",
+  padding: "8px 16px",
+  border: "1px solid #2E2E2E",
+  borderRadius: "100px",
+  fontFamily: "Amazon Ember",
+  fontSize: "18px",
+  color: "#2E2E2E",
+  cursor: "pointer", // Use "pointer" for select elements
   outline: "none",
 });
