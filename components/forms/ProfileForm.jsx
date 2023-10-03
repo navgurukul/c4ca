@@ -148,7 +148,7 @@ const ProfileForm = () => {
               <Typography variant="ButtonLarge">Save Profile</Typography>
             </Link>
           ) : (
-            <Link href="/dashboard">
+            <Link href="/teacher/add-team">
               <Typography variant="ButtonLarge">Save & Proceed</Typography>
             </Link>
           )}

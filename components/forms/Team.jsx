@@ -11,6 +11,7 @@ import { breakpoints } from "@/theme/constant";
 import SelectControl from "./SelectControl";
 import { useEffect, useState } from "react";
 import stateDistrict from "../../data/state.json";
+import Link from "next/link";
 
 const Team = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
@@ -105,14 +106,16 @@ const Team = () => {
         <Button className="Button" color="primary">
           Back
         </Button>
-        <Button
-          className="Button"
-          color="primary"
-          variant="contained"
-          sx={{ minWidth: 240, display: "block" }}
-        >
-          Add Team
-        </Button>
+        <Link href="/teacher">
+          <Button
+            className="Button"
+            color="primary"
+            variant="contained"
+            sx={{ minWidth: 240, display: "block" }}
+          >
+            Add Team
+          </Button>
+        </Link>
       </Box>
     </Container>
   );
