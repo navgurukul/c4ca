@@ -191,13 +191,9 @@ const ProfileForm = () => {
 
         <Button className="profileBtn" onClick={handleSaveProfile}>
           {router.asPath === "/profile/profile-update" ? (
-            <Link href="/profile/profile-update">
               <Typography variant="ButtonLarge">Save Profile</Typography>
-            </Link>
           ) : (
-            <Link href="/dashboard">
               <Typography variant="ButtonLarge">Save & Proceed</Typography>
-            </Link>
           )}
         </Button>
       </Container>
