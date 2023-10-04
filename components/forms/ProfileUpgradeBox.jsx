@@ -31,7 +31,7 @@ const ProfileUpgradeBox = () => {
             </Typography>
           </Link>
         ) : (
-          <Link href="/profile/profile-update">
+          <Link href="/teacher/profile/profile-update">
             <Typography variant="ButtonLarge">Go to Profile</Typography>
           </Link>
         )}

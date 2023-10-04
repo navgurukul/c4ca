@@ -47,7 +47,7 @@ const LoginPage = () => {
           },
         }).then((res) => {
           console.log(res.status);
-          window.location.href = "/profile";
+          window.location.href = "/teacher/profile";
         });
       })
       .catch((err) => {

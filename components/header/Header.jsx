@@ -20,7 +20,7 @@ const Header = () => {
         </Box>
 
         {router.asPath === "/" ? (
-          <Link href="/login">
+          <Link href="/teacher/login">
             <Button sx={{ display: "block", width: 100, m: "auto" }}>
               Login
             </Button>

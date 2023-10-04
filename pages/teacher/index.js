@@ -17,8 +17,14 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const TeacherDashboard = () => {
+  const router = useRouter();
+
+  const handleAddTeam = () => {
+    router.push("/teacher/add-team")
+  }
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const teams = [
     {
@@ -203,6 +209,7 @@ const TeacherDashboard = () => {
                 borderSpacing: "5px",
                 cursor: "pointer",
               }}
+              onClick={handleAddTeam}
             >
               <AddCircleOutlinedIcon color="primary" />
               <Typography variant="body1" color="primary">
