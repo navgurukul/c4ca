@@ -1,10 +1,13 @@
 import { breakpoints } from "@/theme/constant";
 import {
+  CircleRounded,
   CopyAll,
+  DataUsage,
   EditOutlined,
   OpenInNewOutlined,
 } from "@mui/icons-material";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
+import Team from "./add-team";
 import {
   Box,
   Button,
@@ -22,10 +25,9 @@ import { useRouter } from "next/router";
 const TeacherDashboard = () => {
   const router = useRouter();
 
-  const handleAddTeam = () => {
-    setOpenDialog(true); // Open the dialog
-  };
-  
+  // const handleAddTeam = () => {
+  //   router.push("/teacher/add-team")
+  // }
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const teams = [
     {
@@ -41,7 +43,7 @@ const TeacherDashboard = () => {
       course_progress: 78,
       user_id: "unknown234",
       password: "Me@1234",
-    },
+    },,
     {
       id: 25,
       name: "Embracing Winds",
@@ -64,13 +66,19 @@ const TeacherDashboard = () => {
       password: "Me@1234",
     }
   ];
-  const [showLoginDetails, setShowLoginDetails] = useState({});
   const [openDialog, setOpenDialog] = useState(false);
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false); // Close the dialog
+  // Function to open the dialog
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
   };
 
+  // Function to close the dialog
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const [showLoginDetails, setShowLoginDetails] = useState({});
   return (
     <>
       <Container
@@ -87,7 +95,7 @@ const TeacherDashboard = () => {
           spacing={isMobile ? 4 : 6}
         >
           {teams.map((team) => (
-            <Grid item md={4} sm={6} xs={12} key={team.id}>
+            <Grid item md={4} sm={6} xs={12}>
               <Box
                 sx={{
                   width: "100%",
@@ -125,7 +133,7 @@ const TeacherDashboard = () => {
                   />{" "}
                   <Typography>{team.course_progress}%</Typography>
                 </Box>
-                {showLoginDetails[team.id] && (
+                { showLoginDetails[team.id] &&
                   <div>
                     <Box
                       sx={{
@@ -177,7 +185,7 @@ const TeacherDashboard = () => {
                       </Typography>
                     </Box>
                   </div>
-                )}
+                }
 
                 <Button
                   onClick={() =>
@@ -216,7 +224,8 @@ const TeacherDashboard = () => {
                 borderSpacing: "5px",
                 cursor: "pointer",
               }}
-              onClick={handleAddTeam}
+              // onClick={handleAddTeam}
+              onClick={handleOpenDialog}
             >
               <AddCircleOutlinedIcon color="primary" />
               <Typography variant="body1" color="primary">
@@ -225,28 +234,19 @@ const TeacherDashboard = () => {
             </Box>
           </Grid>
         </Grid>
-      </Container>
-      
 
-      <Dialog
+        {/* Awards and Certifications... */}
+      </Container>
+        <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
         maxWidth="sm"
         fullWidth
         >
         <DialogContent>
-        
-          <iframe
-            title="Add Team"
-            src="/teacher/add-team"
-            width= "100%"
-            height="820px"
-            frameBorder="0"
-      
-          />
+          <Team onClose={handleCloseDialog} />
         </DialogContent>
-      </Dialog>
-
+        </Dialog>
 
       <Container maxWidth="lg" sx={{ padding: 5 }} disableGutters>
         <Typography variant="h5" color="primary">
@@ -276,7 +276,7 @@ const TeacherDashboard = () => {
           </Grid>
           <Grid item>
             <Typography variant="body1" color="dark">
-              Check out your team's ranking and certifications
+              Check out your teams ranking and certifications
             </Typography>
             <Button
               size="large"
@@ -328,3 +328,4 @@ const TeacherDashboard = () => {
 };
 
 export default TeacherDashboard;
+
