@@ -1,8 +1,6 @@
 import { breakpoints } from "@/theme/constant";
 import {
-  CircleRounded,
   CopyAll,
-  DataUsage,
   EditOutlined,
   OpenInNewOutlined,
 } from "@mui/icons-material";
@@ -12,6 +10,8 @@ import {
   Button,
   CircularProgress,
   Container,
+  Dialog,
+  DialogContent,
   Grid,
   Typography,
   useMediaQuery,
@@ -23,8 +23,9 @@ const TeacherDashboard = () => {
   const router = useRouter();
 
   const handleAddTeam = () => {
-    router.push("/teacher/add-team")
-  }
+    setOpenDialog(true); // Open the dialog
+  };
+  
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const teams = [
     {
@@ -40,7 +41,7 @@ const TeacherDashboard = () => {
       course_progress: 78,
       user_id: "unknown234",
       password: "Me@1234",
-    },,
+    },
     {
       id: 25,
       name: "Embracing Winds",
@@ -64,6 +65,12 @@ const TeacherDashboard = () => {
     }
   ];
   const [showLoginDetails, setShowLoginDetails] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false); // Close the dialog
+  };
+
   return (
     <>
       <Container
@@ -80,7 +87,7 @@ const TeacherDashboard = () => {
           spacing={isMobile ? 4 : 6}
         >
           {teams.map((team) => (
-            <Grid item md={4} sm={6} xs={12}>
+            <Grid item md={4} sm={6} xs={12} key={team.id}>
               <Box
                 sx={{
                   width: "100%",
@@ -118,7 +125,7 @@ const TeacherDashboard = () => {
                   />{" "}
                   <Typography>{team.course_progress}%</Typography>
                 </Box>
-                { showLoginDetails[team.id] &&
+                {showLoginDetails[team.id] && (
                   <div>
                     <Box
                       sx={{
@@ -170,7 +177,7 @@ const TeacherDashboard = () => {
                       </Typography>
                     </Box>
                   </div>
-                }
+                )}
 
                 <Button
                   onClick={() =>
@@ -218,9 +225,29 @@ const TeacherDashboard = () => {
             </Box>
           </Grid>
         </Grid>
-
-        {/* Awards and Certifications... */}
       </Container>
+      
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+        >
+        <DialogContent>
+        
+          <iframe
+            title="Add Team"
+            src="/teacher/add-team"
+            width= "100%"
+            height="820px"
+            frameBorder="0"
+      
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Rest of your code... */}
       <Container maxWidth="lg" sx={{ padding: 5 }} disableGutters>
         <Typography variant="h5" color="primary">
           Awards & Certification
@@ -249,7 +276,7 @@ const TeacherDashboard = () => {
           </Grid>
           <Grid item>
             <Typography variant="body1" color="dark">
-              Check out your teams ranking and certifications
+              Check out your team's ranking and certifications
             </Typography>
             <Button
               size="large"
