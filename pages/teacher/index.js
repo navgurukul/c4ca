@@ -247,7 +247,7 @@ const TeacherDashboard = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Rest of your code... */}
+
       <Container maxWidth="lg" sx={{ padding: 5 }} disableGutters>
         <Typography variant="h5" color="primary">
           Awards & Certification
