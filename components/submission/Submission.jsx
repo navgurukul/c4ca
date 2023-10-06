@@ -78,7 +78,7 @@ const Submission = (props) => {
                   variant="outlined"
                   sx={{ minWidth: isMobile ? 120 : 200 }}
                 >
-                  <Link href="/dashboard">
+                  <Link href="/">
                     <Typography variant="ButtonLarge">Cancel</Typography>
                   </Link>
                 </Button>

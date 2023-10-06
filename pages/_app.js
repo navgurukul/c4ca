@@ -13,11 +13,11 @@ export default function App({ Component, pageProps }) {
         <title>C4CA Board</title>
         <meta name="description" content="Created by Navgurukul" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/c4ca.svg"/>
+        <link rel="icon" href="/c4ca.svg" />
       </Head>
 
       <ThemeProvider theme={theme}>
-        {router.asPath === "/login" ? null : <Header />}
+        {router.asPath.split("/").reverse()[0] === "login" ? null : <Header />}
         <Component {...pageProps} />
       </ThemeProvider>
     </>

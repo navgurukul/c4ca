@@ -9,14 +9,6 @@ const Header = () => {
       <header>
         <Box className="box">
           <img src="/c4ca.svg" alt="c4ca_logo" />
-          <Link href="/dashboard">
-            <Typography
-              variant="subtitle1"
-              color="primary"
-              sx={{ padding: "8px 16px", cursor: "pointer" }}>
-              Dashboard
-            </Typography>
-          </Link>
         </Box>
 
         {router.asPath === "/" ? (

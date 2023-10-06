@@ -107,7 +107,7 @@ const Profile = () => {
           className="Button"
           color="primary"
           sx={{ minWidth: 240, display: "block", margin: "32px auto 0" }}>
-          <Link href="/dashboard">Save & Proceed</Link>
+          <Link href="/">Save & Proceed</Link>
         </Button>
       )}
     </>
