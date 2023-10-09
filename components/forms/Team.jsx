@@ -4,6 +4,7 @@ import {
   Typography,
   Box,
   useMediaQuery,
+  InputLabel,
   Grid,
 } from "@mui/material";
 import InputControl from "./InputControl";
@@ -32,18 +33,23 @@ const Team = () => {
       <InputControl label="School Name" type="text" />
       <Grid spacing={5} container>
         <Grid xs={6} item>
+          <InputLabel id="state" style={{ fontSize: '14px',color:"#2E2E2E"}}>State</InputLabel> 
           <SelectControl
             onChange={(e) => setValues({ ...values, state: e.target.value })}
-            label="State"
+            // label="State"
+            id = "state"
             options={Object.keys(stateDistrict).map((state) => ({
               label: state,
               value: state,
             }))}
-          />
+            
+          />       
         </Grid>
         <Grid xs={6} item>
+          <InputLabel id="district" style={{ fontSize: '14px',color:"#2E2E2E"}}>District</InputLabel> 
           <SelectControl
-            label="District"
+            // label="District"
+            id="district"
             options={
               values.state
                 ? stateDistrict[values.state].map((district) => ({
@@ -84,8 +90,11 @@ const Team = () => {
             <InputControl label={`Student Name ${i}`} type="text" />
           </Grid>
           <Grid xs={6} item>
+            <InputLabel id ="class" style={{ fontSize: '14px',color:"#2E2E2E", }}>Class</InputLabel> 
             <SelectControl
-              label="Class"
+              // label="Class"
+              sx={{mt:1}}
+              id ="class"
               options={[
                 { label: "5th", value: "5" },
                 { label: "6th", value: "6" },
