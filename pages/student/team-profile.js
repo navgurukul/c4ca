@@ -18,8 +18,8 @@ const TeamProfile = () => {
   ];
 
   return (
-    <Container maxWidth="lg" style={{padding: 10}} disableGutters>
-      <Typography sm={{ textAlign: "left" }} variant="h6" color="primary">
+    <Container maxWidth="lg" style={{ padding: 10, marginTop: 30 }} disableGutters>
+      <Typography sx={{ textAlign: "left" }} variant="h6" color="primary">
         Team Profile
       </Typography>
       <Box sx={{ paddingY: 3, display: "flex", alignItems: "center", gap: 3 }}>
@@ -60,68 +60,70 @@ const TeamProfile = () => {
           >
             School Details
           </Typography>
-          <Table>
-            <tr>
-              <th>
-                <Typography
-                  variant="body1"
-                  style={{ textAlign: "left", padding: 8 }}
-                  color="gray"
-                >
-                  School Name
-                </Typography>
-              </th>
-              <td>
-                <Typography
-                  variant="body1"
-                  style={{ textAlign: "left", padding: 8 }}
-                  color="dark"
-                >
-                  Chintels Maharashtra
-                </Typography>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                <Typography
-                  variant="body1"
-                  style={{ textAlign: "left", padding: 8 }}
-                  color="gray"
-                >
-                  District
-                </Typography>
-              </th>
-              <td>
-                <Typography
-                  variant="body1"
-                  style={{ textAlign: "left", padding: 8 }}
-                  color="dark"
-                >
-                  Anantpur
-                </Typography>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                <Typography
-                  variant="body1"
-                  style={{ textAlign: "left", padding: 8 }}
-                  color="gray"
-                >
-                  State
-                </Typography>
-              </th>
-              <td>
-                <Typography
-                  variant="body1"
-                  style={{ textAlign: "left", padding: 8 }}
-                  color="dark"
-                >
-                  Maharashtra
-                </Typography>
-              </td>
-            </tr>
-          </Table>
+          <table>
+            <tbody>
+              <tr>
+                <th>
+                  <Typography
+                    variant="body1"
+                    style={{ textAlign: "left", padding: 8 }}
+                    color="gray"
+                  >
+                    School Name
+                  </Typography>
+                </th>
+                <td>
+                  <Typography
+                    variant="body1"
+                    style={{ textAlign: "left", padding: 8 }}
+                    color="dark"
+                  >
+                    Chintels Maharashtra
+                  </Typography>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <Typography
+                    variant="body1"
+                    style={{ textAlign: "left", padding: 8 }}
+                    color="gray"
+                  >
+                    District
+                  </Typography>
+                </th>
+                <td>
+                  <Typography
+                    variant="body1"
+                    style={{ textAlign: "left", padding: 8 }}
+                    color="dark"
+                  >
+                    Anantpur
+                  </Typography>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <Typography
+                    variant="body1"
+                    style={{ textAlign: "left", padding: 8 }}
+                    color="gray"
+                  >
+                    State
+                  </Typography>
+                </th>
+                <td>
+                  <Typography
+                    variant="body1"
+                    style={{ textAlign: "left", padding: 8 }}
+                    color="dark"
+                  >
+                    Maharashtra
+                  </Typography>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </Grid>
         <Grid item xs={12} sm={12} md={6}>
           <Typography
@@ -136,43 +138,45 @@ const TeamProfile = () => {
             Team Members
           </Typography>
           <Table>
-            {students.map((student, index) => (
-              <tr key={index}>
-                <th>
-                  <Typography
-                    variant="body1"
-                    style={{ textAlign: "left", padding: 8 }}
-                    color="gray"
-                  >
-                    Student {index + 1}
-                  </Typography>
-                </th>
-                <td>
-                  <Typography
-                    variant="body1"
-                    style={{ textAlign: "left", padding: 5 }}
-                    color="dark"
-                  >
-                    {student.name}
-                  </Typography>
-                </td>
-                <td>
-                  <Typography
-                    variant="body1"
-                    style={{ textAlign: "left", padding: 5 }}
-                    color="dark"
-                  >
-                    {student.class}
-                  </Typography>
-                </td>
-              </tr>
-            ))}
+            <tbody>
+              {students.map((student, index) => (
+                <tr key={index}>
+                  <td style={{width: "120px"}}>
+                    <Typography
+                      variant="body1"
+                      style={{ textAlign: "left", padding: 8 }}
+                      color="gray"
+                    >
+                      Student {index + 1}
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography
+                      variant="body1"
+                      style={{ textAlign: "left", padding: 5 }}
+                      color="dark"
+                    >
+                      {student.name}
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography
+                      variant="body1"
+                      style={{ textAlign: "right", padding: 5 }}
+                      color="dark"
+                    >
+                      Class {student.class}
+                    </Typography>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </Table>
         </Grid>
       </Grid>
       <Button
         variant="contained"
-        sx={{ marginX: "auto", marginY: 10 }}
+        sx={{ marginX: "auto", marginY: 5 }}
         color="primary"
       >
         Verify Details & Proceed

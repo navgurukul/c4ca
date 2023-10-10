@@ -4,7 +4,7 @@ import DropZone from "./DropZone";
 
 import { Container, Typography, Button } from "@mui/material";
 
-const Submission = () => {
+const Submission = ({setIsSubmitted}) => {
   return (
     <Container maxWidth="sm" sx={{ display: "grid", gap: 4, mt: 4 }}>
       <Typography variant="h6" align="center">
@@ -27,6 +27,7 @@ const Submission = () => {
 
       <Button
         color="primary"
+        onClick={()=>setIsSubmitted(true)}
         variant="contained"
         sx={{ minWidth: 240, margin: "32px auto 0", mb: 3 }}>
         Submit Project
