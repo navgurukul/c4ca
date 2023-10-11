@@ -13,6 +13,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
+import jsonData from "../../data/state.json";
 import { Camera } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -35,6 +36,25 @@ const ProfileForm = () => {
     district: "",
     state: "",
   });
+
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+
+  useEffect(() => {
+    const stateNames = Object.keys(jsonData);
+    setStates(stateNames);
+  }, []);
+
+  const handleStateChange = (event) => {
+    const selectedState = event.target.value;
+    const selectedDistricts = jsonData[selectedState] || [];
+    setFormData({
+      ...formData,
+      state: selectedState,
+      district: "",
+    });
+    setDistricts(selectedDistricts);
+  };
 
   useEffect(() => {
     // Retrieve the token from localStorage
@@ -149,6 +169,32 @@ const ProfileForm = () => {
                   variant="body2"
                   color="text.primary"
                 >
+                  Select State
+                </Typography>
+                <FormControl style={{ borderColor: "black" }} fullWidth>
+                  <InputLabel id="state">Select State</InputLabel>
+                  <Select
+                    style={{ borderRadius: 100 }}
+                    labelId="state"
+                    id="state"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleStateChange}
+                  >
+                    {states.map((state) => (
+                      <MenuItem key={state} value={state}>
+                        {state}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item md={6} sm={6} xs={12}>
+                <Typography
+                  style={{ marginBottom: 10 }}
+                  variant="body2"
+                  color="text.primary"
+                >
                   District
                 </Typography>
                 <FormControl fullWidth>
@@ -161,35 +207,11 @@ const ProfileForm = () => {
                     value={formData.district}
                     onChange={handleInputChange}
                   >
-                    <MenuItem value="Nagpur">Nagpur</MenuItem>
-                    <MenuItem value="Bhandara">Bhandara</MenuItem>
-                    <MenuItem value="Akola">Akola</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item md={6} sm={6} xs={12}>
-                <Typography
-                  style={{ marginBottom: 10 }}
-                  variant="body2"
-                  color="text.primary"
-                >
-                  Select State
-                </Typography>
-                <FormControl style={{ borderColor: "black" }} fullWidth>
-                  <InputLabel id="state">Select State</InputLabel>
-                  <Select
-                    style={{ borderRadius: 100 }}
-                    labelId="state"
-                    id="state"
-                    name="state"
-                    value={formData.state}
-                    onChange={handleInputChange}
-                  >
-                    <MenuItem value="Maharashtra">Maharashtra</MenuItem>
-                    <MenuItem value="Madhya Pradesh">Madhya Pradesh</MenuItem>
-                    <MenuItem value="Himachal Pradesh">
-                      Himachal Pradesh
-                    </MenuItem>
+                    {districts.map((district) => (
+                      <MenuItem key={district} value={district}>
+                        {district}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>
@@ -199,15 +221,13 @@ const ProfileForm = () => {
 
         {router.asPath === "/profile/profile-update" ? <Team /> : null}
 
-        <Link href="/teacher/add-team">
-          <Button className="profileBtn" onClick={handleSaveProfile}>
-            {router.asPath === "/profile/profile-update" ? (
-              <Typography variant="ButtonLarge">Save Profile</Typography>
-            ) : (
-              <Typography variant="ButtonLarge">Save & Proceed</Typography>
-            )}
-          </Button>
-        </Link>
+        <Button className="profileBtn" onClick={handleSaveProfile}>
+          {router.asPath === "/profile/profile-update" ? (
+            <Typography variant="ButtonLarge">Save Profile</Typography>
+          ) : (
+            <Typography variant="ButtonLarge">Save & Proceed</Typography>
+          )}
+        </Button>
       </Container>
     </>
   );
