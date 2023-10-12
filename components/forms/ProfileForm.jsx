@@ -13,6 +13,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
+import jsonData from "../../data/state.json";
 import { Camera } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -22,7 +23,7 @@ import Team from "./Team";
 
 const ProfileForm = () => {
   const router = useRouter();
-  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
+  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px");
 
   const [userData, setUserData] = useState({
     name: "",
@@ -30,30 +31,48 @@ const ProfileForm = () => {
   });
 
   const [formData, setFormData] = useState({
-    phoneNumber: "",
+    phone_number: "",
     school: "",
     district: "",
     state: "",
+    partner_id: 0,
   });
 
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+
   useEffect(() => {
-    // Retrieve the token from localStorage
+    const stateNames = Object.keys(jsonData);
+    setStates(stateNames);
+  }, []);
+
+  const handleStateChange = (event) => {
+    const selectedState = event.target.value;
+    const selectedDistricts = jsonData[selectedState] || [];
+    setFormData({
+      ...formData,
+      state: selectedState,
+      district: "",
+    });
+    setDistricts(selectedDistricts);
+  };
+
+  useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
 
-    // Check if the token exists
     if (authToken && authToken.token) {
-      // Fetch user data from the API using Axios with the token
       Axios.get("https://merd-api.merakilearn.org/users/me", {
         headers: {
           Authorization: `Bearer ${authToken.token}`,
         },
       })
         .then((response) => {
-          // Update the state with user data
           setUserData({
             name: response.data.user.name,
             email: response.data.user.email,
           });
+
+          localStorage.setItem("userData", JSON.stringify(response.data));
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
@@ -70,25 +89,38 @@ const ProfileForm = () => {
   };
 
   const handleSaveProfile = () => {
-    // Combine user data and form data
     const profileData = {
       ...userData,
       ...formData,
     };
 
-    // Make a POST request to save the profile data
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+
     Axios.post(
       "https://merd-api.merakilearn.org/c4ca/teacher_profile",
-      profileData
+      profileData,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken.token}`,
+        },
+      }
     )
       .then((response) => {
-        // Redirect to the dashboard if there are no errors
+        localStorage.setItem("userData", JSON.stringify(response.data));
+
         router.push("/teacher");
       })
       .catch((error) => {
         console.error("Error saving profile data:", error);
       });
   };
+
+  useEffect(() => {
+    const storedUserData = localStorage.getItem("userData");
+    if (storedUserData) {
+      router.push("/teacher");
+    }
+  }, [router]);
 
   return (
     <>
@@ -113,21 +145,25 @@ const ProfileForm = () => {
             label="Full Name"
             type="text"
             placeholder="Enter Your Name"
+            name="name"
             value={userData.name}
+            onChange={handleInputChange}
           />
 
           <InputControl
             label="Email Address"
             type="email"
             placeholder="Enter Email Address"
+            name="email" // Added email field
             value={userData.email}
+            onChange={handleInputChange}
           />
 
           <InputControl
             label="Phone Number"
             type="tel"
             placeholder="Enter Phone Number"
-            name="phoneNumber"
+            name="phone_number"
             value={formData.phoneNumber}
             onChange={handleInputChange}
           />
@@ -149,6 +185,32 @@ const ProfileForm = () => {
                   variant="body2"
                   color="text.primary"
                 >
+                  Select State
+                </Typography>
+                <FormControl style={{ borderColor: "black" }} fullWidth>
+                  <InputLabel id="state">Select State</InputLabel>
+                  <Select
+                    style={{ borderRadius: 100 }}
+                    labelId="state"
+                    id="state"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleStateChange}
+                  >
+                    {states.map((state) => (
+                      <MenuItem key={state} value={state}>
+                        {state}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item md={6} sm={6} xs={12}>
+                <Typography
+                  style={{ marginBottom: 10 }}
+                  variant="body2"
+                  color="text.primary"
+                >
                   District
                 </Typography>
                 <FormControl fullWidth>
@@ -161,35 +223,11 @@ const ProfileForm = () => {
                     value={formData.district}
                     onChange={handleInputChange}
                   >
-                    <MenuItem value="Nagpur">Nagpur</MenuItem>
-                    <MenuItem value="Bhandara">Bhandara</MenuItem>
-                    <MenuItem value="Akola">Akola</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item md={6} sm={6} xs={12}>
-                <Typography
-                  style={{ marginBottom: 10 }}
-                  variant="body2"
-                  color="text.primary"
-                >
-                  Select State
-                </Typography>
-                <FormControl style={{ borderColor: "black" }} fullWidth>
-                  <InputLabel id="state">Select State</InputLabel>
-                  <Select
-                    style={{ borderRadius: 100 }}
-                    labelId="state"
-                    id="state"
-                    name="state"
-                    value={formData.state}
-                    onChange={handleInputChange}
-                  >
-                    <MenuItem value="Maharashtra">Maharashtra</MenuItem>
-                    <MenuItem value="Madhya Pradesh">Madhya Pradesh</MenuItem>
-                    <MenuItem value="Himachal Pradesh">
-                      Himachal Pradesh
-                    </MenuItem>
+                    {districts.map((district) => (
+                      <MenuItem key={district} value={district}>
+                        {district}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>
@@ -199,15 +237,13 @@ const ProfileForm = () => {
 
         {router.asPath === "/profile/profile-update" ? <Team /> : null}
 
-        <Link href="/teacher/add-team">
-          <Button className="profileBtn" onClick={handleSaveProfile}>
-            {router.asPath === "/profile/profile-update" ? (
-              <Typography variant="ButtonLarge">Save Profile</Typography>
-            ) : (
-              <Typography variant="ButtonLarge">Save & Proceed</Typography>
-            )}
-          </Button>
-        </Link>
+        <Button className="profileBtn" onClick={handleSaveProfile}>
+          {router.asPath === "/profile/profile-update" ? (
+            <Typography variant="ButtonLarge">Save Profile</Typography>
+          ) : (
+            <Typography variant="ButtonLarge">Save & Proceed</Typography>
+          )}
+        </Button>
       </Container>
     </>
   );

@@ -12,12 +12,68 @@ import SelectControl from "./SelectControl";
 import { useEffect, useState } from "react";
 import stateDistrict from "../../data/state.json";
 import Link from "next/link";
+import Axios from "axios";
+import { useRouter } from "next/router";
 
 const Team = () => {
+  const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
   const [values, setValues] = useState({});
   const sizeList = [3, 4, 5];
+  const [teamId, setTeamId] = useState(null);
+
+  const createTeam = async (teamName, teamSize) => {
+    try {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      const response = await Axios.post(
+        "https://merd-api.merakilearn.org/c4ca/team",
+        {
+          team_name: teamName,
+          team_size: teamSize,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+          },
+        }
+      );
+      setTeamId(response.data.id); // Store the team ID
+      return response.data.id;
+    } catch (error) {
+      console.error("Error creating a team:", error);
+      throw error;
+    }
+  };
+
+  const addStudentsToTeam = async (students) => {
+    if (!teamId) {
+      console.error("Team ID is missing.");
+      return;
+    }
+
+    try {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      await Axios.post(
+        "https://merd-api.merakilearn.org/c4ca/team/addStudent",
+        {
+          team_members: students.map((student) => ({
+            name: student.name,
+            class: student.class,
+          })),
+          team_id: teamId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error adding students to the team:", error);
+      throw error;
+    }
+  };
 
   return (
     <Container
@@ -79,13 +135,13 @@ const Team = () => {
         the dashboard
       </Typography>
       {Array.from({ length: teamSize }, (_, index) => index + 1).map((i) => (
-        <Grid spacing={5} container>
+        <Grid spacing={5} container key={i}>
           <Grid xs={6} item>
             <InputControl label={`Student Name ${i}`} type="text" />
           </Grid>
           <Grid xs={6} item>
             <SelectControl
-              label="Class"
+              label={`Class ${i}`}
               options={[
                 { label: "5th", value: "5" },
                 { label: "6th", value: "6" },
@@ -106,16 +162,34 @@ const Team = () => {
         <Button className="Button" color="primary">
           Back
         </Button>
-        <Link href="/teacher">
-          <Button
-            className="Button"
-            color="primary"
-            variant="contained"
-            sx={{ minWidth: 240, display: "block" }}
-          >
-            Add Team
-          </Button>
-        </Link>
+        <Button
+          className="Button"
+          color="primary"
+          variant="contained"
+          sx={{ minWidth: 240, display: "block" }}
+          onClick={async () => {
+            try {
+              const newTeamId = await createTeam("Avengers0007", teamSize);
+              if (newTeamId) {
+                const students = Array.from(
+                  { length: teamSize },
+                  (_, index) => {
+                    const studentName = values[`Student Name ${index + 1}`];
+                    const studentClass = values[`Class ${index + 1}`];
+                    return { name: studentName, class: studentClass };
+                  }
+                );
+
+                await addStudentsToTeam(students);
+                router.push("/teacher");
+              }
+            } catch (error) {
+              // Handle errors
+            }
+          }}
+        >
+          Add Team
+        </Button>
       </Box>
     </Container>
   );
