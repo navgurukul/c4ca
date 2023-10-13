@@ -106,7 +106,8 @@ const ProfileForm = () => {
       }
     )
       .then((response) => {
-        localStorage.setItem("userData", JSON.stringify(response.data));
+        console.log(response);
+        localStorage.setItem("teacherData", JSON.stringify(response.data));
 
         router.push("/teacher");
       })

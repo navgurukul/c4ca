@@ -19,8 +19,9 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Axios from "axios";
 
 const TeacherDashboard = () => {
   const router = useRouter();
@@ -29,51 +30,29 @@ const TeacherDashboard = () => {
   //   router.push("/teacher/add-team")
   // }
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
-  const teams = [
-    {
-      id: 23,
-      name: "Flying Colors",
-      course_progress: 28,
-      user_id: "pratikdeshmukh2004",
-      password: "Hello@1234",
-    },
-    {
-      id: 24,
-      name: "Rising Tides",
-      course_progress: 78,
-      user_id: "unknown234",
-      password: "Me@1234",
-    },,
-    {
-      id: 25,
-      name: "Embracing Winds",
-      course_progress: 50,
-      user_id: "unknown234",
-      password: "Me@1234",
-    },
-    {
-      id: 26,
-      name: "Sunshine Moon",
-      course_progress: 22,
-      user_id: "unknown234",
-      password: "Me@1234",
-    },
-    {
-      id: 27,
-      name: "Brave Cats",
-      course_progress: 66,
-      user_id: "unknown234",
-      password: "Me@1234",
-    }
-  ];
+  const [teams, setTeams] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
 
-  // Function to open the dialog
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
 
-  // Function to close the dialog
+  useEffect(() => {
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    const teacherData = JSON.parse(localStorage.getItem("teacherData"));
+    const teacherId = teacherData?.[0].id;
+
+    if(teacherId && authToken){
+      Axios.get(`https://merd-api.merakilearn.org/c4ca/teams/${teacherId}`, {
+      headers: {
+        Authorization: `Bearer ${authToken.token}`,
+      },
+    }).then((response) => {
+      setTeams(response.data);
+    });
+    }
+  }, []);
+
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
@@ -95,7 +74,7 @@ const TeacherDashboard = () => {
           spacing={isMobile ? 4 : 6}
         >
           {teams.map((team) => (
-            <Grid item md={4} sm={6} xs={12}>
+            <Grid item md={4} sm={6} xs={12} key={team.id}>
               <Box
                 sx={{
                   width: "100%",
@@ -109,7 +88,7 @@ const TeacherDashboard = () => {
               >
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography variant="subtitle1" color="dark">
-                    {team.name}
+                    {team.team_name}
                   </Typography>
                   <EditOutlined style={{ color: "gray" }} />
                 </Box>
@@ -133,7 +112,7 @@ const TeacherDashboard = () => {
                   />{" "}
                   <Typography>{team.course_progress}%</Typography>
                 </Box>
-                { showLoginDetails[team.id] &&
+                {showLoginDetails[team.id] && (
                   <div>
                     <Box
                       sx={{
@@ -150,7 +129,7 @@ const TeacherDashboard = () => {
                         sx={{ fontSize: 15 }}
                         onClick={() =>
                           navigator.clipboard.writeText(
-                            `User ID: ${team.user_id}\nPassword: ${team.password}}`
+                            `User ID: ${team.login_id}\nPassword: ${team.password}}`
                           )
                         }
                         variant="text"
@@ -168,7 +147,7 @@ const TeacherDashboard = () => {
                     >
                       <img src="/assets/icon-id.svg" alt="" />
                       <Typography variant="body2" color="dark">
-                        User ID: {team.user_id}
+                        User ID: {team.login_id}
                       </Typography>
                     </Box>
                     <Box
@@ -185,7 +164,7 @@ const TeacherDashboard = () => {
                       </Typography>
                     </Box>
                   </div>
-                }
+                )}
 
                 <Button
                   onClick={() =>
@@ -237,16 +216,16 @@ const TeacherDashboard = () => {
 
         {/* Awards and Certifications... */}
       </Container>
-        <Dialog
+      <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
         maxWidth="sm"
         fullWidth
-        >
+      >
         <DialogContent>
           <Team onClose={handleCloseDialog} />
         </DialogContent>
-        </Dialog>
+      </Dialog>
 
       <Container maxWidth="lg" sx={{ padding: 5 }} disableGutters>
         <Typography variant="h5" color="primary">
@@ -328,4 +307,3 @@ const TeacherDashboard = () => {
 };
 
 export default TeacherDashboard;
-
