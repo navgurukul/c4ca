@@ -31,7 +31,7 @@ const DragDropZone = (props) => {
   return (
     <>
       {fileList.length > 0 ? (
-        <Box className="drop-file-preview">
+        <Box sx={{backgroundColor:"pink"}} className="drop-file-preview">
           {fileList.map((item, index) => (
             <Box key={index} className="drop-file-preview__item">
               <Box className="drop-file-preview__item__info">
