@@ -35,6 +35,7 @@ const ProfileForm = () => {
     school: "",
     district: "",
     state: "",
+    profile_url: "random",
     partner_id: 0,
   });
 
@@ -108,6 +109,7 @@ const ProfileForm = () => {
       .then((response) => {
         console.log(response);
         localStorage.setItem("teacherData", JSON.stringify(response.data));
+        console.log(profileData);
 
         router.push("/teacher");
       })
@@ -117,7 +119,7 @@ const ProfileForm = () => {
   };
 
   useEffect(() => {
-    const storedUserData = localStorage.getItem("userData");
+    const storedUserData = localStorage.getItem("teacherData");
     if (storedUserData) {
       router.push("/teacher");
     }

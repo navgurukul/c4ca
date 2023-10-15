@@ -46,8 +46,10 @@ const LoginPage = () => {
             Authorization: res.data.token,
           },
         }).then((res) => {
-          console.log(res.status);
-          window.location.href = "/teacher/profile";
+          if (res.status === 200) {
+            // Only redirect if the request is successful
+            window.location.href = "/teacher/profile";
+          }
         });
       })
       .catch((err) => {
@@ -100,14 +102,12 @@ const LoginPage = () => {
             <Typography variant="body1" align="center" color="text.primary">
               Continue to C4CA
             </Typography>
-            <Link href={"/teacher/profile"}>
             <GoogleBtn onClick={handleLoginSuccess}>
               <img src="/Google.svg" />
               <Typography variant="ButtonLarge" color="text.primary">
                 Login with Google
               </Typography>
             </GoogleBtn>
-            </Link>
           </Box>
         </Box>
       </Container>
