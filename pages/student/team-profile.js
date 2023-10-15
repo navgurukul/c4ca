@@ -7,6 +7,7 @@ const {
   Button,
   Grid,
 } = require("@mui/material");
+import Link from "next/link";
 
 const TeamProfile = () => {
   const students = [
@@ -174,6 +175,8 @@ const TeamProfile = () => {
           </Table>
         </Grid>
       </Grid>
+      <Link href={"/student/project-submission"}>
+          
       <Button
         variant="contained"
         sx={{ marginX: "auto", marginY: 5 }}
@@ -181,6 +184,7 @@ const TeamProfile = () => {
       >
         Verify Details & Proceed
       </Button>
+      </Link>
     </Container>
   );
 };
