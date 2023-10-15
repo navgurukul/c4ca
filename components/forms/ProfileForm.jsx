@@ -24,6 +24,7 @@ import { breakpoints } from "@/theme/constant";
 import InputControl from "./InputControl";
 import Team from "./Team";
 import CircleIcon from "@mui/icons-material/Circle";
+import jsonData from "../../data/state.json";
 
 const ProfileForm = () => {
   const router = useRouter();
@@ -39,9 +40,19 @@ const ProfileForm = () => {
     school: "",
     district: "",
     state: "",
-    profile_url: "random",
-    partner_id: 0,
+    profile_url: "",
+    partner_id: 112,
   });
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+
+  useEffect(() => {
+    const stateNames = Object.keys(jsonData);
+    setStates(stateNames);
+  }, []);
 
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
@@ -71,11 +82,22 @@ const ProfileForm = () => {
     });
   };
 
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+  };
+
   const handleSaveProfile = () => {
-    const profileData = {
-      ...userData,
-      ...formData,
-    };
+    // Create a FormData object to send the image
+    const profileData = new FormData();
+    profileData.append("profile_url", selectedImage); // Add the selected image
+    profileData.append("name", userData.name);
+    profileData.append("email", userData.email);
+    profileData.append("phone_number", formData.phone_number);
+    profileData.append("school", formData.school);
+    profileData.append("district", formData.district);
+    profileData.append("state", formData.state);
+    profileData.append("partner_id", formData.partner_id);
 
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
 
@@ -85,25 +107,42 @@ const ProfileForm = () => {
       {
         headers: {
           Authorization: `Bearer ${authToken.token}`,
+          "Content-Type": "multipart/form-data", // Set the content type for FormData
         },
       }
     )
       .then((response) => {
-        console.log(response);
-        localStorage.setItem("teacherData", JSON.stringify(response.data));
-        console.log(profileData);
+        const uploadedProfileUrl = response.data.profile_url;
+        setFormData({
+          ...formData,
+          profile_url: uploadedProfileUrl,
+        });
+        console.log(response.data.data);
+        localStorage.setItem("teacherData", JSON.stringify(response.data.data));
 
-        router.push("/teacher");
+        // router.push("/teacher");
       })
       .catch((error) => {
         console.error("Error saving profile data:", error);
       });
   };
 
+  const handleStateChange = (event) => {
+    const selectedState = event.target.value;
+    const selectedDistricts = jsonData[selectedState] || [];
+    setFormData({
+      ...formData,
+      state: selectedState,
+      district: "",
+    });
+    setDistricts(selectedDistricts);
+  };
+
   const steps = ["Setup Profile", "Add a Team"];
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
+    handleSaveProfile();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
   const ActiveStepIcon = () => <CheckCircleIcon color="success" />;
@@ -151,11 +190,27 @@ const ProfileForm = () => {
 
             <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
               <Box className="AvatarBox">
-                <Avatar
-                  src="/avatar.svg"
-                  sx={{ width: "100%", height: "100%" }}
+                <label htmlFor="image-input">
+                  {selectedImage ? (
+                    <Avatar
+                      src={URL.createObjectURL(selectedImage)}
+                      sx={{ width: "100%", height: "100%" }}
+                    />
+                  ) : (
+                    <Avatar
+                      src={formData.profile_url || "/default-image.png"}
+                      sx={{ width: "100%", height: "100%" }}
+                    />
+                  )}
+                  <Camera className="Camera" />
+                </label>
+                <input
+                  id="image-input"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
                 />
-                <Camera className="Camera" />
               </Box>
 
               <InputControl
@@ -176,8 +231,8 @@ const ProfileForm = () => {
                 label="Phone Number"
                 type="tel"
                 placeholder="Enter Phone Number"
-                name="phoneNumber"
-                value={formData.phoneNumber}
+                name="phone_number"
+                value={formData.phone_number}
                 onChange={handleInputChange}
               />
 
@@ -198,21 +253,23 @@ const ProfileForm = () => {
                       variant="body2"
                       color="text.primary"
                     >
-                      District
+                      Select State
                     </Typography>
-                    <FormControl fullWidth>
-                      <InputLabel id="district">&nbsp;</InputLabel>
+                    <FormControl style={{ borderColor: "black" }} fullWidth>
+                      <InputLabel id="state">Select State</InputLabel>
                       <Select
                         style={{ borderRadius: 100 }}
-                        labelId="district"
-                        id="district"
-                        name="district"
-                        value={formData.district}
-                        onChange={handleInputChange}
+                        labelId="state"
+                        id="state"
+                        name="state"
+                        value={formData.state}
+                        onChange={handleStateChange}
                       >
-                        <MenuItem value="Nagpur">Nagpur</MenuItem>
-                        <MenuItem value="Bhandara">Bhandara</MenuItem>
-                        <MenuItem value="Akola">Akola</MenuItem>
+                        {states.map((state) => (
+                          <MenuItem key={state} value={state}>
+                            {state}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Grid>
@@ -222,25 +279,23 @@ const ProfileForm = () => {
                       variant="body2"
                       color="text.primary"
                     >
-                      Select State
+                      District
                     </Typography>
-                    <FormControl style={{ borderColor: "black" }} fullWidth>
-                      <InputLabel id="state">&nbsp;</InputLabel>
+                    <FormControl fullWidth>
+                      <InputLabel id="district">Select District</InputLabel>
                       <Select
                         style={{ borderRadius: 100 }}
-                        labelId="state"
-                        id="state"
-                        name="state"
-                        value={formData.state}
+                        labelId="district"
+                        id="district"
+                        name="district"
+                        value={formData.district}
                         onChange={handleInputChange}
                       >
-                        <MenuItem value="Maharashtra">Maharashtra</MenuItem>
-                        <MenuItem value="Madhya Pradesh">
-                          Madhya Pradesh
-                        </MenuItem>
-                        <MenuItem value="Himachal Pradesh">
-                          Himachal Pradesh
-                        </MenuItem>
+                        {districts.map((district) => (
+                          <MenuItem key={district} value={district}>
+                            {district}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Grid>
