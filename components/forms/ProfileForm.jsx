@@ -39,6 +39,8 @@ const ProfileForm = () => {
     school: "",
     district: "",
     state: "",
+    profile_url: "random",
+    partner_id: 0,
   });
 
   useEffect(() => {
@@ -89,6 +91,7 @@ const ProfileForm = () => {
       .then((response) => {
         console.log(response);
         localStorage.setItem("teacherData", JSON.stringify(response.data));
+        console.log(profileData);
 
         router.push("/teacher");
       })
@@ -105,6 +108,12 @@ const ProfileForm = () => {
   };
   const ActiveStepIcon = () => <CheckCircleIcon color="success" />;
   const UnActiveStepIcon = () => <CircleIcon color="primary" />;
+  useEffect(() => {
+    const storedUserData = localStorage.getItem("teacherData");
+    if (storedUserData) {
+      router.push("/teacher");
+    }
+  }, [router]);
 
   return (
     <>
