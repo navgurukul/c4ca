@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Axios from "axios";
+import customAxios from "../../api";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
   Avatar,
@@ -41,7 +41,6 @@ const ProfileForm = () => {
     district: "",
     state: "",
     profile_url: "",
-    partner_id: 112,
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -57,11 +56,12 @@ const ProfileForm = () => {
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
     if (authToken && authToken.token) {
-      Axios.get("https://merd-api.merakilearn.org/users/me", {
-        headers: {
-          Authorization: `Bearer ${authToken.token}`,
-        },
-      })
+      customAxios
+        .get("https://merd-api.merakilearn.org/users/me", {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+          },
+        })
         .then((response) => {
           setUserData({
             name: response.data.user.name,
@@ -97,20 +97,16 @@ const ProfileForm = () => {
     profileData.append("school", formData.school);
     profileData.append("district", formData.district);
     profileData.append("state", formData.state);
-    profileData.append("partner_id", formData.partner_id);
 
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
 
-    Axios.post(
-      "https://merd-api.merakilearn.org/c4ca/teacher_profile",
-      profileData,
-      {
+    customAxios
+      .post("/c4ca/teacher_profile", profileData, {
         headers: {
           Authorization: `Bearer ${authToken.token}`,
           "Content-Type": "multipart/form-data", // Set the content type for FormData
         },
-      }
-    )
+      })
       .then((response) => {
         const uploadedProfileUrl = response.data.profile_url;
         setFormData({
@@ -118,9 +114,6 @@ const ProfileForm = () => {
           profile_url: uploadedProfileUrl,
         });
         console.log(response.data.data);
-        localStorage.setItem("teacherData", JSON.stringify(response.data.data));
-
-        // router.push("/teacher");
       })
       .catch((error) => {
         console.error("Error saving profile data:", error);
@@ -147,12 +140,19 @@ const ProfileForm = () => {
   };
   const ActiveStepIcon = () => <CheckCircleIcon color="success" />;
   const UnActiveStepIcon = () => <CircleIcon color="primary" />;
-  // useEffect(() => {
-  //   const storedUserData = localStorage.getItem("teacherData");
-  //   if (storedUserData) {
-  //     router.push("/teacher");
-  //   }
-  // }, [router]);
+  useEffect(() => {
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    customAxios
+      .get("/c4ca/teacher_Data", {
+        headers: {
+          Authorization: `Bearer ${authToken.token}`,
+        },
+      })
+      .then((res) => {
+        localStorage.setItem("teacherData", JSON.stringify(res.data.data));
+        router.push("/teacher");
+      });
+  }, [router]);
 
   return (
     <>
