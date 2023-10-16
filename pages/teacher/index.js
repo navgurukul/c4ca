@@ -22,13 +22,11 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Axios from "axios";
+import customAxios from "@/api";
 
 const TeacherDashboard = () => {
   const router = useRouter();
 
-  // const handleAddTeam = () => {
-  //   router.push("/teacher/add-team")
-  // }
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teams, setTeams] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -40,16 +38,18 @@ const TeacherDashboard = () => {
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
-    const teacherId = teacherData?.[0].id;
+    const teacherId = teacherData?.id;
 
-    if(teacherId && authToken){
-      Axios.get(`https://merd-api.merakilearn.org/c4ca/teams/${teacherId}`, {
-      headers: {
-        Authorization: `Bearer ${authToken.token}`,
-      },
-    }).then((response) => {
-      setTeams(response.data);
-    });
+    if (teacherId && authToken) {
+      customAxios
+        .get(`/c4ca/teams/${teacherId}`, {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+          },
+        })
+        .then((response) => {
+          setTeams(response.data);
+        });
     }
   }, []);
 

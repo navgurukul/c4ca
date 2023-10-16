@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import { GoogleBtn } from "@/styles/style";
-import axios from "axios";
+import customAxios from "../../../api"; // Import your custom Axios instance
 import Link from "next/link";
 
 const LoginPage = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleLoginSuccess = () => {
     if (typeof gapi !== "undefined") {
@@ -30,27 +29,28 @@ const LoginPage = () => {
   };
 
   const sendGoogleUserData = (token) => {
-    return axios({
-      url: `${BASE_URL}/users/auth/google`,
-      method: "post",
-      headers: { accept: "application/json", Authorization: token },
-      data: { idToken: token, mode: "web" },
-    })
+    customAxios
+      .post("/users/auth/google", { idToken: token, mode: "web" }, {
+        headers: { Authorization: token },
+      })
       .then((res) => {
         localStorage.setItem("AUTH", JSON.stringify(res.data));
-        axios({
-          method: "get",
-          url: `${BASE_URL}/users/me`,
-          headers: {
-            accept: "application/json",
-            Authorization: res.data.token,
-          },
-        }).then((res) => {
-          if (res.status === 200) {
-            // Only redirect if the request is successful
-            window.location.href = "/teacher/profile";
-          }
-        });
+        customAxios
+          .get("/users/me", {
+            headers: {
+              accept: "application/json",
+              Authorization: res.data.token,
+            },
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              // Only redirect if the request is successful
+              window.location.href = "/teacher/profile";
+            }
+          })
+          .catch((err) => {
+            console.log("error in google data", err);
+          });
       })
       .catch((err) => {
         console.log("error in google data", err);

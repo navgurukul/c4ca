@@ -12,8 +12,8 @@ import SelectControl from "./SelectControl";
 import { breakpoints } from "@/theme/constant";
 import { useState, useEffect } from "react";
 import stateDistrict from "../../data/state.json";
-import Axios from "axios";
 import { useRouter } from "next/router";
+import customAxios from "../../api";
 
 const Team = () => {
   const router = useRouter();
@@ -29,7 +29,6 @@ const Team = () => {
   
 
   useEffect(() => {
-    // Ensure the teamMembers array has the correct number of members
     const membersCount = teamMembers.length;
     if (membersCount < teamSize) {
       const emptyMembersToAdd = teamSize - membersCount;
@@ -44,33 +43,34 @@ const Team = () => {
   }, [teamSize]);
 
   const createTeam = async () => {
-  try {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
-    
-    // Filter out empty team members
-    const filteredTeamMembers = teamMembers.filter(member => member.name.trim() !== "" && member.class !== "");
-    
-    const response = await Axios.post(
-      "https://merd-api.merakilearn.org/c4ca/team",
-      {
-        team_name: teamName,
-        team_size: teamSize,
-        team_members: filteredTeamMembers,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${authToken.token}`,
-          "Content-Type": "application/json",
+    try {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+
+      const filteredTeamMembers = teamMembers.filter(
+        (member) => member.name.trim() !== "" && member.class !== ""
+      );
+
+      const response = await customAxios.post(
+        "/c4ca/team",
+        {
+          team_name: teamName,
+          team_size: teamSize,
+          team_members: filteredTeamMembers,
         },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.status === "success") {
+        router.push("/teacher");
       }
-    );
-    if (response.data.status === "success") {
-      router.push("/teacher");
+    } catch (error) {
+      console.error("Error creating a team:", error);
     }
-  } catch (error) {
-    console.error("Error creating a team:", error);
-  }
-};
+  };
 
 
   const updateTeamMember = (index, name, classValue) => {
