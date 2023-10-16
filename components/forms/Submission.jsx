@@ -2,9 +2,10 @@ import React from "react";
 import InputControl from "./InputControl";
 import DropZone from "./DropZone";
 
-import { Container, Typography, Button } from "@mui/material";
+import { Container, Typography, Button, Box } from "@mui/material";
+import DragDropZone from "../submission/DragDropZone";
 
-const Submission = ({setIsSubmitted}) => {
+const Submission = ({ setIsSubmitted }) => {
   return (
     <Container maxWidth="sm" sx={{ display: "grid", gap: 4, mt: 4 }}>
       <Typography variant="h6" align="center">
@@ -23,13 +24,17 @@ const Submission = ({setIsSubmitted}) => {
 
       <InputControl label="Share Scratch Project Link" type="text" />
 
-      <DropZone label="Or, Upload project file" type="text" />
+      <Box sx={{ display: "grid", gap: 1 }}>
+        <Typography variant="body2">Or, Upload project file</Typography>
+        <DragDropZone />
+      </Box>
 
       <Button
         color="primary"
-        onClick={()=>setIsSubmitted(true)}
+        onClick={() => setIsSubmitted(true)}
         variant="contained"
-        sx={{ minWidth: 240, margin: "32px auto 0", mb: 3 }}>
+        sx={{ minWidth: 240, margin: "32px auto 0", mb: 3 }}
+      >
         Submit Project
       </Button>
     </Container>
