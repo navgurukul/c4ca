@@ -36,7 +36,7 @@ const ProfileForm = () => {
   });
 
   const [formData, setFormData] = useState({
-    phoneNumber: "",
+    phone_number: "",
     school: "",
     district: "",
     state: "",
@@ -150,7 +150,13 @@ const ProfileForm = () => {
       })
       .then((res) => {
         localStorage.setItem("teacherData", JSON.stringify(res.data.data));
-        // router.push("/teacher");
+        setFormData({
+          phone_number: res.data.data.phone_number,
+    school: res.data.data.school,
+    district: res.data.data.district,
+    state: res.data.data.state,
+    profile_url: res.data.data.profile_url,
+        })
       });
   }, [router]);
 
