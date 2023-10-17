@@ -147,12 +147,12 @@ const ProfileForm = () => {
   };
   const ActiveStepIcon = () => <CheckCircleIcon color="success" />;
   const UnActiveStepIcon = () => <CircleIcon color="primary" />;
-  useEffect(() => {
-    const storedUserData = localStorage.getItem("teacherData");
-    if (storedUserData) {
-      router.push("/teacher");
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   const storedUserData = localStorage.getItem("teacherData");
+  //   if (storedUserData) {
+  //     router.push("/teacher");
+  //   }
+  // }, [router]);
 
   return (
     <>
