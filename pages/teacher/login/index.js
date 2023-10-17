@@ -66,15 +66,18 @@ const LoginPage = () => {
           .then((res) => {
             if (res.status === 200) {
               // Only redirect if the request is successful
-              window.location.href = "/teacher/profile";
+              router.push("/teacher/profile");
+              setLoading(false);
             }
           })
           .catch((err) => {
             console.log("error in google data", err);
+            setLoading(false);
           });
       })
       .catch((err) => {
         console.log("error in google data", err);
+        setLoading(false);
       });
   };
 

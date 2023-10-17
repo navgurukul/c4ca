@@ -14,8 +14,9 @@ import { useState, useEffect } from "react";
 import stateDistrict from "../../data/state.json";
 import { useRouter } from "next/router";
 import customAxios from "../../api";
+import Link from "next/link";
 
-const Team = () => {
+const Team = ({ handleCloseDialog }) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
@@ -26,7 +27,6 @@ const Team = () => {
   const [teamMembers, setTeamMembers] = useState([]);
 
   const sizeList = [3, 4, 5];
-  
 
   useEffect(() => {
     const membersCount = teamMembers.length;
@@ -66,12 +66,12 @@ const Team = () => {
       );
       if (response.data.status === "success") {
         router.push("/teacher");
+        handleCloseDialog();
       }
     } catch (error) {
       console.error("Error creating a team:", error);
     }
   };
-
 
   const updateTeamMember = (index, name, classValue) => {
     setTeamMembers((prevMembers) => {
@@ -211,9 +211,11 @@ const Team = () => {
       </Typography>
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Link href={"/teacher"}>
         <Button className="Button" color="primary">
           Back
         </Button>
+        </Link>
         <Button
           className="Button"
           color="primary"

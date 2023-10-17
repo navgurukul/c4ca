@@ -150,7 +150,7 @@ const ProfileForm = () => {
       })
       .then((res) => {
         localStorage.setItem("teacherData", JSON.stringify(res.data.data));
-        router.push("/teacher");
+        // router.push("/teacher");
       });
   }, [router]);
 

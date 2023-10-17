@@ -35,7 +35,7 @@ const TeacherDashboard = () => {
     setOpenDialog(true);
   };
 
-  useEffect(() => {
+  const refreshTeams = () => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
@@ -51,10 +51,15 @@ const TeacherDashboard = () => {
           setTeams(response.data);
         });
     }
+  };
+
+  useEffect(() => {
+    refreshTeams();
   }, []);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    refreshTeams();
   };
 
   const [showLoginDetails, setShowLoginDetails] = useState({});
@@ -105,12 +110,12 @@ const TeacherDashboard = () => {
                   </Typography>
                   <CircularProgress
                     variant="determinate"
-                    value={team.course_progress}
+                    value={team.course_progress || 0}
                     size={20}
                     thickness={6}
                     color="typhoon"
                   />{" "}
-                  <Typography>{team.course_progress}%</Typography>
+                  <Typography>{team.course_progress ||0}%</Typography>
                 </Box>
                 {showLoginDetails[team.id] && (
                   <div>
@@ -223,7 +228,10 @@ const TeacherDashboard = () => {
         fullWidth
       >
         <DialogContent>
-          <Team onClose={handleCloseDialog} />
+          <Team
+            handleCloseDialog={handleCloseDialog}
+            onClose={handleCloseDialog}
+          />
         </DialogContent>
       </Dialog>
 
