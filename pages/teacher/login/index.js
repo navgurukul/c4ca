@@ -1,15 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import { GoogleBtn } from "@/styles/style";
 import axios from "axios";
-import Link from "next/link";
+import { useCookies } from "react-cookie";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 
 const LoginPage = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+  const [cookie, setCookie] = useCookies(["user"]);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const handleLoginSuccess = () => {
     if (typeof gapi !== "undefined") {
+      setLoading(true);
       gapi.load("auth2", () => {
         gapi.auth2
           .init({
@@ -24,6 +31,7 @@ const LoginPage = () => {
           })
           .catch((error) => {
             console.log("Login failed", error);
+            setLoading(false)
           });
       });
     }
@@ -37,7 +45,14 @@ const LoginPage = () => {
       data: { idToken: token, mode: "web" },
     })
       .then((res) => {
+        console.log(res.data, 'logindata....');
+        res.data.role = "teacher"
         localStorage.setItem("AUTH", JSON.stringify(res.data));
+        setCookie("user", JSON.stringify(res.data), {
+          path: "/",
+          maxAge: 604800, // Expires after 1hr
+          sameSite: true,
+        });
         axios({
           method: "get",
           url: `${BASE_URL}/users/me`,
@@ -46,8 +61,12 @@ const LoginPage = () => {
             Authorization: res.data.token,
           },
         }).then((res) => {
-          console.log(res.status);
-          window.location.href = "/teacher/profile";
+          if (res.status === 200) {
+            console.log(res.data);
+            // Only redirect if the request is successful
+            router.push("/teacher/profile");
+            setLoading(false)
+          }
         });
       })
       .catch((err) => {
@@ -100,14 +119,12 @@ const LoginPage = () => {
             <Typography variant="body1" align="center" color="text.primary">
               Continue to C4CA
             </Typography>
-            <Link href={"/teacher/profile"}>
-            <GoogleBtn onClick={handleLoginSuccess}>
+            <GoogleBtn disabled={loading} onClick={handleLoginSuccess}>
               <img src="/Google.svg" />
               <Typography variant="ButtonLarge" color="text.primary">
-                Login with Google
+                {loading ? "Logging in..." : "Login with Google"}
               </Typography>
             </GoogleBtn>
-            </Link>
           </Box>
         </Box>
       </Container>

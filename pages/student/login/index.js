@@ -13,10 +13,12 @@ import {
   Card,
   InputLabel,
 } from "@mui/material";
+import { useCookies } from "react-cookie";
 
 const LoginForm = () => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const [cookie, setCookie] = useCookies(["user"]);
 
   const [formData, setFormData] = useState({
     userId: "",
@@ -44,30 +46,36 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let isValid = true;
+    // let isValid = true;
 
-    if (formData.userId.trim() === "") {
-      setErrors({
-        ...errors,
-        userId: "User ID is required",
-      });
-      isValid = false;
-    }
+    // if (formData.userId.trim() === "") {
+    //   setErrors({
+    //     ...errors,
+    //     userId: "User ID is required",
+    //   });
+    //   isValid = false;
+    // }
 
-    if (formData.password.trim() === "") {
-      setErrors({
-        ...errors,
-        password: "Password is required",
-      });
-      isValid = false;
-    }
+    // if (formData.password.trim() === "") {
+    //   setErrors({
+    //     ...errors,
+    //     password: "Password is required",
+    //   });
+    //   isValid = false;
+    // }
 
-    if (isValid) {
-      // You can perform login logic here
-      // For example, send the data to your authentication API
-      // Redirect to the dashboard on successful login
-      router.push("/dashboard"); // Replace '/dashboard' with the actual dashboard route
-    }
+    // if (isValid) {
+    //   // You can perform login logic here
+    //   // For example, send the data to your authentication API
+    //   // Redirect to the dashboard on successful login
+    const data = { role: "student" };
+    localStorage.setItem("AUTH", JSON.stringify(data));
+    setCookie("user", JSON.stringify(data), {
+      path: "/",
+      maxAge: 604800, // Expires after 7 days
+      sameSite: true,
+    });
+    router.push("/student/team-profile"); // Replace '/dashboard' with the actual dashboard route
   };
 
   return (
@@ -79,14 +87,16 @@ const LoginForm = () => {
         placeItems: "center",
         gap: "20px",
         marginTop: "7%",
-      }}>
+      }}
+    >
       <Card
         sx={{
           width: isMobile ? "100%" : "50%",
           minHeight: "100%",
           backgroundColor: "#FFFFFF",
           padding: isMobile ? "20px" : "40px",
-        }}>
+        }}
+      >
         <Container maxWidth="sm" sx={{ mt: 5 }}>
           <form onSubmit={handleSubmit}>
             <Grid container justifyContent="center" sx={{ mb: 4 }}>
@@ -143,11 +153,13 @@ const LoginForm = () => {
               )}
             </Box>
             <Grid container justifyContent="center" sx={{ mb: 3 }}>
-              <Link href={"/student/team-profile"}>
-                <Button type="submit" className="profileBtn">
-                  Login
-                </Button>
-              </Link>
+              <Button
+                onClick={handleSubmit}
+                type="submit"
+                className="profileBtn"
+              >
+                Login
+              </Button>
             </Grid>
             <Grid container justifyContent="center" sx={{ mb: 4 }}>
               <Typography variant="subtitle1">
