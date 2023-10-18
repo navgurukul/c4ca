@@ -5,10 +5,11 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
+import customAxios from "../../../api"; // Import your custom Axios instance
+import Link from "next/link";
 
 const LoginPage = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const [cookie, setCookie] = useCookies(["user"]);
   const router = useRouter();
@@ -31,46 +32,52 @@ const LoginPage = () => {
           })
           .catch((error) => {
             console.log("Login failed", error);
-            setLoading(false)
+            setLoading(false);
           });
       });
     }
   };
 
   const sendGoogleUserData = (token) => {
-    return axios({
-      url: `${BASE_URL}/users/auth/google`,
-      method: "post",
-      headers: { accept: "application/json", Authorization: token },
-      data: { idToken: token, mode: "web" },
-    })
+    customAxios
+      .post(
+        "/users/auth/google",
+        { idToken: token, mode: "web" },
+        {
+          headers: { Authorization: token },
+        }
+      )
       .then((res) => {
-        console.log(res.data, 'logindata....');
-        res.data.role = "teacher"
+        console.log(res.data, "logindata....");
+        res.data.role = "teacher";
         localStorage.setItem("AUTH", JSON.stringify(res.data));
         setCookie("user", JSON.stringify(res.data), {
           path: "/",
           maxAge: 604800, // Expires after 1hr
           sameSite: true,
         });
-        axios({
-          method: "get",
-          url: `${BASE_URL}/users/me`,
-          headers: {
-            accept: "application/json",
-            Authorization: res.data.token,
-          },
-        }).then((res) => {
-          if (res.status === 200) {
-            console.log(res.data);
-            // Only redirect if the request is successful
-            router.push("/teacher/profile");
-            setLoading(false)
-          }
-        });
+        customAxios
+          .get("/users/me", {
+            headers: {
+              accept: "application/json",
+              Authorization: res.data.token,
+            },
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              // Only redirect if the request is successful
+              router.push("/teacher/profile");
+              setLoading(false);
+            }
+          })
+          .catch((err) => {
+            console.log("error in google data", err);
+            setLoading(false);
+          });
       })
       .catch((err) => {
         console.log("error in google data", err);
+        setLoading(false);
       });
   };
 

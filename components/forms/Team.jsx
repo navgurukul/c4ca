@@ -12,10 +12,11 @@ import SelectControl from "./SelectControl";
 import { breakpoints } from "@/theme/constant";
 import { useState, useEffect } from "react";
 import stateDistrict from "../../data/state.json";
-import Axios from "axios";
 import { useRouter } from "next/router";
+import customAxios from "../../api";
+import Link from "next/link";
 
-const Team = () => {
+const Team = ({ handleCloseDialog }) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
@@ -26,10 +27,8 @@ const Team = () => {
   const [teamMembers, setTeamMembers] = useState([]);
 
   const sizeList = [3, 4, 5];
-  
 
   useEffect(() => {
-    // Ensure the teamMembers array has the correct number of members
     const membersCount = teamMembers.length;
     if (membersCount < teamSize) {
       const emptyMembersToAdd = teamSize - membersCount;
@@ -44,34 +43,35 @@ const Team = () => {
   }, [teamSize]);
 
   const createTeam = async () => {
-  try {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
-    
-    // Filter out empty team members
-    const filteredTeamMembers = teamMembers.filter(member => member.name.trim() !== "" && member.class !== "");
-    
-    const response = await Axios.post(
-      "https://merd-api.merakilearn.org/c4ca/team",
-      {
-        team_name: teamName,
-        team_size: teamSize,
-        team_members: filteredTeamMembers,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${authToken.token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (response.data.status === "success") {
-      router.push("/teacher");
-    }
-  } catch (error) {
-    console.error("Error creating a team:", error);
-  }
-};
+    try {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
 
+      const filteredTeamMembers = teamMembers.filter(
+        (member) => member.name.trim() !== "" && member.class !== ""
+      );
+
+      const response = await customAxios.post(
+        "/c4ca/team",
+        {
+          team_name: teamName,
+          team_size: teamSize,
+          team_members: filteredTeamMembers,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.status === "success") {
+        router.push("/teacher");
+        handleCloseDialog();
+      }
+    } catch (error) {
+      console.error("Error creating a team:", error);
+    }
+  };
 
   const updateTeamMember = (index, name, classValue) => {
     setTeamMembers((prevMembers) => {
@@ -211,9 +211,11 @@ const Team = () => {
       </Typography>
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Link href={"/teacher"}>
         <Button className="Button" color="primary">
           Back
         </Button>
+        </Link>
         <Button
           className="Button"
           color="primary"
