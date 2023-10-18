@@ -87,6 +87,8 @@ const ProfileForm = () => {
     setSelectedImage(file);
   };
 
+  const [existingData, setExistingData] = useState(false);
+
   const handleSaveProfile = () => {
     // Create a FormData object to send the image
     const profileData = new FormData();
@@ -99,7 +101,6 @@ const ProfileForm = () => {
     profileData.append("state", formData.state);
 
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
-    const [existingData, setExistingData] = useState(false);
 
     customAxios
       .post("/c4ca/teacher_profile", profileData, {
@@ -308,11 +309,9 @@ const ProfileForm = () => {
                 </Grid>
               </Box>
             </Container>
-            <Button className="profileBtn" onClick={handleNext}>
-              {!existingData && (
+            {!existingData && <Button className="profileBtn" onClick={handleNext}>
                 <Typography variant="ButtonLarge">Save & Proceed</Typography>
-              )}
-            </Button>
+            </Button>}
           </>
         ) : activeStep === 1 && !existingData ? (
           <>
