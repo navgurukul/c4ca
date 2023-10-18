@@ -99,6 +99,7 @@ const ProfileForm = () => {
     profileData.append("state", formData.state);
 
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    const [existingData, setExistingData] = useState(false);
 
     customAxios
       .post("/c4ca/teacher_profile", profileData, {
@@ -149,14 +150,15 @@ const ProfileForm = () => {
         },
       })
       .then((res) => {
+        setExistingData(true);
         localStorage.setItem("teacherData", JSON.stringify(res.data.data));
         setFormData({
           phone_number: res.data.data.phone_number,
-    school: res.data.data.school,
-    district: res.data.data.district,
-    state: res.data.data.state,
-    profile_url: res.data.data.profile_url,
-        })
+          school: res.data.data.school,
+          district: res.data.data.district,
+          state: res.data.data.state,
+          profile_url: res.data.data.profile_url,
+        });
       });
   }, [router]);
 
@@ -189,9 +191,7 @@ const ProfileForm = () => {
         {activeStep === 0 ? (
           <>
             <Typography variant="h5" color="text.primary">
-              {router.asPath === "/profile/profile-update"
-                ? "Personal Details"
-                : "Setup Profile"}
+              {existingData ? "Personal Details" : "Setup Profile"}
             </Typography>
 
             <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
@@ -309,10 +309,12 @@ const ProfileForm = () => {
               </Box>
             </Container>
             <Button className="profileBtn" onClick={handleNext}>
-              <Typography variant="ButtonLarge">Save & Proceed</Typography>
+              {!existingData && (
+                <Typography variant="ButtonLarge">Save & Proceed</Typography>
+              )}
             </Button>
           </>
-        ) : activeStep === 1 ? (
+        ) : activeStep === 1 && !existingData ? (
           <>
             <Team />
           </>

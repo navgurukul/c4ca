@@ -212,10 +212,17 @@ const Team = ({ handleCloseDialog }) => {
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Link href={"/teacher"}>
-        <Button className="Button" color="primary">
-          Back
-        </Button>
+          <Button className="Button" color="primary">
+            Back
+          </Button>
         </Link>
+        <Button
+          className="Button"
+          color="primary"
+          onClick={() => router.push("/teacher")}
+        >
+          Skip
+        </Button>
         <Button
           className="Button"
           color="primary"
