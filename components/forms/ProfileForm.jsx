@@ -170,7 +170,7 @@ const ProfileForm = () => {
         disableGutters
         sx={{ display: "grid", placeItems: "center", gap: 4 }}
       >
-        <Box sx={{ width: "35%" }}>
+        {!existingData && (<Box sx={{ width: "35%" }}>
           <Stepper activeStep={activeStep}>
             {steps.map((label, index) => (
               <Step key={label}>
@@ -188,7 +188,7 @@ const ProfileForm = () => {
               </Step>
             ))}
           </Stepper>
-        </Box>
+        </Box>)}
         {activeStep === 0 ? (
           <>
             <Typography variant="h5" color="text.primary">
@@ -263,7 +263,7 @@ const ProfileForm = () => {
                       Select State
                     </Typography>
                     <FormControl style={{ borderColor: "black" }} fullWidth>
-                      <InputLabel id="state">Select State</InputLabel>
+                      {/* <InputLabel id="state">Select State</InputLabel> */}
                       <Select
                         style={{ borderRadius: 100 }}
                         labelId="state"
@@ -289,7 +289,7 @@ const ProfileForm = () => {
                       District
                     </Typography>
                     <FormControl fullWidth>
-                      <InputLabel id="district">Select District</InputLabel>
+                      {/* <InputLabel id="district">Select District</InputLabel> */}
                       <Select
                         style={{ borderRadius: 100 }}
                         labelId="district"
@@ -300,7 +300,7 @@ const ProfileForm = () => {
                       >
                         {districts.map((district) => (
                           <MenuItem key={district} value={district}>
-                            {district}
+                            {formData.district}
                           </MenuItem>
                         ))}
                       </Select>
@@ -309,9 +309,11 @@ const ProfileForm = () => {
                 </Grid>
               </Box>
             </Container>
-            {!existingData && <Button className="profileBtn" onClick={handleNext}>
+            {!existingData && (
+              <Button className="profileBtn" onClick={handleNext}>
                 <Typography variant="ButtonLarge">Save & Proceed</Typography>
-            </Button>}
+              </Button>
+            )}
           </>
         ) : activeStep === 1 && !existingData ? (
           <>
