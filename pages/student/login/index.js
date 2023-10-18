@@ -12,21 +12,23 @@ import {
   TextField,
   Card,
   InputLabel,
+  Icon,
 } from "@mui/material";
 import { useCookies } from "react-cookie";
+import customAxios from "@/api";
 
 const LoginForm = () => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [cookie, setCookie] = useCookies(["user"]);
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    userId: "",
+    login_id: "",
     password: "",
   });
 
   const [errors, setErrors] = useState({
-    userId: "",
+    login_id: "",
     password: "",
   });
 
@@ -46,36 +48,55 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // let isValid = true;
+    let isValid = true;
 
-    // if (formData.userId.trim() === "") {
-    //   setErrors({
-    //     ...errors,
-    //     userId: "User ID is required",
-    //   });
-    //   isValid = false;
-    // }
+    if (formData.login_id.trim() === "") {
+      setErrors({
+        ...errors,
+        login_id: "User ID is required",
+      });
+      isValid = false;
+    }
 
-    // if (formData.password.trim() === "") {
-    //   setErrors({
-    //     ...errors,
-    //     password: "Password is required",
-    //   });
-    //   isValid = false;
-    // }
+    if (formData.password.trim() === "") {
+      setErrors({
+        ...errors,
+        password: "Password is required",
+      });
+      isValid = false;
+    }
 
-    // if (isValid) {
-    //   // You can perform login logic here
-    //   // For example, send the data to your authentication API
-    //   // Redirect to the dashboard on successful login
-    const data = { role: "student" };
-    localStorage.setItem("AUTH", JSON.stringify(data));
-    setCookie("user", JSON.stringify(data), {
-      path: "/",
-      maxAge: 604800, // Expires after 7 days
-      sameSite: true,
-    });
-    router.push("/student/team-profile"); // Replace '/dashboard' with the actual dashboard route
+    if (isValid) {
+      setLoading(true);
+      customAxios
+        .post("/c4ca/team/login", formData)
+        .then((res) => {
+          setLoading(false);
+          if (res.status === 200) {
+            if (res.data.data === null){
+              return setErrors({
+                ...errors,
+                password: res.data.status,
+              });
+            }
+            console.log(res);
+            // Only redirect if the request is successful
+            setLoading(false);
+            res.data.role = "student";
+            localStorage.setItem("AUTH", JSON.stringify(res.data));
+            setCookie("user", JSON.stringify(res.data), {
+              path: "/",
+              maxAge: 604800, // Expires after 7 days
+              sameSite: true,
+            });
+            router.push("/student/team-profile"); // Replace '/dashboard' with the actual dashboard route
+          }
+        })
+        .catch((err) => {
+          console.log("error in google data", err);
+          setLoading(false);
+        });
+    }
   };
 
   return (
@@ -110,7 +131,7 @@ const LoginForm = () => {
               <TextField
                 fullWidth
                 id="name"
-                name="userId"
+                name="login_id"
                 placeholder="User ID"
                 variant="outlined"
                 margin="normal"
@@ -120,11 +141,11 @@ const LoginForm = () => {
                     borderRadius: "50px",
                   },
                 }}
-                value={formData.userId}
+                value={formData.login_id}
                 onChange={handleChange}
               />
-              {errors.userId && (
-                <Typography color="error">{errors.userId}</Typography>
+              {errors.login_id && (
+                <Typography color="error">{errors.login_id}</Typography>
               )}
             </Box>
             <Box sx={{ marginBottom: "20px" }}>
@@ -154,6 +175,7 @@ const LoginForm = () => {
             </Box>
             <Grid container justifyContent="center" sx={{ mb: 3 }}>
               <Button
+                disabled={loading}
                 onClick={handleSubmit}
                 type="submit"
                 className="profileBtn"

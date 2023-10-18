@@ -7,9 +7,20 @@ const {
   Button,
   Grid,
 } = require("@mui/material");
+import customAxios from "@/api";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const TeamProfile = () => {
+  const [team, setTeam] = useState({});
+  useEffect(() => {
+    const teamData = JSON.parse(localStorage.getItem("AUTH"));
+    console.log(teamData, "teamdata...");
+    customAxios.get(`/c4ca/team/${teamData.data.id}`).then((res) => {
+      console.log(res.data);
+      setTeam(res.data.data);
+    });
+  }, []);
   const students = [
     { name: "Pratik Deshmukh", class: "4" },
     { name: "Pratik Deshmukh", class: "4" },
@@ -19,7 +30,11 @@ const TeamProfile = () => {
   ];
 
   return (
-    <Container maxWidth="lg" style={{ padding: 10, marginTop: 30 }} disableGutters>
+    <Container
+      maxWidth="lg"
+      style={{ padding: 10, marginTop: 30 }}
+      disableGutters
+    >
       <Typography sx={{ textAlign: "left" }} variant="h6" color="primary">
         Team Profile
       </Typography>
@@ -33,7 +48,7 @@ const TeamProfile = () => {
           }}
         >
           <span style={{ color: "#192954", fontWeight: 900, fontSize: 25 }}>
-            SR
+            {team.team_name?.split(" ")[0]?.charAt(0)}{team.team_name?.split(" ")[1]?.charAt(0)}
           </span>
         </Avatar>
         <Typography
@@ -41,7 +56,7 @@ const TeamProfile = () => {
           variant="body1"
           color="primary"
         >
-          SkyRiders
+          {team.team_name}
         </Typography>
       </Box>
       <Typography style={{ textAlign: "left" }} variant="body1" color="gray">
@@ -140,9 +155,9 @@ const TeamProfile = () => {
           </Typography>
           <Table>
             <tbody>
-              {students.map((student, index) => (
-                <tr key={index}>
-                  <td style={{width: "120px"}}>
+              {team?.students?.map((student, index) => (
+                <tr key={student.id}>
+                  <td style={{ width: "120px" }}>
                     <Typography
                       variant="body1"
                       style={{ textAlign: "left", padding: 8 }}
@@ -166,7 +181,7 @@ const TeamProfile = () => {
                       style={{ textAlign: "right", padding: 5 }}
                       color="dark"
                     >
-                      Class {student.class}
+                      Class {student.class}th
                     </Typography>
                   </td>
                 </tr>
@@ -176,14 +191,13 @@ const TeamProfile = () => {
         </Grid>
       </Grid>
       <Link href={"/student/project-submission"}>
-          
-      <Button
-        variant="contained"
-        sx={{ marginX: "auto", marginY: 5 }}
-        color="primary"
-      >
-        Verify Details & Proceed
-      </Button>
+        <Button
+          variant="contained"
+          sx={{ marginX: "auto", marginY: 5 }}
+          color="primary"
+        >
+          Verify Details & Proceed
+        </Button>
       </Link>
     </Container>
   );
