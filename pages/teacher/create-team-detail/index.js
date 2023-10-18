@@ -136,7 +136,6 @@ const TeamDetail = () => {
                 </Box>
                 <Box >
                     <Divider variant="middle" color="#DEDEDE" />
-                    {/* <Divider sx={{ borderColor: '#DEDEDE', borderTop: '1px solid' }} /> */}
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', marginTop: '4px', gap:1 ,mt:"32px" ,mb:"16px",ml:2}}>
                     <Typography variant="subtitle1">Course Progress:</Typography>
