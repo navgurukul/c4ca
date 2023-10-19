@@ -13,13 +13,41 @@ import InputControl from "../forms/InputControl";
 import { breakpoints } from "@/theme/constant";
 import DragDropZone from "./DragDropZone";
 import ProjectSubmitted from "./Completed";
+import Divider from '@mui/material/Divider';
+import Link from "@mui/material/Link";
 
 
 const Submission = (props) => {
   const [show, setShow] = useState(false);
+  const [inputControlValue, setInputControlValue] = useState("");
+  const [dragDropZoneValue, setDragDropZoneValue] = useState([]);
+  const [linkShow , setLinkShow ] = useState(true);
+  const [projectShow , setprojectShow ] = useState(true);
+  var inputValue ;
+  var dropValue
+
+
   const handleShow = () => setShow(true);
 
-  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
+  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px");
+
+  const handleSubmit = () => {
+    setLinkShow(false);
+    setprojectShow(false);
+  };
+
+  const isSubmitDisabled = !inputControlValue && dragDropZoneValue.length === 0;
+
+  const handleInputControlChange = (value) => {
+    setInputControlValue(value);
+    var inputValue = value;
+    
+  };
+
+  const handleDragDropZoneChange = (files) => {
+    setDragDropZoneValue(files);
+    var dropValue = files;
+  };
 
   return (
     <>
@@ -94,32 +122,72 @@ const Submission = (props) => {
               </Typography>
               
             </Box>
+            {linkShow&&
+               <>
+           
+                {!isSubmitDisabled&&
+                <>
+                  <Divider />
+                  <Typography variant="body1">Draft saved on 23 Sep 2023</Typography>
 
-       
-            <InputControl label="Share Scratch Project Link" type="text" />
-
-            <Box sx={{ display: "grid", gap: 1 }}>
-              <Typography variant="body2">Or, Upload project file</Typography>
-              <DragDropZone />
-            </Box>
+                </>
+                }
+              </>
+             }
+             {linkShow?
+              <>
+                <InputControl label="Share Scratch Project Link" type="text" onChange={handleInputControlChange} />
+              </>:
+              <>
+                <Typography variant="subtitle1">Scratch Project Link</Typography>
+                <Link href={inputValue}>{inputValue}</Link>
+              
+              </>
+             }
+            {projectShow?
+              <Box sx={{ display: "grid", gap: 1 }}>
+                <Typography variant="body2">Or, Upload project file</Typography>
+                <DragDropZone onChange={handleDragDropZoneChange} />
+              </Box>:
+              <>
+                <Typography variant="subtitle1">Scratch Project File</Typography>
+                <Link to={dropValue}>{dropValue}</Link>
+              
+              </>
+            }
+            {!linkShow&&!projectShow&& 
+              <Grid container spacing={2}>
+                <Grid item xs={12} container justifyContent="center" alignItems="center">
+                    <Button size="medium" variant="subtitle1"  className="profileBtn">
+                    Return to Dashboard
+                    </Button>
+                </Grid>
+              </Grid> 
+            }
+              
           </Container>
-
+          {linkShow&&
           <Container maxWidth="sm" align="center">
           <Grid container  spacing={1}>
                 <Grid item xs={12} sm={6} md={6}>
-                  <Button variant="outlined">
+                  <Button variant="outlined" backgroundColor = {isSubmitDisabled&&"gray"}  disabled={!inputControlValue && dragDropZoneValue.length === 0}>
                     <Typography  variant="ButtonLarge" pl ="16px " pr="16px"pt="8px" pb="8px">Save Draft</Typography>
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} >
-                <Button className="profileBtn">
-                <Typography  variant="ButtonLarge">Submit Project</Typography>
+                <Button className={!isSubmitDisabled&&"profileBtn"}
+                  onClick={handleSubmit}
+                  disabled={isSubmitDisabled}
+                  backgroundColor="gray" >
+                 
+                <Typography  variant="ButtonLarge" onClick={handleSubmit}>Submit Project</Typography>
               </Button>
                   
                 </Grid>           
             </Grid>
             
           </Container>
+          }
         </Container>
       ) : (
         <ProjectSubmitted />
@@ -129,3 +197,8 @@ const Submission = (props) => {
 };
 
 export default Submission;
+
+
+
+
+  
