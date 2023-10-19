@@ -108,9 +108,6 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
 
       <Grid spacing={5} container>
         <Grid xs={6} item>
-          <InputLabel id="state" style={{ fontSize: "14px", color: "#2E2E2E" }}>
-            State
-          </InputLabel>
           <SelectControl
             onChange={(e) => setValues({ ...values, state: e.target.value })}
             label="State"
@@ -121,12 +118,6 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
           />
         </Grid>
         <Grid xs={6} item>
-          <InputLabel
-            id="district"
-            style={{ fontSize: "14px", color: "#2E2E2E" }}
-          >
-            District
-          </InputLabel>
           <SelectControl
             label="District"
             options={
