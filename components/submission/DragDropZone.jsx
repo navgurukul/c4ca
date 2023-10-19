@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { HighlightOff } from "@mui/icons-material";
+import Button from '@mui/material/Button';
 
 const DragDropZone = (props) => {
   const wrapperRef = useRef(null);
@@ -30,31 +31,35 @@ const DragDropZone = (props) => {
   };
   return (
     <>
-      {fileList.length > 0 ? (
-        <Box sx={{backgroundColor:"pink"}} className="drop-file-preview">
-          {fileList.map((item, index) => (
-            <Box key={index} className="drop-file-preview__item">
-              <Box className="drop-file-preview__item__info">
-                <img src="/project.svg" alt="" />
-                <Typography variant="body1" color='text.primary'>{item.name}</Typography>
-              </Box>
-
-              <HighlightOff
-                className="drop-file-preview__item__del"
-                onClick={() => fileRemove(item)}
-              />
-            </Box>
-          ))}
-        </Box>
-      ) : null}
-
-      <Box
+     
+     <Box
         ref={wrapperRef}
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         className="drop-file-input"
       >
+      {fileList.length > 0 ? (
+       
+        <Box sx={{backgroundColor:"pink"}} className="drop-file-preview">
+          {fileList.map((item, index) => (
+            <>
+              <Box key={index} className="drop-file-preview__item">
+                <Box className="drop-file-preview__item__info">
+                  <img src="/project.svg" alt="" />
+                  <Typography variant="body1" color='text.primary'>{item.name}</Typography>
+                </Box>      
+              </Box>
+              <Button onClick={() => fileRemove(item)} >
+                <Typography  variant="ButtonLarge" >Remove file</Typography>
+              </Button>
+            
+            </>
+            
+          ))}
+         
+        </Box>
+      ) : 
         <Box className="drop-file-input__label">
           <img src="/file_upload.svg" alt="" />
           <Box sx={{display:'grid', gap:1}}>
@@ -66,7 +71,9 @@ const DragDropZone = (props) => {
             </Typography>
           </Box>
         </Box>
+      }
         <input type="file" multiple onChange={onFileDrop} accept=".sb3"/>
+      
       </Box>
     </>
   );
