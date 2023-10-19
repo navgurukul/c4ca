@@ -7,7 +7,7 @@ export default function Home() {
     <center style={{ padding: 50 }}>
       <Typography variant="h4">CODE 4 CLIMATE ACTION</Typography>
       <br />
-      <Link href={"/teacher"}>
+      <Link href={"/teacher/teams"}>
         {" "}
         <Button
           variant="contained"

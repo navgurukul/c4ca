@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import customAxios from "../../api";
 import Link from "next/link";
 
-const Team = ({ handleCloseDialog }) => {
+const Team = ({ handleCloseDialog, setActiveStep = null }) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
@@ -64,8 +64,8 @@ const Team = ({ handleCloseDialog }) => {
           },
         }
       );
-      if (response.data.status === "success") {
-        router.push("/teacher");
+      if (!response.data.status === "success") {
+        router.push("/teacher/teams");
         handleCloseDialog();
       }
     } catch (error) {
@@ -180,7 +180,7 @@ const Team = ({ handleCloseDialog }) => {
               id={`class${index + 1}`}
               style={{ fontSize: "14px", color: "#2E2E2E" }}
             >
-              {`Class ${index + 1}`}
+              Class
             </InputLabel>
             <SelectControl
               sx={{ mt: 1 }}
@@ -211,11 +211,24 @@ const Team = ({ handleCloseDialog }) => {
       </Typography>
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Link href={"/teacher"}>
-        <Button className="Button" color="primary">
+        <Button
+          onClick={() =>
+            setActiveStep ? setActiveStep(0) : router.push("/teacher/teams")
+          }
+          className="Button"
+          color="primary"
+        >
           Back
         </Button>
-        </Link>
+        {setActiveStep && (
+          <Button
+            className="Button"
+            color="primary"
+            onClick={() => router.push("/teacher/teams")}
+          >
+            Skip
+          </Button>
+        )}
         <Button
           className="Button"
           color="primary"

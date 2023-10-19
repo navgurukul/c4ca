@@ -3,10 +3,9 @@ import { Box, Container, Typography } from "@mui/material";
 import { GoogleBtn } from "@/styles/style";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import customAxios from "../../../api"; // Import your custom Axios instance
-import Link from "next/link";
 
 const LoginPage = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -14,6 +13,9 @@ const LoginPage = () => {
   const [cookie, setCookie] = useCookies(["user"]);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const searchParams = useSearchParams();
+  const partner_id = searchParams.get("partner_id");
 
   const handleLoginSuccess = () => {
     if (typeof gapi !== "undefined") {
@@ -48,23 +50,42 @@ const LoginPage = () => {
         }
       )
       .then((res) => {
-        console.log(res.data, "logindata....");
-        res.data.role = "teacher";
-        localStorage.setItem("AUTH", JSON.stringify(res.data));
-        setCookie("user", JSON.stringify(res.data), {
-          path: "/",
-          maxAge: 604800, // Expires after 1hr
-          sameSite: true,
-        });
         customAxios
-          .get("/users/me", {
+          .get("/c4ca/teacher_Data", {
             headers: {
               accept: "application/json",
               Authorization: res.data.token,
             },
           })
-          .then((res) => {
-            if (res.status === 200) {
+          .then((resp) => {
+            if (resp.data.data === null) {
+              setLoading(false);
+              if (partner_id) {
+                res.data.role = "teacher";
+                localStorage.setItem("AUTH", JSON.stringify(res.data));
+                setCookie("user", JSON.stringify(res.data), {
+                  path: "/",
+                  maxAge: 604800, // Expires after 1hr
+                  sameSite: true,
+                });
+                return router.push(`/teacher/profile?partner_id=${partner_id}`);
+              }
+              return setError(resp.data.status);
+            } else {
+              res.data.role = "teacher";
+              localStorage.setItem("AUTH", JSON.stringify(res.data));
+              setCookie("user", JSON.stringify(res.data), {
+                path: "/",
+                maxAge: 604800, // Expires after 1hr
+                sameSite: true,
+              });
+              if (resp.data.data.school) {
+                localStorage.setItem(
+                  "teacherData",
+                  JSON.stringify(resp.data.data)
+                );
+                return router.push("/teacher/teams");
+              }
               // Only redirect if the request is successful
               router.push("/teacher/profile");
               setLoading(false);
@@ -132,6 +153,13 @@ const LoginPage = () => {
                 {loading ? "Logging in..." : "Login with Google"}
               </Typography>
             </GoogleBtn>
+            <Typography
+              variant="body1"
+              style={{ textAlign: "center" }}
+              color="red"
+            >
+              {error && error}
+            </Typography>
           </Box>
         </Box>
       </Container>

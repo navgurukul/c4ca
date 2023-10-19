@@ -25,10 +25,13 @@ import InputControl from "./InputControl";
 import Team from "./Team";
 import CircleIcon from "@mui/icons-material/Circle";
 import jsonData from "../../data/state.json";
+import { useSearchParams } from "next/navigation";
 
 const ProfileForm = () => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
+  const searchParams = useSearchParams();
+  const partner_id = searchParams.get("partner_id");
 
   const [userData, setUserData] = useState({
     name: "",
@@ -36,7 +39,7 @@ const ProfileForm = () => {
   });
 
   const [formData, setFormData] = useState({
-    phoneNumber: "",
+    phone_number: "",
     school: "",
     district: "",
     state: "",
@@ -51,27 +54,50 @@ const ProfileForm = () => {
   useEffect(() => {
     const stateNames = Object.keys(jsonData);
     setStates(stateNames);
-  }, []);
 
-  useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
-    if (authToken && authToken.token) {
-      customAxios
-        .get("https://merd-api.merakilearn.org/users/me", {
-          headers: {
-            Authorization: `Bearer ${authToken.token}`,
-          },
-        })
-        .then((response) => {
-          setUserData({
-            name: response.data.user.name,
-            email: response.data.user.email,
+    customAxios
+      .get("/c4ca/teacher_Data", {
+        headers: {
+          Authorization: `Bearer ${authToken.token}`,
+        },
+      })
+      .then((res) => {
+        if (res.data.data !== null) {
+          setExistingData(true);
+          console.log("ites herel....", res);
+          localStorage.setItem("teacherData", JSON.stringify(res.data.data));
+          setFormData({
+            phone_number: res.data.data.phone_number,
+            school: res.data.data.school,
+            district: res.data.data.district,
+            state: res.data.data.state,
+            profile_url: res.data.data.profile_url,
           });
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-        });
-    }
+          setUserData({
+            ...userData,
+            name: res.data.data.name,
+            email: res.data.data.email,
+          });
+        } else {
+          customAxios
+            .get("https://merd-api.merakilearn.org/users/me", {
+              headers: {
+                Authorization: `Bearer ${authToken.token}`,
+              },
+            })
+            .then((response) => {
+              console.log(response, "resp....");
+              setUserData({
+                name: response.data.user.name,
+                email: response.data.user.email,
+              });
+            })
+            .catch((error) => {
+              console.error("Error fetching user data:", error);
+            });
+        }
+      });
   }, []);
 
   const handleInputChange = (event) => {
@@ -86,6 +112,8 @@ const ProfileForm = () => {
     const file = event.target.files[0];
     setSelectedImage(file);
   };
+
+  const [existingData, setExistingData] = useState(false);
 
   const handleSaveProfile = () => {
     // Create a FormData object to send the image
@@ -108,51 +136,25 @@ const ProfileForm = () => {
         },
       })
       .then((response) => {
-        const uploadedProfileUrl = response.data.profile_url;
-        setFormData({
-          ...formData,
-          profile_url: uploadedProfileUrl,
-        });
-        console.log(response.data.data);
+        if (response.data.data) {
+          setActiveStep(1);
+        }
       })
       .catch((error) => {
         console.error("Error saving profile data:", error);
       });
   };
 
-  const handleStateChange = (event) => {
-    const selectedState = event.target.value;
-    const selectedDistricts = jsonData[selectedState] || [];
-    setFormData({
-      ...formData,
-      state: selectedState,
-      district: "",
-    });
+  useEffect(() => {
+    const selectedDistricts = jsonData[formData.state] || [];
     setDistricts(selectedDistricts);
-  };
+  }, [formData.state]);
 
   const steps = ["Setup Profile", "Add a Team"];
   const [activeStep, setActiveStep] = useState(0);
 
-  const handleNext = () => {
-    handleSaveProfile();
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
   const ActiveStepIcon = () => <CheckCircleIcon color="success" />;
   const UnActiveStepIcon = () => <CircleIcon color="primary" />;
-  useEffect(() => {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
-    customAxios
-      .get("/c4ca/teacher_Data", {
-        headers: {
-          Authorization: `Bearer ${authToken.token}`,
-        },
-      })
-      .then((res) => {
-        localStorage.setItem("teacherData", JSON.stringify(res.data.data));
-        // router.push("/teacher");
-      });
-  }, [router]);
 
   return (
     <>
@@ -161,31 +163,31 @@ const ProfileForm = () => {
         disableGutters
         sx={{ display: "grid", placeItems: "center", gap: 4 }}
       >
-        <Box sx={{ width: "35%" }}>
-          <Stepper activeStep={activeStep}>
-            {steps.map((label, index) => (
-              <Step key={label}>
-                <StepLabel
-                  StepIconComponent={
-                    activeStep === index
-                      ? ActiveStepIcon
-                      : index === 1
-                      ? UnActiveStepIcon
-                      : ActiveStepIcon
-                  }
-                >
-                  <Typography variant="body1">{label}</Typography>
-                </StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        </Box>
+        {partner_id && (
+          <Box sx={{ width: "35%" }}>
+            <Stepper activeStep={activeStep}>
+              {steps.map((label, index) => (
+                <Step key={label}>
+                  <StepLabel
+                    StepIconComponent={
+                      activeStep === index
+                        ? ActiveStepIcon
+                        : index === 1
+                        ? UnActiveStepIcon
+                        : ActiveStepIcon
+                    }
+                  >
+                    <Typography variant="body1">{label}</Typography>
+                  </StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          </Box>
+        )}
         {activeStep === 0 ? (
           <>
             <Typography variant="h5" color="text.primary">
-              {router.asPath === "/profile/profile-update"
-                ? "Personal Details"
-                : "Setup Profile"}
+              {!partner_id ? "Personal Details" : "Setup Profile"}
             </Typography>
 
             <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
@@ -217,14 +219,14 @@ const ProfileForm = () => {
                 label="Full Name"
                 type="text"
                 placeholder="Enter Your Name"
-                value={userData.name}
+                value={userData.name || formData.name}
               />
 
               <InputControl
                 label="Email Address"
                 type="email"
                 placeholder="Enter Email Address"
-                value={userData.email}
+                value={userData.email || formData.email}
               />
 
               <InputControl
@@ -232,7 +234,7 @@ const ProfileForm = () => {
                 type="tel"
                 placeholder="Enter Phone Number"
                 name="phone_number"
-                value={formData.phone_number}
+                value={formData?.phone_number}
                 onChange={handleInputChange}
               />
 
@@ -241,7 +243,7 @@ const ProfileForm = () => {
                 type="text"
                 placeholder="Enter School"
                 name="school"
-                value={formData.school}
+                value={formData?.school}
                 onChange={handleInputChange}
               />
 
@@ -256,14 +258,14 @@ const ProfileForm = () => {
                       Select State
                     </Typography>
                     <FormControl style={{ borderColor: "black" }} fullWidth>
-                      <InputLabel id="state">Select State</InputLabel>
+                      {/* <InputLabel id="state">Select State</InputLabel> */}
                       <Select
                         style={{ borderRadius: 100 }}
                         labelId="state"
                         id="state"
                         name="state"
-                        value={formData.state}
-                        onChange={handleStateChange}
+                        value={formData?.state}
+                        onChange={handleInputChange}
                       >
                         {states.map((state) => (
                           <MenuItem key={state} value={state}>
@@ -282,13 +284,13 @@ const ProfileForm = () => {
                       District
                     </Typography>
                     <FormControl fullWidth>
-                      <InputLabel id="district">Select District</InputLabel>
+                      {/* <InputLabel id="district">Select District</InputLabel> */}
                       <Select
                         style={{ borderRadius: 100 }}
                         labelId="district"
                         id="district"
                         name="district"
-                        value={formData.district}
+                        value={formData?.district}
                         onChange={handleInputChange}
                       >
                         {districts.map((district) => (
@@ -302,15 +304,24 @@ const ProfileForm = () => {
                 </Grid>
               </Box>
             </Container>
-            <Button className="profileBtn" onClick={handleNext}>
-              <Typography variant="ButtonLarge">Save & Proceed</Typography>
-            </Button>
+            {partner_id ? (
+              <Button className="profileBtn" onClick={handleSaveProfile}>
+                <Typography variant="ButtonLarge">Save & Proceed</Typography>
+              </Button>
+            ) : (
+              <Button
+                className="profileBtn"
+                onClick={() => router.push("/teacher")}
+              >
+                <Typography variant="ButtonLarge">Back</Typography>
+              </Button>
+            )}
           </>
-        ) : activeStep === 1 ? (
+        ) : (
           <>
-            <Team />
+            <Team setActiveStep={setActiveStep} />
           </>
-        ) : null}
+        )}
       </Container>
     </>
   );

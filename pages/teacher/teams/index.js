@@ -7,7 +7,7 @@ import {
   OpenInNewOutlined,
 } from "@mui/icons-material";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
-import Team from "./add-team";
+import Team from "../add-team";
 import {
   Box,
   Button,
@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Axios from "axios";
 import customAxios from "@/api";
+import Link from "next/link";
 
 const TeacherDashboard = () => {
   const router = useRouter();
@@ -80,118 +81,123 @@ const TeacherDashboard = () => {
         >
           {teams.map((team) => (
             <Grid item md={4} sm={6} xs={12} key={team.id}>
-              <Box
-                sx={{
-                  width: "100%",
-                  border: "2px solid",
-                  borderColor: "lightgray",
-                  padding: 4,
-                  borderRadius: 3,
-                  borderSpacing: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Typography variant="subtitle1" color="dark">
-                    {team.team_name}
-                  </Typography>
-                  <EditOutlined style={{ color: "gray" }} />
-                </Box>
+              <Link href={`/teacher/teams/${team.id}`}>
                 <Box
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    marginTop: 2,
+                    width: "100%",
+                    border: "2px solid",
+                    borderColor: "lightgray",
+                    padding: 4,
+                    borderRadius: 3,
+                    borderSpacing: "5px",
+                    cursor: "pointer",
                   }}
                 >
-                  <Typography variant="body1" color="dark">
-                    Course Progress:
-                  </Typography>
-                  <CircularProgress
-                    variant="determinate"
-                    value={team.course_progress || 0}
-                    size={20}
-                    thickness={6}
-                    color="typhoon"
-                  />{" "}
-                  <Typography>{team.course_progress ||0}%</Typography>
-                </Box>
-                {showLoginDetails[team.id] && (
-                  <div>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 1,
-                        alignItems: "center",
-                        marginTop: 2,
-                      }}
-                    >
-                      <Typography variant="subtitle1" color="dark">
-                        Team Login Details
-                      </Typography>
-                      <Button
-                        sx={{ fontSize: 15 }}
-                        onClick={() =>
-                          navigator.clipboard.writeText(
-                            `User ID: ${team.login_id}\nPassword: ${team.password}}`
-                          )
-                        }
-                        variant="text"
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="subtitle1" color="dark">
+                      {team.team_name}
+                    </Typography>
+                    <EditOutlined style={{ color: "gray" }} />
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      marginTop: 2,
+                    }}
+                  >
+                    <Typography variant="body1" color="dark">
+                      Course Progress:
+                    </Typography>
+                    <CircularProgress
+                      variant="determinate"
+                      value={team.course_progress || 10}
+                      size={20}
+                      thickness={6}
+                      color="typhoon"
+                    />{" "}
+                    <Typography>{team.course_progress || 0}%</Typography>
+                  </Box>
+                  {showLoginDetails[team.id] && (
+                    <div>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                          alignItems: "center",
+                          marginTop: 2,
+                        }}
                       >
-                        <CopyAll style={{ color: "gray" }} /> Copy
-                      </Button>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        marginTop: 1,
-                      }}
-                    >
-                      <img src="/assets/icon-id.svg" alt="" />
-                      <Typography variant="body2" color="dark">
-                        User ID: {team.login_id}
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        marginTop: 1,
-                      }}
-                    >
-                      <img src="/assets/security-password.svg" alt="" />
-                      <Typography variant="body2" color="dark">
-                        Password: {team.password}
-                      </Typography>
-                    </Box>
-                  </div>
-                )}
+                        <Typography variant="subtitle1" color="dark">
+                          Team Login Details
+                        </Typography>
+                        <Button
+                          sx={{ fontSize: 15 }}
+                          onClick={() =>
+                            navigator.clipboard.writeText(
+                              `User ID: ${team.login_id}\nPassword: ${team.password}}`
+                            )
+                          }
+                          variant="text"
+                        >
+                          <CopyAll style={{ color: "gray" }} /> Copy
+                        </Button>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          marginTop: 1,
+                        }}
+                      >
+                        <img src="/assets/icon-id.svg" alt="" />
+                        <Typography variant="body2" color="dark">
+                          User ID: {team.login_id}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          marginTop: 1,
+                        }}
+                      >
+                        <img src="/assets/security-password.svg" alt="" />
+                        <Typography variant="body2" color="dark">
+                          Password: {team.password}
+                        </Typography>
+                      </Box>
+                    </div>
+                  )}
 
-                <Button
-                  onClick={() =>
-                    setShowLoginDetails({
-                      ...showLoginDetails,
-                      [team.id]: !showLoginDetails[team.id],
-                    })
-                  }
-                  size="small"
-                  style={{
-                    height: 35,
-                    borderWidth: 2,
-                    marginLeft: "auto",
-                    marginTop: 20,
-                    fontWeight: 900,
-                  }}
-                  variant="outlined"
-                >
-                  {showLoginDetails[team.id] ? "Hide" : "Show"} Login ID &
-                  Password
-                </Button>
-              </Box>
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowLoginDetails({
+                        ...showLoginDetails,
+                        [team.id]: !showLoginDetails[team.id],
+                      });
+                    }}
+                    size="small"
+                    style={{
+                      height: 35,
+                      borderWidth: 2,
+                      marginLeft: "auto",
+                      marginTop: 20,
+                      fontWeight: 900,
+                    }}
+                    variant="outlined"
+                  >
+                    {showLoginDetails[team.id] ? "Hide" : "Show"} Login ID &
+                    Password
+                  </Button>
+                </Box>
+              </Link>
             </Grid>
           ))}
           <Grid item md={4} sm={6} xs={12}>

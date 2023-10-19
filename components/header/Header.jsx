@@ -20,7 +20,7 @@ const Header = () => {
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
 
   useEffect(() => {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    const authToken = JSON.parse(localStorage.getItem("teacherData"));
     setUser(authToken);
     console.log(authToken, 'token...');
   }, []);
@@ -47,7 +47,7 @@ const Header = () => {
           <img src="/c4ca.svg" alt="c4ca_logo" />
         </Link>
 
-        {router.asPath === "/" && user == null ? (
+        {router.pathname === "/" && user == null ? (
           <Stack spacing={2} direction="row">
             {" "}
             <Link href="/teacher/login">
@@ -88,7 +88,7 @@ const Header = () => {
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
               >
-                <Avatar src={user?.user?.profile_picture} />
+                <Avatar src={user?.profile_url} />
               </Button>
               <Menu
                 id="basic-menu"
