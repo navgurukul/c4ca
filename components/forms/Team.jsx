@@ -21,6 +21,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
   const [teamName, setTeamName] = useState("");
+  const [schoolName, setSchoolName] = useState(""); 
   const [values, setValues] = useState({
     state: "",
   });
@@ -95,6 +96,14 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
         type="text"
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
+      />
+
+      <InputControl
+      label="School Name"
+      type="text"
+      value={schoolName}
+      onChange={(e) => setSchoolName(e.target.value)}
+      
       />
 
       <Grid spacing={5} container>

@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Box, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  Container,
+  Typography,
+  CardContent,
+  CardMedia,
+  Stack,
+} from "@mui/material";
 import { GoogleBtn } from "@/styles/style";
 import axios from "axios";
 import { useCookies } from "react-cookie";
@@ -129,41 +137,48 @@ const LoginPage = () => {
   }, []);
 
   return (
-    <main>
-      <Container
-        maxWidth="lg"
-        sx={{ display: "grid", placeItems: "center", gap: 6 }}
-      >
-        <img src="/logo.svg" alt="logo" />
+    <Container
+      maxWidth="sm"
+      sx={{ display: "grid", alignItems: "center", gap: 10, marginTop:"13%"}}
+    >
+      <Card sx={{ display: "grid", gap: 1 }}>
+        <Stack alignItems={"center"}>
+          {" "}
+          <img src="/logo.svg" alt="logo" />
+        </Stack>
 
-        <Box sx={{ display: "grid", gap: 4 }}>
-          <img
-            src="/app-development.svg"
-            alt="app-development"
-            style={{ width: "100%" }}
-          />
-
-          <Box sx={{ display: "grid", gap: 2 }}>
-            <Typography variant="body1" align="center" color="text.primary">
-              Continue to C4CA
+        <CardContent>
+          <Typography gutterBottom variant="h6" align="center" component="div">
+            Embark On Your Learning Journey
+          </Typography>
+          <Typography
+            sx={{ mt: 3 }}
+            variant="body2"
+            align="center"
+            color="text.secondary"
+          >
+            Continue to C4CA
+          </Typography>
+          <GoogleBtn
+            sx={{ mt: 1 }}
+            disabled={loading}
+            onClick={handleLoginSuccess}
+          >
+            <img src="/Google.svg" />
+            <Typography variant="ButtonLarge" color="text.primary">
+              {loading ? "Logging in..." : "Login with Google"}
             </Typography>
-            <GoogleBtn disabled={loading} onClick={handleLoginSuccess}>
-              <img src="/Google.svg" />
-              <Typography variant="ButtonLarge" color="text.primary">
-                {loading ? "Logging in..." : "Login with Google"}
-              </Typography>
-            </GoogleBtn>
-            <Typography
+          </GoogleBtn>
+          <Typography
               variant="body1"
               style={{ textAlign: "center" }}
               color="red"
             >
               {error && error}
             </Typography>
-          </Box>
-        </Box>
-      </Container>
-    </main>
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 
