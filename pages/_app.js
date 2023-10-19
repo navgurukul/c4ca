@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }) {
       </Head>
 
       <ThemeProvider theme={theme}>
-        {router.asPath.split("/").reverse()[0] === "login" ? null : <Header />}
+        {router.pathname.split("/").reverse()[0] === "login" ? null : <Header />}
         <Component {...pageProps} />
       </ThemeProvider>
     </>

@@ -47,7 +47,7 @@ const Header = () => {
           <img src="/c4ca.svg" alt="c4ca_logo" />
         </Link>
 
-        {router.asPath === "/" && user == null ? (
+        {router.pathname === "/" && user == null ? (
           <Stack spacing={2} direction="row">
             {" "}
             <Link href="/teacher/login">
