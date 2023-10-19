@@ -72,7 +72,7 @@ const TeamDetail = () => {
   
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx ={{mt :10}}>
         <Grid container spacing={2}>
             <Grid item xs={12} md={7} lg={7}>
                 {teamDetailData.map((team) => (
@@ -85,7 +85,7 @@ const TeamDetail = () => {
                     </Typography>
                 </Typography>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', marginTop: '4px',ml:2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', marginTop: '4px',ml:2 , mt:"32px" }}>
                     <Typography variant="h6">{team.name}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', marginTop: '4px', gap:2 ,mt:"32px" ,mb:"16px", ml:2}}>
@@ -122,13 +122,13 @@ const TeamDetail = () => {
                     <Grid container >
                         <Grid item xs={4}>
                             <Box  sx={{ display: 'flex', alignItems: 'flex-start', gap:2 }}>
-                                <img src="id.svg" alt="Team Image" />
+                                <img src ="/assets/icon-id.svg" alt ="id" />
                                 <Typography>{team.user}</Typography>
                             </Box>
                         </Grid>
                         <Grid item xs={4} >
                             <Box  sx={{ display: 'flex', alignItems: 'flex-start', gap:2 }}>
-                                <img src="password.svg" alt="Team Image" />
+                                <img src="/assets/security-password.svg" alt="passwrod" />
                                 <Typography>{team.password}</Typography>
                             </Box>
                         </Grid>
@@ -176,7 +176,7 @@ const TeamDetail = () => {
                 </Box>
                 ))}        
             </Grid>
-            <Grid item xs={12} md={5} lg={5}>
+            <Grid item xs={12} md={4} lg={4} mt={9}>
                 <Card sx={{ border: 1, borderColor: 'gray', borderRadius: '8px' }}>
                     <CardContent>
                         <Grid container spacing={3} alignItems="flex-start" sx={{ mt: 1 }}>
@@ -185,13 +185,13 @@ const TeamDetail = () => {
                             </Grid>
                             <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <Box spacing ={3} sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                                    <img src="Student.svg" alt="Team Image" />
+                                    <img src="/assets/Student.svg" alt="Team Image" />
                                     <Typography>{teamMemberData.length}</Typography>
                                 </Box>
                             </Grid>
                         </Grid>
                         {teamMemberData.map((team, index) => (
-                        <Grid container spacing={3} sx={{ mt: 1, ml:2}} key={index}>
+                        <Grid container spacing={3} sx={{ mt: 1,}} key={index}>
                             <Grid item>
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                 <Typography variant="body2">
