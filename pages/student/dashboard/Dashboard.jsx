@@ -64,7 +64,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container sx={{marginTop:"3%"}} maxWidth="lg">
       <Grid container spacing={2}>
         <Grid item xs={12} md={8} lg={8}>
           <Box sx={{ display: 'flex', mb: '32px' }}>
