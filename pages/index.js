@@ -1,9 +1,13 @@
 import { Button, Typography } from "@mui/material";
 import Link from "next/link";
+import Dashboard from "@/components/dashboard/Dashboard";
 
 export default function Home() {
   // const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)")
   return (
+    <>
+      <Dashboard />
+    
     <center style={{ padding: 50 }}>
       <Typography variant="h4">CODE 4 CLIMATE ACTION</Typography>
       <br />
@@ -37,5 +41,6 @@ export default function Home() {
         </Button>
       </Link>
     </center>
+    </>
   );
 }
