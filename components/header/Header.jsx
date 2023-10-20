@@ -18,10 +18,12 @@ const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
-  const authData = JSON.parse(localStorage.getItem("AUTH"));
+  const [authData, setAuthData] = useState({});
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("teacherData"));
     setUser(authToken);
+    const data = JSON.parse(localStorage.getItem("AUTH"));
+    setAuthData(data);
   }, []);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
