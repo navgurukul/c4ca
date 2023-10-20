@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, CircularProgress, Button, Grid, Card, CardContent, CardMedia } from '@mui/material';
-import jsonData from './data.json';
+import jsonData from '../../data/data.json';
 import LockIcon from '@mui/icons-material/Lock'; // Import the Lock icon
 import LaunchIcon from '@mui/icons-material/Launch'; // Import the Launch icon
 

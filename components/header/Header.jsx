@@ -18,7 +18,7 @@ const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
-
+  const authData = JSON.parse(localStorage.getItem("AUTH"));
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("teacherData"));
     setUser(authToken);
@@ -35,9 +35,9 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    removeCookie("user", {path: "/"});
-    setUser(null)
-    router.push("/")
+    removeCookie("user", { path: "/" });
+    setUser(null);
+    router.push("/");
   };
   return (
     <>
@@ -98,8 +98,17 @@ const Header = () => {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                <MenuItem>
-                  <Link href={"/teacher/profile"}>Profile</Link>
+                <MenuItem
+                  onClick={() => {
+                    handleClose();
+                    router.push(
+                      authData.role == "teacher"
+                        ? "/teacher/profile"
+                        : "/student/team-profile"
+                    );
+                  }}
+                >
+                  Profile
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>

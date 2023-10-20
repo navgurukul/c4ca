@@ -21,7 +21,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
   const [teamName, setTeamName] = useState("");
-  const [schoolName, setSchoolName] = useState(""); 
+  const [schoolName, setSchoolName] = useState("");
   const [values, setValues] = useState({
     state: "",
   });
@@ -99,16 +99,17 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
       />
 
       <InputControl
-      label="School Name"
-      type="text"
-      value={schoolName}
-      onChange={(e) => setSchoolName(e.target.value)}
-      
+        label="School Name"
+        type="text"
+        value={schoolName}
+        onChange={(e) => setSchoolName(e.target.value)}
       />
 
       <Grid spacing={5} container>
         <Grid xs={6} item>
-          <InputLabel sx={{ fontSize: '14px',color:'#2E2E2E' }}>State</InputLabel>
+          <InputLabel sx={{ fontSize: "14px", color: "#2E2E2E" }}>
+            State
+          </InputLabel>
           <SelectControl
             onChange={(e) => setValues({ ...values, state: e.target.value })}
             options={Object.keys(stateDistrict).map((state) => ({
@@ -118,7 +119,9 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
           />
         </Grid>
         <Grid xs={6} item>
-          <InputLabel sx={{ fontSize: '14px',color:'#2E2E2E' }}>District</InputLabel>
+          <InputLabel sx={{ fontSize: "14px", color: "#2E2E2E" }}>
+            District
+          </InputLabel>
           <SelectControl
             options={
               values.state
@@ -213,7 +216,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Button
           onClick={() =>
-            setActiveStep ? setActiveStep(0) : router.push("/teacher/teams")
+            setActiveStep ? setActiveStep(0) : handleCloseDialog()
           }
           className="Button"
           color="primary"

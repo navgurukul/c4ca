@@ -311,9 +311,9 @@ const ProfileForm = () => {
             ) : (
               <Button
                 className="profileBtn"
-                onClick={() => router.push("/teacher")}
+                onClick={() => router.push("/teacher/teams")}
               >
-                <Typography variant="ButtonLarge">Back</Typography>
+                <Typography variant="ButtonLarge">Go To Dashboard</Typography>
               </Button>
             )}
           </>

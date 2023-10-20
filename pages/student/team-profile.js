@@ -191,7 +191,7 @@ const TeamProfile = () => {
         </Grid>
       </Grid>
       {/* <Link href={"/student/project-submission"}> */}
-      <Link href={"/student/dashboard/Dashboard"}>
+      <Link href={"/student/dashboard"}>
         <Button
           variant="contained"
           sx={{ marginX: "auto", marginY: 5 }}

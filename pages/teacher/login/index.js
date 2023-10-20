@@ -77,6 +77,10 @@ const LoginPage = () => {
                   sameSite: true,
                 });
                 return router.push(`/teacher/profile?partner_id=${partner_id}`);
+              } else {
+                return setError(
+                  "Apologies, the entered Gmail ID is not linked with a C4CA partner."
+                );
               }
               return setError(resp.data.status);
             } else {
@@ -139,7 +143,7 @@ const LoginPage = () => {
   return (
     <Container
       maxWidth="sm"
-      sx={{ display: "grid", alignItems: "center", gap: 10, marginTop:"13%"}}
+      sx={{ display: "grid", alignItems: "center", gap: 10, marginTop: "13%" }}
     >
       <Card sx={{ display: "grid", gap: 1 }}>
         <Stack alignItems={"center"}>
@@ -170,12 +174,12 @@ const LoginPage = () => {
             </Typography>
           </GoogleBtn>
           <Typography
-              variant="body1"
-              style={{ textAlign: "center" }}
-              color="red"
-            >
-              {error && error}
-            </Typography>
+            variant="body1"
+            style={{ textAlign: "center", marginTop: 10 }}
+            color="red"
+          >
+            {error && error}
+          </Typography>
         </CardContent>
       </Card>
     </Container>

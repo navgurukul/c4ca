@@ -12,8 +12,8 @@ import {
   CardActions,
   Avatar
 } from '@mui/material';
-import OverView from './OverView';
-import Module from './Module';
+import OverView from '../../../components/studentDashboard/OverView';
+import Module from '../../../components/studentDashboard/Module';
 
 const teamData = [
   {
