@@ -5,19 +5,82 @@ import {
   Box,
   useMediaQuery,
   Grid,
+  InputLabel,
 } from "@mui/material";
 import InputControl from "./InputControl";
-import { breakpoints } from "@/theme/constant";
 import SelectControl from "./SelectControl";
-import { useEffect, useState } from "react";
+import { breakpoints } from "@/theme/constant";
+import { useState, useEffect } from "react";
 import stateDistrict from "../../data/state.json";
+import { useRouter } from "next/router";
+import customAxios from "../../api";
 import Link from "next/link";
 
-const Team = () => {
+const Team = ({ handleCloseDialog, setActiveStep = null }) => {
+  const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
-  const [values, setValues] = useState({});
+  const [teamName, setTeamName] = useState("");
+  const [schoolName, setSchoolName] = useState(""); 
+  const [values, setValues] = useState({
+    state: "",
+  });
+  const [teamMembers, setTeamMembers] = useState([]);
+
   const sizeList = [3, 4, 5];
+
+  useEffect(() => {
+    const membersCount = teamMembers.length;
+    if (membersCount < teamSize) {
+      const emptyMembersToAdd = teamSize - membersCount;
+      const newMembers = Array.from({ length: emptyMembersToAdd }, () => ({
+        name: "",
+        class: "",
+      }));
+      setTeamMembers((prevMembers) => [...prevMembers, ...newMembers]);
+    } else if (membersCount > teamSize) {
+      setTeamMembers(teamMembers.slice(0, teamSize));
+    }
+  }, [teamSize]);
+
+  const createTeam = async () => {
+    try {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+
+      const filteredTeamMembers = teamMembers.filter(
+        (member) => member.name.trim() !== "" && member.class !== ""
+      );
+
+      const response = await customAxios.post(
+        "/c4ca/team",
+        {
+          team_name: teamName,
+          team_size: teamSize,
+          team_members: filteredTeamMembers,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.data.status === "success") {
+        router.push("/teacher/teams");
+        handleCloseDialog();
+      }
+    } catch (error) {
+      console.error("Error creating a team:", error);
+    }
+  };
+
+  const updateTeamMember = (index, name, classValue) => {
+    setTeamMembers((prevMembers) => {
+      const newMembers = [...prevMembers];
+      newMembers[index] = { name, class: classValue };
+      return newMembers;
+    });
+  };
 
   return (
     <Container
@@ -28,13 +91,26 @@ const Team = () => {
         Add a Team
       </Typography>
 
-      <InputControl label="Team Name" type="text" />
-      <InputControl label="School Name" type="text" />
+      <InputControl
+        label="Team Name"
+        type="text"
+        value={teamName}
+        onChange={(e) => setTeamName(e.target.value)}
+      />
+
+      <InputControl
+      label="School Name"
+      type="text"
+      value={schoolName}
+      onChange={(e) => setSchoolName(e.target.value)}
+      
+      />
+
       <Grid spacing={5} container>
         <Grid xs={6} item>
+          <InputLabel sx={{ fontSize: '14px',color:'#2E2E2E' }}>State</InputLabel>
           <SelectControl
             onChange={(e) => setValues({ ...values, state: e.target.value })}
-            label="State"
             options={Object.keys(stateDistrict).map((state) => ({
               label: state,
               value: state,
@@ -42,8 +118,8 @@ const Team = () => {
           />
         </Grid>
         <Grid xs={6} item>
+          <InputLabel sx={{ fontSize: '14px',color:'#2E2E2E' }}>District</InputLabel>
           <SelectControl
-            label="District"
             options={
               values.state
                 ? stateDistrict[values.state].map((district) => ({
@@ -55,7 +131,9 @@ const Team = () => {
           />
         </Grid>
       </Grid>
+
       <hr />
+
       <Box sx={{ display: "grid", gap: 1 }}>
         <Typography variant="body2" color="text.primary">
           Select Team Size
@@ -64,28 +142,56 @@ const Team = () => {
           {sizeList.map((size) => (
             <Button
               className={`teamBtn ${
-                teamSize == size ? "teamBtn-selected" : ""
+                teamSize === size ? "teamBtn-selected" : ""
               }`}
               variant="subtitle1"
               onClick={() => setTeamSize(size)}
+              key={size}
             >
               {size}
             </Button>
           ))}
         </Box>
       </Box>
+
       <Typography variant="" color="Gray.light">
         User ID and password will be created automatically and shareable from
         the dashboard
       </Typography>
-      {Array.from({ length: teamSize }, (_, index) => index + 1).map((i) => (
-        <Grid spacing={5} container>
+
+      {Array.from({ length: teamSize }, (_, index) => (
+        <Grid spacing={5} container key={index}>
           <Grid xs={6} item>
-            <InputControl label={`Student Name ${i}`} type="text" />
+            <InputControl
+              label={`Student Name ${index + 1}`}
+              type="text"
+              value={teamMembers[index] ? teamMembers[index].name : ""}
+              onChange={(e) =>
+                updateTeamMember(
+                  index,
+                  e.target.value,
+                  teamMembers[index]?.class
+                )
+              }
+            />
           </Grid>
           <Grid xs={6} item>
+            <InputLabel
+              id={`class${index + 1}`}
+              style={{ fontSize: "14px", color: "#2E2E2E" }}
+            >
+              Class
+            </InputLabel>
             <SelectControl
-              label="Class"
+              sx={{ mt: 1 }}
+              value={teamMembers[index] ? teamMembers[index].class : ""}
+              onChange={(e) =>
+                updateTeamMember(
+                  index,
+                  teamMembers[index]?.name,
+                  e.target.value
+                )
+              }
               options={[
                 { label: "5th", value: "5" },
                 { label: "6th", value: "6" },
@@ -98,24 +204,40 @@ const Team = () => {
           </Grid>
         </Grid>
       ))}
+
       <Typography variant="" color="Gray.light">
         If you do not have the student details, you can skip this step and add a
         team later
       </Typography>
+
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Button className="Button" color="primary">
+        <Button
+          onClick={() =>
+            setActiveStep ? setActiveStep(0) : router.push("/teacher/teams")
+          }
+          className="Button"
+          color="primary"
+        >
           Back
         </Button>
-        <Link href="/teacher">
+        {setActiveStep && (
           <Button
             className="Button"
             color="primary"
-            variant="contained"
-            sx={{ minWidth: 240, display: "block" }}
+            onClick={() => router.push("/teacher/teams")}
           >
-            Add Team
+            Skip
           </Button>
-        </Link>
+        )}
+        <Button
+          className="Button"
+          color="primary"
+          variant="contained"
+          sx={{ minWidth: 240, display: "block" }}
+          onClick={createTeam}
+        >
+          Add Team
+        </Button>
       </Box>
     </Container>
   );
