@@ -79,10 +79,10 @@ return (
   ))}
 
   <Box sx={{ display: 'block', textAlign: 'center', mt: '32px', mb: '32px' }}>
-  <img src={'separator.svg'} alt='Image' style={{ width: '5' }} />
+  <img src={'/assets/separator.svg'} alt='Image' style={{ width: '5' }} />
   </Box>
   <Box sx={{ display: 'block', textAlign: 'center', mt: 3, mb: 5 }}>
-  <img src={'Frame.svg'} alt='Image' style={{ width: '40%' }} />
+  <img src={'/assets/Frame.svg'} alt='Image' style={{ width: '40%' }} />
   </Box>
   </>
 );

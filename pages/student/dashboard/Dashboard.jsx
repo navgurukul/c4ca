@@ -19,21 +19,21 @@ const teamData = [
   {
     id: 1,
     name: 'Skyriders',
-    image: 'medal1.svg',
+    image: '/assets/medal1.svg',
     description: 'Completed on 23 Sep 23',
     progress: 100,
   },
   {
     id: 2,
     name: 'Flying Mantle',
-    image: 'medal2.svg',
+    image: '/assets/medal2.svg',
     description: '',
     progress: 72,
   },
   {
     id: 3,
     name: 'Blue Surfers',
-    image: 'medal3.svg',
+    image: '/assets/medal3.svg',
     description: '',
     progress: 65,
   },
@@ -68,8 +68,8 @@ const Dashboard = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={8} lg={8}>
           <Box sx={{ display: 'flex', mb: '32px' }}>
-            <Typography variant="h5">
-              Welcome, Team{' '}
+              <Typography variant="h5">
+                Welcome, Team{' '}
               <Typography variant="h5" component="span" color="#F55C38">
                 Skyriders
               </Typography>
@@ -128,7 +128,7 @@ const Dashboard = () => {
               {!showAllTeams && (
                 <Grid container spacing={3} alignItems="center" sx={{ mt: 1 }}>
                   <Grid item xs={12} sx={{ justifyContent: 'center' }}>
-                    <img src ="separator.svg"/>
+                    <img src ="/assets/separator.svg"/>
                   </Grid>
                   <Grid item style={{ width: '15%', color:"#6D6D6D" ,fontSize:'18px' }}  > {teamData.length}</Grid>
                  
@@ -168,7 +168,7 @@ const Dashboard = () => {
            <Card sx={{ mt: '32px', border: 1, borderColor: 'gray', borderRadius: '8px' }}>
             <CardContent>
               <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                <img src="scratch.svg" alt="" />
+                <img src="/assets/scratch.svg" alt="" />
                 <Typography variant="subtitle1">Develop your skills in Scratch</Typography>
               </Box>
               <Box sx={{ display: 'flex', gap: 3, mt: 2, alignItems: 'center' }}>
@@ -180,7 +180,7 @@ const Dashboard = () => {
                   }}
                 >
                   <span style={{ flex: 1 }}>Scratch Web</span>
-                  <img src="launch.svg" alt="" />
+                  <img src="/assets/launch.svg" alt="" />
                 </Button>
               </Box>
               <Box sx={{ display: 'flex', gap: 3, mt: 2, alignItems: 'center' }}>
@@ -188,12 +188,12 @@ const Dashboard = () => {
                   type="button"
                   className="btn-lg"
                   sx={{
-                    borderRadius: 0, // Ensure square shape
+                    borderRadius: 0,
                    
                   }}
                 >
                   <span style={{ flex: 1 }}>Download Meraki App</span>
-                  <img src="launch1.svg" alt="" />
+                  <img src="/assets/launch1.svg" alt="" />
                 </Button>
               </Box>
             </CardContent>
