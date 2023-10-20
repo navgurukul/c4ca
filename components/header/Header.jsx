@@ -22,7 +22,6 @@ const Header = () => {
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("teacherData"));
     setUser(authToken);
-    console.log(authToken, 'token...');
   }, []);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -36,7 +35,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    removeCookie("user");
+    removeCookie("user", {path: "/"});
     setUser(null)
     router.push("/")
   };
