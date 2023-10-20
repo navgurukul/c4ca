@@ -65,7 +65,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
           },
         }
       );
-      if (!response.data.status === "success") {
+      if (response.data.status === "success") {
         router.push("/teacher/teams");
         handleCloseDialog();
       }
