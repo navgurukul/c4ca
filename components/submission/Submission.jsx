@@ -26,11 +26,8 @@ const Submission = (props) => {
   var inputValue ;
   var dropValue
 
-
   const handleShow = () => setShow(true);
-
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px");
-
   const handleSubmit = () => {
     setLinkShow(false);
     setprojectShow(false);
@@ -40,13 +37,13 @@ const Submission = (props) => {
 
   const handleInputControlChange = (value) => {
     setInputControlValue(value);
-    var inputValue = value;
+    console.log("val",inputControlValue);
     
   };
 
   const handleDragDropZoneChange = (files) => {
     setDragDropZoneValue(files);
-    var dropValue = files;
+    console.log("val",dragDropz);
   };
 
   return (
@@ -170,7 +167,11 @@ const Submission = (props) => {
           <Container maxWidth="sm" align="center">
           <Grid container  spacing={1}>
                 <Grid item xs={12} sm={6} md={6}>
-                  <Button variant="outlined" backgroundColor = {isSubmitDisabled&&"gray"}  disabled={!inputControlValue && dragDropZoneValue.length === 0}>
+                  <Button variant="outlined" 
+                   sx={{
+                    backgroundColor: (theme) => (isSubmitDisabled ? theme.palette.grey[100] : "transparent"),
+                  }}
+                   disabled={!inputControlValue && dragDropZoneValue.length === 0}>
                     <Typography  variant="ButtonLarge" pl ="16px " pr="16px"pt="8px" pb="8px">Save Draft</Typography>
                   </Button>
                 </Grid>
@@ -178,7 +179,10 @@ const Submission = (props) => {
                 <Button className={!isSubmitDisabled&&"profileBtn"}
                   onClick={handleSubmit}
                   disabled={isSubmitDisabled}
-                  backgroundColor="gray" >
+                  sx={{
+                    backgroundColor: (theme) => (isSubmitDisabled ? theme.palette.grey[500] : "transparent"),
+                  }} 
+                  >
                  
                 <Typography  variant="ButtonLarge" onClick={handleSubmit}>Submit Project</Typography>
               </Button>
