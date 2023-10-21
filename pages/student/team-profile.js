@@ -94,7 +94,7 @@ const TeamProfile = () => {
                     style={{ textAlign: "left", padding: 8 }}
                     color="dark"
                   >
-                    Chintels Maharashtra
+                    {team.school}
                   </Typography>
                 </td>
               </tr>
@@ -114,7 +114,7 @@ const TeamProfile = () => {
                     style={{ textAlign: "left", padding: 8 }}
                     color="dark"
                   >
-                    Anantpur
+                    {team.district}
                   </Typography>
                 </td>
               </tr>
@@ -134,7 +134,7 @@ const TeamProfile = () => {
                     style={{ textAlign: "left", padding: 8 }}
                     color="dark"
                   >
-                    Maharashtra
+                    {team.state}
                   </Typography>
                 </td>
               </tr>
@@ -155,7 +155,7 @@ const TeamProfile = () => {
           </Typography>
           <Table>
             <tbody>
-              {team?.students?.map((student, index) => (
+              {team?.team_members?.map((student, index) => (
                 <tr key={student.id}>
                   <td style={{ width: "120px" }}>
                     <Typography
@@ -190,7 +190,8 @@ const TeamProfile = () => {
           </Table>
         </Grid>
       </Grid>
-      <Link href={"/student/project-submission"}>
+      {/* <Link href={"/student/project-submission"}> */}
+      <Link href={"/student/dashboard"}>
         <Button
           variant="contained"
           sx={{ marginX: "auto", marginY: 5 }}

@@ -235,7 +235,7 @@ const TeamDetail = () => {
                     spacing={3}
                     sx={{ display: "flex", alignItems: "flex-end" }}
                   >
-                    <img src="/assets/Student.svg" alt="Team Image" />
+                     <img src="/assets/Student.svg" alt="Team Image" />
                     <Typography variant="body1" sx={{ ml: 2 }}>
                       {teamMemberData.length}
                     </Typography>
