@@ -18,12 +18,17 @@ const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
-
+  const [loggedOut, setLoggedOut] = useState("");
+  const [isFirstLogin, setIsFirstLogin] = useState("");
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
     setUser(authToken);
-    console.log(authToken, 'token...');
-  }, []);
+    // console.log(authToken, 'token...');
+    console.log(localStorage.getItem("loggedOut"), 'user...');
+    setIsFirstLogin(localStorage.getItem("isFirstLogin"));
+    setLoggedOut(localStorage.getItem("loggeOut"));
+    console.log(loggedOut, 'loggedOut...');
+  }, [loggedOut, isFirstLogin]);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -35,11 +40,17 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    // localStorage.clear();
+    localStorage.removeItem("AUTH");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token")
+    localStorage.setItem("loggedOut", true);
+    localStorage.setItem("isFirstLogin", false);
     removeCookie("user");
     setUser(null)
     router.push("/")
   };
+
   return (
     <>
       <header>
@@ -47,10 +58,11 @@ const Header = () => {
           <img src="/c4ca.svg" alt="c4ca_logo" />
         </Link>
 
-        {router.asPath === "/" && user == null ? (
+        {router.pathname === "/" && user == null ? (
           <Stack spacing={2} direction="row">
             {" "}
-            <Link href="/teacher/login">
+            <a href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}>
+              {/* <Link href="/teacher/login"> */}
               <Button
                 color="secondary"
                 variant="contained"
@@ -63,7 +75,8 @@ const Header = () => {
               >
                 Teacher and Partners
               </Button>{" "}
-            </Link>
+              {/* </Link> */}
+            </a>
             <Link href="/student/login">
               <Button
                 variant="contained"
