@@ -164,7 +164,7 @@ const ProfileForm = () => {
         sx={{ display: "grid", placeItems: "center", gap: 4 }}
       >
         {partner_id && (
-          <Box sx={{ width: "35%" }}>
+          <Box  sx={{ width: isMobile ? "100%" : "35%" }}>
             <Stepper activeStep={activeStep}>
               {steps.map((label, index) => (
                 <Step key={label}>
