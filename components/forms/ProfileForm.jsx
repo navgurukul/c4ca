@@ -99,8 +99,8 @@ const ProfileForm = () => {
 
   return (
     <>
-    <Container maxWidth="lg" disableGutters sx={{ display:"grid", placeItems:"center", gap: 4 }}>
-      <Box sx={{ width:"35%" }}>
+    <Container maxWidth="lg" disableGutters sx={{ display:"grid", placeItems:"center", gap: 4 ,mt:5}}>
+      <Box sx={{ width: isMobile ? "100%" : "35%" }}>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => (
           <Step key={label}>
