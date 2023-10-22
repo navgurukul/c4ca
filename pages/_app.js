@@ -39,6 +39,7 @@ export default function App({ Component, pageProps }) {
           maxAge: 604800, // Expires after 1hr
           sameSite: true,
         });
+        
         axios({
           method: "get",
           url: `https://merd-api.merakilearn.org/users/me`,
