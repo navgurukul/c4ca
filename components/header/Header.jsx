@@ -20,14 +20,15 @@ const Header = () => {
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
   const [loggedOut, setLoggedOut] = useState("");
   const [isFirstLogin, setIsFirstLogin] = useState("");
+  const [authData, setAuthData] = useState({});
   useEffect(() => {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    const authToken = JSON.parse(localStorage.getItem("teacherData"));
     setUser(authToken);
-    // console.log(authToken, 'token...');
-    console.log(localStorage.getItem("loggedOut"), 'user...');
     setIsFirstLogin(localStorage.getItem("isFirstLogin"));
     setLoggedOut(localStorage.getItem("loggeOut"));
-    console.log(loggedOut, 'loggedOut...');
+
+    const data = JSON.parse(localStorage.getItem("AUTH"));
+    setAuthData(data);
   }, [loggedOut, isFirstLogin]);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -101,7 +102,7 @@ const Header = () => {
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
               >
-                <Avatar src={user?.user?.profile_picture} />
+                <Avatar src={user?.profile_url} />
               </Button>
               <Menu
                 id="basic-menu"
@@ -112,8 +113,17 @@ const Header = () => {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                <MenuItem>
-                  <Link href={"/teacher/profile"}>Profile</Link>
+                <MenuItem
+                  onClick={() => {
+                    handleClose();
+                    router.push(
+                      authData.role == "teacher"
+                        ? "/teacher/profile"
+                        : "/student/team-profile"
+                    );
+                  }}
+                >
+                  Profile
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>

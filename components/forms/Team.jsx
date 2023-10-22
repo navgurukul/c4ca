@@ -12,24 +12,24 @@ import SelectControl from "./SelectControl";
 import { breakpoints } from "@/theme/constant";
 import { useState, useEffect } from "react";
 import stateDistrict from "../../data/state.json";
-import Axios from "axios";
 import { useRouter } from "next/router";
+import customAxios from "../../api";
+import Link from "next/link";
 
-const Team = () => {
+const Team = ({ handleCloseDialog, setActiveStep = null }) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
   const [teamName, setTeamName] = useState("");
+  const [schoolName, setSchoolName] = useState("");
   const [values, setValues] = useState({
     state: "",
   });
   const [teamMembers, setTeamMembers] = useState([]);
 
   const sizeList = [3, 4, 5];
-  
 
   useEffect(() => {
-    // Ensure the teamMembers array has the correct number of members
     const membersCount = teamMembers.length;
     if (membersCount < teamSize) {
       const emptyMembersToAdd = teamSize - membersCount;
@@ -44,34 +44,35 @@ const Team = () => {
   }, [teamSize]);
 
   const createTeam = async () => {
-  try {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
-    
-    // Filter out empty team members
-    const filteredTeamMembers = teamMembers.filter(member => member.name.trim() !== "" && member.class !== "");
-    
-    const response = await Axios.post(
-      "https://merd-api.merakilearn.org/c4ca/team",
-      {
-        team_name: teamName,
-        team_size: teamSize,
-        team_members: filteredTeamMembers,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${authToken.token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (response.data.status === "success") {
-      router.push("/teacher");
-    }
-  } catch (error) {
-    console.error("Error creating a team:", error);
-  }
-};
+    try {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
 
+      const filteredTeamMembers = teamMembers.filter(
+        (member) => member.name.trim() !== "" && member.class !== ""
+      );
+
+      const response = await customAxios.post(
+        "/c4ca/team",
+        {
+          team_name: teamName,
+          team_size: teamSize,
+          team_members: filteredTeamMembers,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.status === "success") {
+        router.push("/teacher/teams");
+        handleCloseDialog();
+      }
+    } catch (error) {
+      console.error("Error creating a team:", error);
+    }
+  };
 
   const updateTeamMember = (index, name, classValue) => {
     setTeamMembers((prevMembers) => {
@@ -97,14 +98,20 @@ const Team = () => {
         onChange={(e) => setTeamName(e.target.value)}
       />
 
+      <InputControl
+        label="School Name"
+        type="text"
+        value={schoolName}
+        onChange={(e) => setSchoolName(e.target.value)}
+      />
+
       <Grid spacing={5} container>
         <Grid xs={6} item>
-          <InputLabel id="state" style={{ fontSize: "14px", color: "#2E2E2E" }}>
+          <InputLabel sx={{ fontSize: "14px", color: "#2E2E2E" }}>
             State
           </InputLabel>
           <SelectControl
             onChange={(e) => setValues({ ...values, state: e.target.value })}
-            label="State"
             options={Object.keys(stateDistrict).map((state) => ({
               label: state,
               value: state,
@@ -112,14 +119,10 @@ const Team = () => {
           />
         </Grid>
         <Grid xs={6} item>
-          <InputLabel
-            id="district"
-            style={{ fontSize: "14px", color: "#2E2E2E" }}
-          >
+          <InputLabel sx={{ fontSize: "14px", color: "#2E2E2E" }}>
             District
           </InputLabel>
           <SelectControl
-            label="District"
             options={
               values.state
                 ? stateDistrict[values.state].map((district) => ({
@@ -180,7 +183,7 @@ const Team = () => {
               id={`class${index + 1}`}
               style={{ fontSize: "14px", color: "#2E2E2E" }}
             >
-              {`Class ${index + 1}`}
+              Class
             </InputLabel>
             <SelectControl
               sx={{ mt: 1 }}
@@ -211,9 +214,24 @@ const Team = () => {
       </Typography>
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Button className="Button" color="primary">
+        <Button
+          onClick={() =>
+            setActiveStep ? setActiveStep(0) : handleCloseDialog()
+          }
+          className="Button"
+          color="primary"
+        >
           Back
         </Button>
+        {setActiveStep && (
+          <Button
+            className="Button"
+            color="primary"
+            onClick={() => router.push("/teacher/teams")}
+          >
+            Skip
+          </Button>
+        )}
         <Button
           className="Button"
           color="primary"

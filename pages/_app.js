@@ -15,18 +15,19 @@ export default function App({ Component, pageProps }) {
   const [cookie, setCookie] = useCookies(["user"]);
   const { token } = router.query;
 
-  function reverseLastFiveChars(inputString) {
-    if (inputString?.length < 5) {
-        return inputString;
-    }
+  function reverseLastFiveChars (str){
+    if (str?.length < 5) {
+      return inputString;
+  }else{ 
+    const charArray = str?.slice(-5);
+    return str?.slice(0, str?.length-5).concat(charArray?.split("").reverse().join(""))
+  }
+  }
 
-    const charArray = inputString?.split('');
-    const reversedChars = charArray?.slice(-5).reverse();
-    return charArray?.slice(0, -5).concat(reversedChars).join('');
-}
+
   const sendGoogleUserData = (token) => {
     return axios({
-      url: `https://merd-api.merakilearn.org/users/auth/GoogleIdentityServices`,
+      url: `https://merd-api.merakilearn.org/users/auth/google`,
       method: "post",
       headers: { accept: "application/json", Authorization: token },
       data: { idToken: token, mode: "web" },
@@ -39,7 +40,7 @@ export default function App({ Component, pageProps }) {
           maxAge: 604800, // Expires after 1hr
           sameSite: true,
         });
-        
+
         axios({
           method: "get",
           url: `https://merd-api.merakilearn.org/users/me`,
@@ -49,7 +50,6 @@ export default function App({ Component, pageProps }) {
           },
         }).then((res) => {
           if (res.status === 200) {
-            console.log(res.data);
             // Only redirect if the request is successful
             router.push("/teacher/profile");
           }
@@ -61,10 +61,12 @@ export default function App({ Component, pageProps }) {
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token")
-    if (token) {
-      localStorage.setItem("token", reverseLastFiveChars(token));
-      sendGoogleUserData(reverseLastFiveChars(token));
+    const urlParams = new URLSearchParams(window.location.search);
+
+    let tokenVal = urlParams?.get("token");
+    if (tokenVal) {
+      localStorage.setItem("token", reverseLastFiveChars(tokenVal));
+      sendGoogleUserData(reverseLastFiveChars(tokenVal));
     }
 
     !localStorage.getItem("token") && localStorage.setItem("token", null);

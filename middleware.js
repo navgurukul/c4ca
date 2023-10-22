@@ -14,7 +14,11 @@ export default async function middleware(req) {
       if (openRoutes.filter((route) => pathname.endsWith(route)).length == 0) {
         return NextResponse.next();
       }
-      req.nextUrl.pathname = `/${handlePage}`;
+      if (handlePage == "teacher") {
+        req.nextUrl.pathname = `/${handlePage}/teams`;
+      } else {
+        req.nextUrl.pathname = `/${handlePage}`;
+      }
       return NextResponse.redirect(req.nextUrl);
     } else {
       req.nextUrl.pathname = `/`;

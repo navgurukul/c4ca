@@ -7,7 +7,7 @@ import {
   OpenInNewOutlined,
 } from "@mui/icons-material";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
-import Team from "./add-team";
+import Team from "../add-team";
 import {
   Box,
   Button,
@@ -22,13 +22,12 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Axios from "axios";
+import customAxios from "@/api";
+import Link from "next/link";
 
 const TeacherDashboard = () => {
   const router = useRouter();
 
-  // const handleAddTeam = () => {
-  //   router.push("/teacher/add-team")
-  // }
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teams, setTeams] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -37,24 +36,31 @@ const TeacherDashboard = () => {
     setOpenDialog(true);
   };
 
-  useEffect(() => {
+  const refreshTeams = () => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
-    const teacherId = teacherData?.[0].id;
+    const teacherId = teacherData?.id;
 
-    if(teacherId && authToken){
-      Axios.get(`https://merd-api.merakilearn.org/c4ca/teams/${teacherId}`, {
-      headers: {
-        Authorization: `Bearer ${authToken.token}`,
-      },
-    }).then((response) => {
-      setTeams(response.data);
-    });
+    if (teacherId && authToken) {
+      customAxios
+        .get(`/c4ca/teams/${teacherId}`, {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+          },
+        })
+        .then((response) => {
+          setTeams(response.data);
+        });
     }
+  };
+
+  useEffect(() => {
+    refreshTeams();
   }, []);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    refreshTeams();
   };
 
   const [showLoginDetails, setShowLoginDetails] = useState({});
@@ -83,13 +89,14 @@ const TeacherDashboard = () => {
                   padding: 4,
                   borderRadius: 3,
                   borderSpacing: "5px",
-                  cursor: "pointer",
                 }}
               >
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Typography variant="subtitle1" color="dark">
-                    {team.team_name}
-                  </Typography>
+                  <Link href={`/teacher/teams/${team.id}`}>
+                    <Typography variant="subtitle1" color="dark">
+                      {team.team_name}
+                    </Typography>
+                  </Link>
                   <EditOutlined style={{ color: "gray" }} />
                 </Box>
                 <Box
@@ -105,12 +112,12 @@ const TeacherDashboard = () => {
                   </Typography>
                   <CircularProgress
                     variant="determinate"
-                    value={team.course_progress}
+                    value={team.course_progress || 10}
                     size={20}
                     thickness={6}
                     color="typhoon"
                   />{" "}
-                  <Typography>{team.course_progress}%</Typography>
+                  <Typography>{team.course_progress || 0}%</Typography>
                 </Box>
                 {showLoginDetails[team.id] && (
                   <div>
@@ -167,12 +174,13 @@ const TeacherDashboard = () => {
                 )}
 
                 <Button
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.preventDefault();
                     setShowLoginDetails({
                       ...showLoginDetails,
                       [team.id]: !showLoginDetails[team.id],
-                    })
-                  }
+                    });
+                  }}
                   size="small"
                   style={{
                     height: 35,
@@ -223,7 +231,10 @@ const TeacherDashboard = () => {
         fullWidth
       >
         <DialogContent>
-          <Team onClose={handleCloseDialog} />
+          <Team
+            handleCloseDialog={handleCloseDialog}
+            onClose={handleCloseDialog}
+          />
         </DialogContent>
       </Dialog>
 
