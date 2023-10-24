@@ -1,17 +1,10 @@
 import { Button, Typography } from "@mui/material";
 
-import { useRouter } from "next/router";
 import Link from "next/link";
 
 
 export default function Home() {
   // const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)")
-
-  
-  const router = useRouter();
-
-  const { token } = router.query;
-  console.log(token, "token from home page")
   return (
     <>
     
