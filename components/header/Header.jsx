@@ -89,7 +89,10 @@ const Header = () => {
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
               >
-                <Avatar src={user?.profile_url} />
+                <Avatar src={user?.profile_url}>
+                  {authData?.data?.team_name?.split(" ")[0]?.charAt(0)}
+                  {authData?.data?.team_name?.split(" ")[1]?.charAt(0)}
+                </Avatar>
               </Button>
               <Menu
                 id="basic-menu"
