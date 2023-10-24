@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/theme/theme";
 import { useRouter } from "next/router";
@@ -7,25 +7,35 @@ import { useCookies } from "react-cookie";
 import axios from "axios";
 import "@/styles/globals.css";
 import Header from "@/components/header/Header";
+import "../styles/app.css"
+import { Typography } from "@mui/material";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
+
+  const styles = {
+    marginTop: "30vh",
+  };
 
   const [cookie, setCookie] = useCookies(["user"]);
   const { token } = router.query;
 
-  function reverseLastFiveChars (str){
+  function reverseLastFiveChars(str) {
     if (str?.length < 5) {
       return inputString;
-  }else{ 
-    const charArray = str?.slice(-5);
-    return str?.slice(0, str?.length-5).concat(charArray?.split("").reverse().join(""))
+    } else {
+      const charArray = str?.slice(-5);
+      return str
+        ?.slice(0, str?.length - 5)
+        .concat(charArray?.split("").reverse().join(""));
+    }
   }
-  }
-
 
   const sendGoogleUserData = (token) => {
+    setLoading(true);
+    console.log("token", token)
     return axios({
       url: `https://merd-api.merakilearn.org/users/auth/google`,
       method: "post",
@@ -33,7 +43,7 @@ export default function App({ Component, pageProps }) {
       data: { idToken: token, mode: "web" },
     })
       .then((res) => {
-        res.data.role = "teacher"
+        res.data.role = "teacher";
         localStorage.setItem("AUTH", JSON.stringify(res.data));
         setCookie("user", JSON.stringify(res.data), {
           path: "/",
@@ -53,6 +63,8 @@ export default function App({ Component, pageProps }) {
             // Only redirect if the request is successful
             router.push("/teacher/profile");
           }
+
+          setLoading(false);
         });
       })
       .catch((err) => {
@@ -70,10 +82,11 @@ export default function App({ Component, pageProps }) {
     }
 
     !localStorage.getItem("token") && localStorage.setItem("token", null);
-    !localStorage.getItem("loggedOut") && localStorage.setItem("loggedOut", null);
-    !localStorage.getItem("isFirstLogin") && localStorage.setItem("isFirstLogin", true);
-  })
-
+    !localStorage.getItem("loggedOut") &&
+      localStorage.setItem("loggedOut", null);
+    !localStorage.getItem("isFirstLogin") &&
+      localStorage.setItem("isFirstLogin", true);
+  },[]);
 
   return (
     <>
@@ -83,10 +96,20 @@ export default function App({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/c4ca.svg" />
       </Head>
+      {/* <h1 style={{color:"red", zIndex:"1"}}>Helllllllllllllllllllllllo</h1> */}
 
       <ThemeProvider theme={theme}>
-        {router.pathname.split("/").reverse()[0] === "login" ? null : <Header />}
-        <Component {...pageProps} />
+        {router.pathname.split("/").reverse()[0] === "login" ? null : (
+          <Header />
+        )}
+        {loading ? (
+          <div class="loading-container">
+            <div class="loading"></div>
+            <div id="loading-text">Logging In</div>
+          </div>
+        ) : (
+          <Component {...pageProps} />
+        )}
       </ThemeProvider>
     </>
   );
