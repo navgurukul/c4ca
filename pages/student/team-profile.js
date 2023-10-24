@@ -21,13 +21,6 @@ const TeamProfile = () => {
       setTeam(res.data.data);
     });
   }, []);
-  const students = [
-    { name: "Pratik Deshmukh", class: "4" },
-    { name: "Pratik Deshmukh", class: "4" },
-    { name: "Pratik Deshmukh", class: "4" },
-    { name: "Pratik Deshmukh", class: "4" },
-    { name: "Pratik Deshmukh", class: "4" },
-  ];
 
   return (
     <Container

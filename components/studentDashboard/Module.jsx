@@ -3,6 +3,7 @@ import { Box, Typography, CircularProgress, Button, Grid, Card, CardContent, Car
 import jsonData from '../../data/data.json';
 import LockIcon from '@mui/icons-material/Lock'; // Import the Lock icon
 import LaunchIcon from '@mui/icons-material/Launch'; // Import the Launch icon
+// import customAxios from "../../../api"; // Import your custom Axios instance
 
 const Module = () => {
 const [openedCards, setOpenedCards] = useState(0);
@@ -13,6 +14,28 @@ const handleCardOpen = () => {
   setOpenedCards(openedCards + 1);
   }
 };
+
+
+
+
+// useEffect(() => {
+//   customAxios
+//     .get("/c4ca/teams", {
+//       headers: {
+//         Authorization:
+//           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4MyIsImVtYWlsIjoia29tYWxhQG5hdmd1cnVrdWwub3JnIiwiaWF0IjoxNjk4MDc5OTcwLCJleHAiOjE3Mjk2Mzc1NzB9.hR3m5DtqHTq3jsOMnaZ4laQSsZxyk_a8_y7jZC0YKz4",
+//         // Authorization: `Bearer ${authToken.token}`,
+//       },
+//     })
+//     .then((res) => {
+//       console.log(res, "data- of team api-----");
+//       setLeaderboard(res.data.data);
+//     })
+//     .catch((err) => {
+//       console.log("error", err);
+      
+//     });
+// }, []);
 
 return (
 <>
