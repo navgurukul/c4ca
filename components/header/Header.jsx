@@ -43,7 +43,7 @@ const Header = () => {
   };
   return (
     <>
-      <header>
+      <header className="header">
         <Link href={"/"}>
           <img src="/c4ca.svg" alt="c4ca_logo" />
         </Link>
