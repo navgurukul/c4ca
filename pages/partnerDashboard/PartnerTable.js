@@ -169,12 +169,7 @@ const PartnerTable = ({data}) => {
     handleEditClick(partneredit);
   };
 
-//   const handleRowClick = (event, dataIndex) => {
-//     partnerId = data[dataIndex.dataIndex].id;
-//     Navigate(`/partner/${partnerId}`);
-//   };
-
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();  
 
   const handleRowClick = (event, dataIndex) => {
     partnerId = data[dataIndex.dataIndex].id;
