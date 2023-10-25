@@ -59,7 +59,7 @@ const TeacherFilter = () => {
 
   const handleDistrictChange = (event) => {
     const selectedDistrict = event.target.value;
-    setSelectedDistrict(selectedDistrict); 
+    setSelectedDistrict(selectedDistrict);
     if (selectedDistrict === "All District") {
       setFilteredTeacher(allTeacherList);
     } else {
@@ -73,10 +73,10 @@ const TeacherFilter = () => {
 
   const handleSchoolChange = (event) => {
     const selectedSchool = event.target.value;
-    setSelectedSchool(selectedSchool); 
-    console.log(selectedSchool); 
+    setSelectedSchool(selectedSchool);
+    console.log(selectedSchool);
     const filterBySchool = filterSchool(selectedSchool, allTeacherList);
-    setFilteredTeacher(filterBySchool)
+    setFilteredTeacher(filterBySchool);
   };
 
   function filterSchool(selectedSchool, allTeacherList) {
@@ -84,11 +84,23 @@ const TeacherFilter = () => {
       return allTeacherList;
     }
     const filterDataf = allTeacherList?.filter((school) =>
-    school?.school?.includes(selectedSchool)
+      school?.school?.includes(selectedSchool)
     );
     return filterDataf;
   }
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    const data = filterTeacher(searchTerm, allTeacherList);
+    setFilteredTeacher(data);
+  };
+
+  function filterTeacher(searchTerm, allTeacherList) {
+    const filterData = allTeacherList.filter((teacher) =>
+      teacher?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+    );
+    return filterData;
+  }
 
   return (
     <Box style={{ margin: "40px 0" }}>
@@ -150,6 +162,8 @@ const TeacherFilter = () => {
           <TextField
             placeholder="Search Partner..."
             size="medium"
+            value={searchTerm}
+            onChange={handleSearch}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -183,49 +197,53 @@ const TeacherFilter = () => {
                 ))}
               </Select>
             </FormControl>
-            {
-              selectedDistrict === "All District" ? ( <FormControl>
-              <InputLabel id="school-label">School</InputLabel>
-              <Select
-                sx={{ width: "250px" }}
-                labelId="school-label"
-                id="school-select"
-                value={selectedSchool}
-                label="School"
-                onChange={handleSchoolChange}
-              >
-                 <MenuItem value="All School">All School</MenuItem>
-                {allTeacherList?.map((teacher, index) => (
-                  <MenuItem key={index} value={teacher.school}>
-                    {teacher.school}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>)
-
-           : ( <FormControl>
-              <InputLabel id="school-label">School</InputLabel>
-              <Select
-                sx={{ width: "250px" }}
-                labelId="school-label"
-                id="school-select"
-                value={selectedSchool}
-                label="All School"
-                onChange={handleSchoolChange}
-              >
-                 <MenuItem value="All School">All School</MenuItem>
-                {filteredTeacher?.map((teacher, index) => (
-                  <MenuItem key={index} value={teacher.school}>
-                    {teacher.school}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>)
-            }
+            {selectedDistrict === "All District" ? (
+              <FormControl>
+                <InputLabel id="school-label">School</InputLabel>
+                <Select
+                  sx={{ width: "250px" }}
+                  labelId="school-label"
+                  id="school-select"
+                  value={selectedSchool}
+                  label="School"
+                  onChange={handleSchoolChange}
+                >
+                  <MenuItem value="All School">All School</MenuItem>
+                  {allTeacherList?.map((teacher, index) => (
+                    <MenuItem key={index} value={teacher.school}>
+                      {teacher.school}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            ) : (
+              <FormControl>
+                <InputLabel id="school-label">School</InputLabel>
+                <Select
+                  sx={{ width: "250px" }}
+                  labelId="school-label"
+                  id="school-select"
+                  value={selectedSchool}
+                  label="All School"
+                  onChange={handleSchoolChange}
+                >
+                  <MenuItem value="All School">All School</MenuItem>
+                  {filteredTeacher?.map((teacher, index) => (
+                    <MenuItem key={index} value={teacher.school}>
+                      {teacher.school}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
           </Box>
         </Box>
       </Box>
-      <TeacherListTable filteredTeacher={filteredTeacher} />
+      {searchTerm === "" ? (
+        <TeacherListTable filteredTeacher={allTeacherList} />
+      ) : (
+        <TeacherListTable filteredTeacher={filteredTeacher} />
+      )}
     </Box>
   );
 };
