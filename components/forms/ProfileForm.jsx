@@ -50,7 +50,7 @@ const ProfileForm = () => {
 
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
-
+  const [errors, setErrors] = useState({}); 
   useEffect(() => {
     const stateNames = Object.keys(jsonData);
     setStates(stateNames);
@@ -81,12 +81,13 @@ const ProfileForm = () => {
         } else {
           customAxios
             .get("https://merd-api.merakilearn.org/users/me", {
-              headers: {
+               headers: {
                 Authorization: `Bearer ${authToken.token}`,
+
               },
             })
             .then((response) => {
-              console.log(response, "resp....");
+              console.log("res", response, "resp....");
               setUserData({
                 name: response.data.user.name,
                 email: response.data.user.email,
@@ -105,6 +106,10 @@ const ProfileForm = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    if (name === 'phone_number' && value.length > 10) {
+      return;
+    }
+    
     setFormData({
       ...formData,
       [name]: value,
@@ -119,6 +124,8 @@ const ProfileForm = () => {
   const [existingData, setExistingData] = useState(false);
 
   const handleSaveProfile = () => {
+    clearErrors();
+    if (validateInputs()) {
     // Create a FormData object to send the image
     const profileData = new FormData();
     profileData.append("profile_url", selectedImage || formData.profile_url); // Add the selected image
@@ -129,7 +136,7 @@ const ProfileForm = () => {
     profileData.append("district", formData.district);
     profileData.append("state", formData.state);
 
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
 
     customAxios
       .post("/c4ca/teacher_profile", profileData, {
@@ -151,6 +158,48 @@ const ProfileForm = () => {
         console.error("Error saving profile data:", error);
       });
   };
+  const validateInputs = () => {
+    const newErrors = {};
+
+    if (!selectedImage) {
+      newErrors.profileImage = "Please select a profile image.";
+    }
+
+  
+
+    if (!formData.phone_number || formData.phone_number.length !== 10) {
+      newErrors.phone_number = "Please enter a valid 10-digit phone number.";
+    }
+
+    if (!formData.school) {
+      newErrors.school = "School is required.";
+    }
+
+    if (!formData.state) {
+      newErrors.state = "Please select a State.";
+    }
+
+    if (!formData.district) {
+      newErrors.district = "Please select a District.";
+    }
+
+    setErrors(newErrors); // Update the errors state with new errors
+    return Object.keys(newErrors).length === 0; // Return true if there are no errors
+  };
+
+  // Function to validate email format
+  const validateEmail = (email) => {
+    // Regular expression for email validation
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+    return emailPattern.test(email);
+  };
+
+  // Function to clear errors
+  const clearErrors = () => {
+    setErrors({});
+  };
+
+
 
   useEffect(() => {
     const selectedDistricts = jsonData[formData.state] || [];
@@ -269,10 +318,10 @@ const ProfileForm = () => {
                     >
                       Select State
                     </Typography>
-                    <FormControl style={{ borderColor: "black" }} fullWidth>
+                    <FormControl style={{ borderColor: "black" }} sx={{mb:1}} fullWidth>
                       {/* <InputLabel id="state">Select State</InputLabel> */}
                       <Select
-                        style={{ borderRadius: 100 }}
+                        style={{ borderRadius: 100  }}
                         labelId="state"
                         id="state"
                         disabled={!partner_id}
@@ -287,6 +336,11 @@ const ProfileForm = () => {
                         ))}
                       </Select>
                     </FormControl>
+                    {errors.state && (
+                      <Typography variant="caption" color="error">
+                        {errors.state}
+                      </Typography>)
+                    }
                   </Grid>
                   <Grid item md={6} sm={6} xs={12}>
                     <Typography
@@ -296,7 +350,7 @@ const ProfileForm = () => {
                     >
                       District
                     </Typography>
-                    <FormControl fullWidth>
+                    <FormControl fullWidth sx={{mb:1}}>
                       {/* <InputLabel id="district">Select District</InputLabel> */}
                       <Select
                         style={{ borderRadius: 100 }}
@@ -314,6 +368,11 @@ const ProfileForm = () => {
                         ))}
                       </Select>
                     </FormControl>
+                    {errors.district && (
+                      <Typography variant="caption" color="error">
+                        {errors.district}
+                      </Typography>)
+                    }
                   </Grid>
                 </Grid>
               </Box>
@@ -325,7 +384,12 @@ const ProfileForm = () => {
             ) : (
               <Button
                 className="profileBtn"
-                onClick={() => router.push("/teacher/teams")}
+                onClick={() => {
+                  if (validateInputs()) {
+                    router.push("/teacher/teams");
+                  }
+                }}
+                // onClick={() => router.push("/teacher/teams")}
               >
                 <Typography variant="ButtonLarge">Go To Dashboard</Typography>
               </Button>
