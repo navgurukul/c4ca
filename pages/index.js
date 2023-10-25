@@ -35,9 +35,11 @@ export default function Home() {
           adoption and promote sustainable living
         </Typography>
         <Stack sx={{ marginTop: 5 }} alignItems={"center"}>
+          <Link href="/student/login">
           <Button alignItems={"center"} className="profileBtn">
             <Typography variant="ButtonLarge">Get Started</Typography>
           </Button>
+          </Link>
         </Stack>
         <Container maxWidth="md" sx={{ marginTop: 10, marginBottom: 10 }}>
           <Typography variant="h5" align="center">
