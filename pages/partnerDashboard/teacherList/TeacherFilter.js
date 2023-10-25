@@ -59,6 +59,7 @@ const TeacherFilter = () => {
 
   const handleDistrictChange = (event) => {
     const selectedDistrict = event.target.value;
+    console.log(selectedDistrict);
     setSelectedDistrict(selectedDistrict);
     if (selectedDistrict === "All District") {
       setFilteredTeacher(allTeacherList);
@@ -240,7 +241,7 @@ const TeacherFilter = () => {
         </Box>
       </Box>
       {searchTerm === "" ? (
-        <TeacherListTable filteredTeacher={allTeacherList} />
+        <TeacherListTable filteredTeacher={filteredTeacher} />
       ) : (
         <TeacherListTable filteredTeacher={filteredTeacher} />
       )}

@@ -119,7 +119,7 @@ function FacilitatorFilter({ data,id }) {
             ),
             style: {
               height: "48px",
-              borderRadius: "8px",
+              borderRadius: "35px",
               fontSize: "14px",
             },
           }}

@@ -6,8 +6,8 @@ import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Typography, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import EditIcon from "@mui/icons-material/Edit"; 
-import { useRouter } from 'next/router';
+import EditIcon from "@mui/icons-material/Edit";
+import { useRouter } from "next/router";
 
 const getMuiTheme = () =>
   createTheme({
@@ -59,18 +59,16 @@ let btnsContainerStyles = {
   justifyContent: "flex-end",
 };
 
-
-
-const FacilatorTable = ({data}) => {
+const FacilatorTable = ({ data }) => {
   console.log(data);
-  
+
   const router = useRouter();
-  const {id } = router.query
+  const { id } = router.query;
 
   let facilitatorId = "";
   const handleRowClick = (event, dataIndex) => {
     facilitatorId = data[dataIndex.dataIndex].id;
-    console.log("facilitatorId",facilitatorId);
+    console.log("facilitatorId", facilitatorId);
     console.log(router.query);
     router.push(`/partnerDashboard/teacherList/${facilitatorId}`);
   };
@@ -149,7 +147,15 @@ const FacilatorTable = ({data}) => {
 
   return (
     <Box>
-      <Typography>Facilitator List</Typography> 
+      <Typography
+        style={{
+          fontFamily: "Amazon Ember Display",
+          fontSize: "24px",
+          fontWeight: "800px",
+        }}
+      >
+        Facilitator List
+      </Typography>
       <div
         style={{
           overflowX: "hidden",
@@ -161,7 +167,6 @@ const FacilatorTable = ({data}) => {
             data={data}
             columns={columns}
             options={{ ...options, onRowClick: handleRowClick }}
-         
           />
         </ThemeProvider>
       </div>

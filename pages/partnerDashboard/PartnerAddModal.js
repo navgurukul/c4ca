@@ -4,61 +4,49 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
-// import { useAddPartnerMutation } from "../../store";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Dialog,
   Grid,
-  // DialogTitle,  
+  // DialogTitle,
   // TableContainer,
   DialogContent,
   // DialogContentText,
   DialogActions,
 } from "@mui/material";
-import axios from 'axios';
-// import showToast from "../showToast";
+import axios from "axios";
 // import useValidEmail from "../../hooks/useValidEmail";
 
-function PartnerAddModal({ boolean, onOpen }) { 
+function PartnerAddModal({ boolean, onOpen }) {
   const [values, setValues] = useState({
     name: "",
     point_of_contact_name: "",
     email: "",
-    phone_number:"",
+    phone_number: "",
   });
-   
 
-  const createNewPartner = (values) => {   
-    const apiUrl = 'https://merd-api.merakilearn.org/partners/create/newpartner'; 
+  const createNewPartner = (values) => {
+    const apiUrl =
+      "https://merd-api.merakilearn.org/partners/create/newpartner";
     const headers = {
-      'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA', // Replace with your actual access token
-      'Content-Type': 'application/json', 
+      Authorization:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA", // Replace with your actual access token
+      "Content-Type": "application/json",
     };
-   
-    axios.post(apiUrl, values, { headers })
-      .then(response => { 
-        console.log('POST request successful:', response.data);
-        alert(response.data.status)
+
+    axios
+      .post(apiUrl, values, { headers })
+      .then((response) => {
+        console.log("POST request successful:", response.data);
+        alert(response.data.status);
       })
-      .catch(error => { 
-        console.error('POST request error:', error);
+      .catch((error) => {
+        console.error("POST request error:", error);
         alert("ERROR: " + error?.response?.data?.message);
       });
   };
- 
-
-  
 
   // const { isValidEmail } = useValidEmail(values.email);
-
-  // useEffect(() => {
-  //   if (results.isSuccess) {
-  //     showToast("success", results.data.status);
-  //     onOpen();
-  //   } else if (results.isError) {
-  //     showToast("error", results.error.data.message);
-  //   }
-  // }, [results.isSuccess, results.isError]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -74,12 +62,11 @@ function PartnerAddModal({ boolean, onOpen }) {
       !values.phone_number.trim()
     ) {
       alert("Fill all fields");
-      // showToast("error", "Fill all fields");
       return;
     } else {
-      console.log(values)
-      createNewPartner(values)
-      onOpen()
+      console.log(values);
+      createNewPartner(values);
+      onOpen();
     }
   };
 
@@ -88,21 +75,30 @@ function PartnerAddModal({ boolean, onOpen }) {
       {/* <Button onClick={handleOpen}>Open modal</Button> */}
       <Dialog open={boolean} onClose={onOpen}>
         <DialogContent>
-          <Grid container mb={3}>
-            <Grid item xs={11}>
-              <Typography variant="h6" component="h2">
-                New Partner
-              </Typography>
-            </Grid>
-            <Grid color="text.secondary" item xs={1}>
-              <CloseIcon
-                onClick={onOpen}
-                sx={{
-                  cursor: "pointer",
-                }}
-              />
-            </Grid>
-          </Grid>
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: 16,
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="h6"
+              component="h2"
+              style={{ fontSize: "20px", marginLeft: "10px" }}
+            >
+              New Partner
+            </Typography>
+            <CloseIcon
+              onClick={onOpen}
+              sx={{
+                cursor: "pointer",
+                // marginRight:"10px"
+                color: "#949494",
+              }}
+            />
+          </Box>
 
           <TextField
             margin="dense"
@@ -111,6 +107,12 @@ function PartnerAddModal({ boolean, onOpen }) {
             value={values.name}
             onChange={handleChange}
             fullWidth
+            InputProps={{
+              style: {
+                height: "50px",
+                borderRadius: "100px",
+              },
+            }}
           />
           <TextField
             margin="dense"
@@ -119,6 +121,12 @@ function PartnerAddModal({ boolean, onOpen }) {
             value={values.point_of_contact_name}
             onChange={handleChange}
             fullWidth
+            InputProps={{
+              style: {
+                height: "50px",
+                borderRadius: "100px",
+              },
+            }}
           />
           <TextField
             margin="dense"
@@ -127,6 +135,12 @@ function PartnerAddModal({ boolean, onOpen }) {
             value={values.email}
             onChange={handleChange}
             fullWidth
+            InputProps={{
+              style: {
+                height: "50px",
+                borderRadius: "100px",
+              },
+            }}
           />
           <TextField
             margin="dense"
@@ -135,6 +149,12 @@ function PartnerAddModal({ boolean, onOpen }) {
             value={values.phone}
             onChange={handleChange}
             fullWidth
+            InputProps={{
+              style: {
+                height: "50px",
+                borderRadius: "100px",
+              },
+            }}
           />
           {/* {values.email === "" ? "" : !isValidEmail && (
             <Typography sx={{ fontSize: "14px", color: "red" }}>
@@ -146,7 +166,7 @@ function PartnerAddModal({ boolean, onOpen }) {
           <DialogActions>
             <Button
               // disabled={!isValidEmail || values.email.trim() === ""}
-              fullWidth
+              
               variant="contained"
               onClick={handleSubmit}
             >

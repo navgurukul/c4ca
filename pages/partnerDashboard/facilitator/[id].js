@@ -43,6 +43,17 @@ const FacilatorHome = () => {
   return (
     <Box className="dashboardContainer">
       <MyBreadcrumbs />
+      <Typography
+        style={{
+          fontSize: "24px",
+          fontWeight: "800px",
+          fontFamily: "Amazon Ember Display",
+          lineHeight: "75px",
+        }}
+      >
+        Aarti for Girls
+      </Typography>
+
       <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
         <Typography variant="h6">{data?.name}</Typography>
       </Box>

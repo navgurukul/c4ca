@@ -98,10 +98,11 @@ function PartnerFilter() {
       //   variant={term === filterBy ? "contained" : "outlined"}
       sx={{
         mr: 2,
-        borderRadius: "18px",
-        borderColor: "#DCDCDC",
+        borderRadius: "30px",
+        borderColor: "#29458C",
         p: "12px",
-        border: "1px solid lightBlue",
+        border:"1px solid  #29458C",
+        color:"#BDBDBD"
       }}
     >
       <Typography
@@ -129,7 +130,7 @@ function PartnerFilter() {
             ),
             style: {
               height: "48px",
-              borderRadius: "8px",
+              borderRadius: "35px",
               fontSize: "14px",
             },
           }}
