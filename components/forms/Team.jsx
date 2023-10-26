@@ -112,10 +112,10 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
     const memberErrors = teamMembers.map((member, index) => {
       const memberErrorsForIndex = {};
       if (!member.name) {
-        memberErrorsForIndex.name = `Student Name ${index + 1} is required`;
+        memberErrorsForIndex.name = `Student Name is required`;
       }
       if (!member.class) {
-        memberErrorsForIndex.class = `Class for Student ${index + 1} is required`;
+        memberErrorsForIndex.class = `Class for Student is required`;
       }
       return memberErrorsForIndex;
     });
@@ -148,7 +148,6 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
       <Typography variant="h5" color="text.primary">
         Add a Team
       </Typography>
-
       <InputControl
         label="Team Name"
         type="text"
@@ -177,11 +176,10 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
             }))}
             sx={{mb:1}}
           />
-          {errors.state && (
+           {errors.state && (
             <Typography variant="caption" color="error">
               {errors.state}
-            </Typography>
-          )}
+            </Typography>)}
         </Grid>
         <Grid xs={6} item>
           <InputLabel sx={{ fontSize: "14px", color: "#2E2E2E" }}>
@@ -198,7 +196,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
                   }))
                 : []
             }
-            sx={{mb:1}}
+            sx={{ mb: 1 }}
+            
           />
           {errors.district && (
             <Typography variant="caption" color="error">
@@ -250,14 +249,14 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
                 )
               }
               sx={{mb:1}}
+              error={
+                errors.teamMembers &&
+                errors.teamMembers[index] &&
+                errors.teamMembers[index].name
+              }
+               
             />
-              {errors.teamMembers &&
-              errors.teamMembers[index] &&
-              errors.teamMembers[index].name && (
-                <Typography variant="caption" color="error">
-                  {errors.teamMembers[index].name}
-                </Typography>
-              )}
+          
           </Grid>
           <Grid xs={6} item>
             <InputLabel
@@ -284,16 +283,14 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
                 { label: "9th", value: "9" },
                 { label: "10th", value: "10" },
               ]}
-            
             />
-              {errors.teamMembers &&
+            {errors.teamMembers &&
               errors.teamMembers[index] &&
               errors.teamMembers[index].class && (
                 <Typography variant="caption" color="error">
                   {errors.teamMembers[index].class}
                 </Typography>
               )}
-
           </Grid>
         </Grid>
       ))}

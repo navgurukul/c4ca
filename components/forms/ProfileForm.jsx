@@ -16,6 +16,7 @@ import {
   Stepper,
   Step,
   StepLabel,
+  CircularProgress,
 } from "@mui/material";
 import { Camera } from "@mui/icons-material";
 import Link from "next/link";
@@ -47,6 +48,7 @@ const ProfileForm = () => {
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -124,6 +126,12 @@ const ProfileForm = () => {
   const [existingData, setExistingData] = useState(false);
 
   const handleSaveProfile = () => {
+    setIsLoading(true); 
+
+    setTimeout(() => {
+      setIsLoading(false); 
+    }, 1000);
+
     clearErrors();
     if (validateInputs()) {
     // Create a FormData object to send the image
@@ -183,18 +191,10 @@ const ProfileForm = () => {
       newErrors.district = "Please select a District.";
     }
 
-    setErrors(newErrors); // Update the errors state with new errors
-    return Object.keys(newErrors).length === 0; // Return true if there are no errors
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; 
   };
 
-  // Function to validate email format
-  const validateEmail = (email) => {
-    // Regular expression for email validation
-    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
-    return emailPattern.test(email);
-  };
-
-  // Function to clear errors
   const clearErrors = () => {
     setErrors({});
   };
@@ -249,7 +249,9 @@ const ProfileForm = () => {
             <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
               <Box className="AvatarBox">
                 <label htmlFor="image-input">
-                  {selectedImage ? (
+                {isLoading ?(
+                    <CircularProgress  size="sm" sx={{ width: "100%", height: "100%",  color: 'gray', } }   />
+                  ) :selectedImage ? (
                     <Avatar
                       src={URL.createObjectURL(selectedImage)}
                       sx={{ width: "100%", height: "100%" }}
@@ -319,7 +321,6 @@ const ProfileForm = () => {
                       Select State
                     </Typography>
                     <FormControl style={{ borderColor: "black" }} sx={{mb:1}} fullWidth>
-                      {/* <InputLabel id="state">Select State</InputLabel> */}
                       <Select
                         style={{ borderRadius: 100  }}
                         labelId="state"
@@ -351,7 +352,6 @@ const ProfileForm = () => {
                       District
                     </Typography>
                     <FormControl fullWidth sx={{mb:1}}>
-                      {/* <InputLabel id="district">Select District</InputLabel> */}
                       <Select
                         style={{ borderRadius: 100 }}
                         labelId="district"
