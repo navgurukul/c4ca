@@ -18,7 +18,7 @@ export default async function middleware(req) {
       if (handlePage == "teacher") {
         req.nextUrl.pathname = `/${handlePage}/teams`;
       } else {
-        req.nextUrl.pathname = `/${handlePage}`;
+        req.nextUrl.pathname = `/${handlePage}/dashboard`;
       }
       return NextResponse.redirect(req.nextUrl);
     } else {

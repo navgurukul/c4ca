@@ -53,6 +53,19 @@ a {
   gap: 16px;
 }
 
+.footer{
+  /* width: 100vw; */
+  /* height: 65vh; */
+  margin: 0px;
+  padding: 0px;
+  padding-bottom: -1rem;
+  background-size: 100% 100%;
+}
+
+.header{
+  width: 100%;
+}
+
 .profileBtn {
   min-width: 200px;
   background: linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%);
