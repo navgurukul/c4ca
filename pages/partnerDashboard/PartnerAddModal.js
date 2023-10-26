@@ -23,6 +23,7 @@ function PartnerAddModal({ boolean, onOpen }) {
     point_of_contact_name: "",
     email: "",
     phone_number: "",
+    platform:"c4ca"
   });
 
   const createNewPartner = (values) => {

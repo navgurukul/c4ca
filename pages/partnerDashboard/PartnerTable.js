@@ -173,7 +173,7 @@ const PartnerTable = ({data}) => {
 
   const handleRowClick = (event, dataIndex) => {
     partnerId = data[dataIndex.dataIndex].id;
-    router.push(`partnerDashboard/facilitator/${partnerId}`);
+    router.push(`partner/facilitator/${partnerId}`);
   };
 
   return (

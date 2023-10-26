@@ -4,6 +4,7 @@ import { TextField, Box, Button, InputAdornment } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import MUIDataTable from "mui-datatables";
+import { useRouter } from 'next/router';
 
 const getMuiTheme = () =>
   createTheme({
@@ -106,6 +107,15 @@ function TeachersList({ filteredTeacher }) {
       },
     },
   ];
+
+  const router = useRouter();  
+
+  const handleRowClick = (event, dataIndex) => {
+    // partnerId = data[dataIndex.dataIndex].id;
+    router.push(`/partnerDashboard/teacherList/Progress`);
+  };
+
+
   return (
     <Box sx={{ mx: "110px" }}>
       <Typography
@@ -130,7 +140,8 @@ function TeachersList({ filteredTeacher }) {
             <MUIDataTable
               data={filteredTeacher}
               columns={columns}
-              options={options}
+              options={{ ...options, onRowClick: handleRowClick }}
+         
             />
           )}
         </ThemeProvider>

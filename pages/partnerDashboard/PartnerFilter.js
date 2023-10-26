@@ -21,6 +21,7 @@ function PartnerFilter() {
   const [filteredPartner, setfilteredPartner] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  //add query
   useEffect(() => {
     const apiUrl = "https://merd-api.merakilearn.org/partners";
     const token =
