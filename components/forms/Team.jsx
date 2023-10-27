@@ -55,7 +55,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
 
   const createTeam = async () => {
     clearErrors();
-    if (validateInputs()){
+    if (validateInputs()) {
       try {
         const authToken = JSON.parse(localStorage.getItem("AUTH"));
 
@@ -63,21 +63,17 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
           (member) => member.name.trim() !== "" && member.class !== ""
         );
 
-      const response = await customAxios.post(
-        "/c4ca/team",
-        {
-          team_name: teamName,
-          team_size: teamSize,
-          team_members: filteredTeamMembers,
-          school: values.school,
-          district: values.district,
-          state: values.state,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken.token}`,
-            "Content-Type": "application/json",
+        const response = await customAxios.post(
+          "/c4ca/team",
+          {
+            team_name: teamName,
+            team_size: teamSize,
+            team_members: filteredTeamMembers,
+            school: values.school,
+            district: values.district,
+            state: values.state,
           },
+
           {
             headers: {
               Authorization: `Bearer ${authToken.token}`,
@@ -88,6 +84,13 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
         if (response.data.status === "success") {
           router.push("/teacher/teams");
           handleCloseDialog();
+        } else {
+          if (response.data.status == "Unique Key Violation") {
+            setErrors({
+              teamName:
+                "Team Name already exists. Please try again with a different name.",
+            });
+          }
         }
       } catch (error) {
         console.error("Error creating a team:", error);
@@ -99,8 +102,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
     if (!teamName) {
       newErrors.teamName = "Team Name is required";
     }
-    if (!schoolName) {
-      newErrors.schoolName = "School Name is required";
+    if (!values.school) {
+      newErrors.school = "School Name is required";
     }
     if (!values.state) {
       newErrors.state = "Please select a State";
@@ -151,6 +154,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
       <InputControl
         label="Team Name"
         type="text"
+        error={errors.teamName}
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
       />
@@ -158,6 +162,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
       <InputControl
         label="School Name"
         type="text"
+        error={errors.school}
         value={values.school}
         onChange={(e) => setValues({ ...values, school: e.target.value })}
       />
@@ -174,12 +179,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
               label: state,
               value: state,
             }))}
-            sx={{mb:1}}
+            sx={{ mb: 1 }}
           />
-           {errors.state && (
-            <Typography variant="caption" color="error">
-              {errors.state}
-            </Typography>)}
         </Grid>
         <Grid xs={6} item>
           <InputLabel sx={{ fontSize: "14px", color: "#2E2E2E" }}>
@@ -197,13 +198,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
                 : []
             }
             sx={{ mb: 1 }}
-            
           />
-          {errors.district && (
-            <Typography variant="caption" color="error">
-              {errors.district}
-            </Typography>
-          )}
         </Grid>
       </Grid>
 
@@ -248,15 +243,13 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
                   teamMembers[index]?.class
                 )
               }
-              sx={{mb:1}}
+              sx={{ mb: 1 }}
               error={
                 errors.teamMembers &&
                 errors.teamMembers[index] &&
                 errors.teamMembers[index].name
               }
-               
             />
-          
           </Grid>
           <Grid xs={6} item>
             <InputLabel
@@ -266,7 +259,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
               Class
             </InputLabel>
             <SelectControl
-              sx={{ mt: 1 ,mb:1}}
+              sx={{ mt: 1, mb: 1 }}
               value={teamMembers[index] ? teamMembers[index].class : ""}
               onChange={(e) =>
                 updateTeamMember(

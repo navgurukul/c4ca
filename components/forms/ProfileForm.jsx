@@ -52,7 +52,7 @@ const ProfileForm = () => {
 
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [errors, setErrors] = useState({}); 
+  const [errors, setErrors] = useState({});
   useEffect(() => {
     const stateNames = Object.keys(jsonData);
     setStates(stateNames);
@@ -83,9 +83,8 @@ const ProfileForm = () => {
         } else {
           customAxios
             .get("https://merd-api.merakilearn.org/users/me", {
-               headers: {
+              headers: {
                 Authorization: `Bearer ${authToken.token}`,
-
               },
             })
             .then((response) => {
@@ -108,10 +107,10 @@ const ProfileForm = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    if (name === 'phone_number' && value.length > 10) {
+    if (name === "phone_number" && value.length > 10) {
       return;
     }
-    
+
     setFormData({
       ...formData,
       [name]: value,
@@ -126,54 +125,53 @@ const ProfileForm = () => {
   const [existingData, setExistingData] = useState(false);
 
   const handleSaveProfile = () => {
-    setIsLoading(true); 
+    setIsLoading(true);
 
     setTimeout(() => {
-      setIsLoading(false); 
+      setIsLoading(false);
     }, 1000);
 
     clearErrors();
     if (validateInputs()) {
-    // Create a FormData object to send the image
-    const profileData = new FormData();
-    profileData.append("profile_url", selectedImage || formData.profile_url); // Add the selected image
-    profileData.append("name", userData.name);
-    profileData.append("email", userData.email);
-    profileData.append("phone_number", formData.phone_number);
-    profileData.append("school", formData.school);
-    profileData.append("district", formData.district);
-    profileData.append("state", formData.state);
+      // Create a FormData object to send the image
+      const profileData = new FormData();
+      profileData.append("profile_url", selectedImage || formData.profile_url); // Add the selected image
+      profileData.append("name", userData.name);
+      profileData.append("email", userData.email);
+      profileData.append("phone_number", formData.phone_number);
+      profileData.append("school", formData.school);
+      profileData.append("district", formData.district);
+      profileData.append("state", formData.state);
 
       const authToken = JSON.parse(localStorage.getItem("AUTH"));
 
-    customAxios
-      .post("/c4ca/teacher_profile", profileData, {
-        headers: {
-          Authorization: `Bearer ${authToken.token}`,
-          "Content-Type": "multipart/form-data", // Set the content type for FormData
-        },
-      })
-      .then((response) => {
-        if (response.data.data) {
-          localStorage.setItem(
-            "teacherData",
-            JSON.stringify(response.data.data)
-          );
-          setActiveStep(1);
-        }
-      })
-      .catch((error) => {
-        console.error("Error saving profile data:", error);
-      });
+      customAxios
+        .post("/c4ca/teacher_profile", profileData, {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+            "Content-Type": "multipart/form-data", // Set the content type for FormData
+          },
+        })
+        .then((response) => {
+          if (response.data.data) {
+            localStorage.setItem(
+              "teacherData",
+              JSON.stringify(response.data.data)
+            );
+            setActiveStep(1);
+          }
+        })
+        .catch((error) => {
+          console.error("Error saving profile data:", error);
+        });
+    }
   };
   const validateInputs = () => {
     const newErrors = {};
 
-    if (!selectedImage) {
+    if (!selectedImage && formData.profile_url == "") {
       newErrors.profileImage = "Please select a profile image.";
     }
-
-  
 
     if (!formData.phone_number || formData.phone_number.length !== 10) {
       newErrors.phone_number = "Please enter a valid 10-digit phone number.";
@@ -192,14 +190,13 @@ const ProfileForm = () => {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; 
+    console.log(Object.keys(newErrors).length === 0, newErrors, formData);
+    return Object.keys(newErrors).length === 0;
   };
 
   const clearErrors = () => {
     setErrors({});
   };
-
-
 
   useEffect(() => {
     const selectedDistricts = jsonData[formData.state] || [];
@@ -249,9 +246,12 @@ const ProfileForm = () => {
             <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
               <Box className="AvatarBox">
                 <label htmlFor="image-input">
-                {isLoading ?(
-                    <CircularProgress  size="sm" sx={{ width: "100%", height: "100%",  color: 'gray', } }   />
-                  ) :selectedImage ? (
+                  {isLoading ? (
+                    <CircularProgress
+                      size="sm"
+                      sx={{ width: "100%", height: "100%", color: "gray" }}
+                    />
+                  ) : selectedImage ? (
                     <Avatar
                       src={URL.createObjectURL(selectedImage)}
                       sx={{ width: "100%", height: "100%" }}
@@ -277,7 +277,7 @@ const ProfileForm = () => {
               <InputControl
                 label="Full Name"
                 type="text"
-                disabled={!partner_id}
+                disabled
                 placeholder="Enter Your Name"
                 value={userData.name || formData.name}
               />
@@ -285,7 +285,7 @@ const ProfileForm = () => {
               <InputControl
                 label="Email Address"
                 type="email"
-                disabled={!partner_id}
+                disabled
                 placeholder="Enter Email Address"
                 value={userData.email || formData.email}
               />
@@ -298,6 +298,7 @@ const ProfileForm = () => {
                 value={formData?.phone_number}
                 onChange={handleInputChange}
                 disabled={!partner_id}
+                error={errors.phone_number}
               />
 
               <InputControl
@@ -308,6 +309,7 @@ const ProfileForm = () => {
                 value={formData?.school}
                 onChange={handleInputChange}
                 disabled={!partner_id}
+                error={errors.school}
               />
 
               <Box>
@@ -320,9 +322,13 @@ const ProfileForm = () => {
                     >
                       Select State
                     </Typography>
-                    <FormControl style={{ borderColor: "black" }} sx={{mb:1}} fullWidth>
+                    <FormControl
+                      style={{ borderColor: "black" }}
+                      sx={{ mb: 1 }}
+                      fullWidth
+                    >
                       <Select
-                        style={{ borderRadius: 100  }}
+                        style={{ borderRadius: 100 }}
                         labelId="state"
                         id="state"
                         disabled={!partner_id}
@@ -340,8 +346,8 @@ const ProfileForm = () => {
                     {errors.state && (
                       <Typography variant="caption" color="error">
                         {errors.state}
-                      </Typography>)
-                    }
+                      </Typography>
+                    )}
                   </Grid>
                   <Grid item md={6} sm={6} xs={12}>
                     <Typography
@@ -351,7 +357,7 @@ const ProfileForm = () => {
                     >
                       District
                     </Typography>
-                    <FormControl fullWidth sx={{mb:1}}>
+                    <FormControl fullWidth sx={{ mb: 1 }}>
                       <Select
                         style={{ borderRadius: 100 }}
                         labelId="district"
@@ -371,8 +377,8 @@ const ProfileForm = () => {
                     {errors.district && (
                       <Typography variant="caption" color="error">
                         {errors.district}
-                      </Typography>)
-                    }
+                      </Typography>
+                    )}
                   </Grid>
                 </Grid>
               </Box>
