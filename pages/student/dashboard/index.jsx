@@ -50,13 +50,10 @@ const Dashboard = () => {
     customAxios
       .get("/c4ca/teams", {
         headers: {
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4MyIsImVtYWlsIjoia29tYWxhQG5hdmd1cnVrdWwub3JnIiwiaWF0IjoxNjk4MDc5OTcwLCJleHAiOjE3Mjk2Mzc1NzB9.hR3m5DtqHTq3jsOMnaZ4laQSsZxyk_a8_y7jZC0YKz4",
-          // Authorization: `Bearer ${authToken.token}`,
+          Authorization: authToken.data.token
         },
       })
       .then((res) => {
-        // console.log(res, "data- of team api-----");
         setLeaderboard(res.data.data);
       })
       .catch((err) => {

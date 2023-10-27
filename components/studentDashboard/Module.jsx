@@ -20,16 +20,12 @@ const Module = () => {
   const [data, setData] = useState({});
   const [unlockedModules, setUnlockedModules] = useState(0);
 
-
-
   useEffect(() => {
-    // let authToken = JSON.parse(localStorage.getItem("AUTH"));
-    // console.log(authToken.token, "token");
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
     customAxios
       .get("/pathways/c4ca/modules", {
         headers: {
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtX2lkIjo3MywiZmxhZyI6ImM0Y2EiLCJpYXQiOjE2OTgzMzg3NjksImV4cCI6MTcyOTg5NjM2OX0.AMPzvRZVi9H0jjwMNY0YPpkCeeo0Ky8zB_YAfqKJn2w",
+          Authorization: authToken.data.token,
           // Authorization: `Bearer ${authToken.token}`,
         },
       })
