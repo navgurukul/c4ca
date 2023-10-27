@@ -73,7 +73,7 @@ const LoginForm = () => {
         .then((res) => {
           setLoading(false);
           if (res.status === 200) {
-            if (res.data.data === null){
+            if (res.data.data === null) {
               return setErrors({
                 ...errors,
                 password: res.data.status,
@@ -89,7 +89,11 @@ const LoginForm = () => {
               maxAge: 604800, // Expires after 7 days
               sameSite: true,
             });
-            router.push("/student/team-profile"); // Replace '/dashboard' with the actual dashboard route
+            if (res.data.data.last_login == null) {
+              router.push("/student/team-profile?first_login=true");
+            } else {
+              router.push("/student/dashboard");
+            }
           }
         })
         .catch((err) => {

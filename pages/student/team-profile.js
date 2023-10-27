@@ -9,10 +9,13 @@ const {
 } = require("@mui/material");
 import customAxios from "@/api";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const TeamProfile = () => {
   const [team, setTeam] = useState({});
+  const searchParams = useSearchParams();
+  const first_login = searchParams.get("first_login");
   useEffect(() => {
     const teamData = JSON.parse(localStorage.getItem("AUTH"));
     console.log(teamData, "teamdata...");
@@ -41,7 +44,8 @@ const TeamProfile = () => {
           }}
         >
           <span style={{ color: "#192954", fontWeight: 900, fontSize: 25 }}>
-            {team.team_name?.split(" ")[0]?.charAt(0)}{team.team_name?.split(" ")[1]?.charAt(0)}
+            {team.team_name?.split(" ")[0]?.charAt(0)}
+            {team.team_name?.split(" ")[1]?.charAt(0)}
           </span>
         </Avatar>
         <Typography
@@ -190,7 +194,7 @@ const TeamProfile = () => {
           sx={{ marginX: "auto", marginY: 5 }}
           color="primary"
         >
-          Verify Details & Proceed
+          {first_login ? "Verify Details & Proceed" : "Go to Dashboard"}
         </Button>
       </Link>
     </Container>

@@ -5,20 +5,25 @@ import {
   ButtonGroup,
   Menu,
   MenuItem,
+  useMediaQuery,
   Stack,
   Typography,
+  Divider ,
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import * as React from "react";
 import { useCookies } from "react-cookie";
+import { breakpoints } from "@/theme/constant";
 
 const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
   const [authData, setAuthData] = useState({});
+  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
+
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("teacherData"));
     setUser(authToken);
@@ -43,12 +48,18 @@ const Header = () => {
   };
   return (
     <>
-      <header>
-        <Link href={"/"}>
+      <header className="header">
+      {!isMobile &&<Link href={"/"}>
           <img src="/c4ca.svg" alt="c4ca_logo" />
-        </Link>
+        </Link>}
+       
 
         {router.pathname === "/" && user == null ? (
+          <>
+          {isMobile&& <Link href={"/"}>
+            <img src="/c4ca.svg" alt="c4ca_logo" />
+          </Link>}
+        {!isMobile &&
           <Stack spacing={2} direction="row">
             {" "}
             <Link href="/teacher/login">
@@ -78,8 +89,15 @@ const Header = () => {
                 Student Login
               </Button>
             </Link>
-          </Stack>
+          </Stack>}
+          </>
         ) : (
+          <>
+          {isMobile &&
+          <Link href={"/"}>
+            <img src="/CCA_Logo.svg" alt="CCA_Logo" />
+          </Link>
+          }
           <Box>
             <div>
               <Button
@@ -89,7 +107,10 @@ const Header = () => {
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
               >
-                <Avatar src={user?.profile_url} />
+                <Avatar src={user?.profile_url || user?.profile_link}>
+                  {authData?.data?.team_name?.split(" ")[0]?.charAt(0)}
+                  {authData?.data?.team_name?.split(" ")[1]?.charAt(0)}
+                </Avatar>
               </Button>
               <Menu
                 id="basic-menu"
@@ -113,11 +134,16 @@ const Header = () => {
                   Profile
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
+              </Menu>  
             </div>
           </Box>
+         
+          </>
+          
         )}
+     
       </header>
+         {isMobile&&  <Divider  />}
     </>
   );
 };

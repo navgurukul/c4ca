@@ -21,13 +21,22 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
   const [teamName, setTeamName] = useState("");
-  const [schoolName, setSchoolName] = useState("");
   const [values, setValues] = useState({
     state: "",
   });
   const [teamMembers, setTeamMembers] = useState([]);
 
   const sizeList = [3, 4, 5];
+
+  useEffect(() => {
+    const teacherData = JSON.parse(localStorage.getItem("teacherData"));
+
+    setValues({
+      school: teacherData?.school,
+      state: teacherData?.state,
+      district: teacherData?.district,
+    });
+  }, []);
 
   useEffect(() => {
     const membersCount = teamMembers.length;
@@ -57,6 +66,9 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
           team_name: teamName,
           team_size: teamSize,
           team_members: filteredTeamMembers,
+          school: values.school,
+          district: values.district,
+          state: values.state,
         },
         {
           headers: {
@@ -101,8 +113,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
       <InputControl
         label="School Name"
         type="text"
-        value={schoolName}
-        onChange={(e) => setSchoolName(e.target.value)}
+        value={values.school}
+        onChange={(e) => setValues({ ...values, school: e.target.value })}
       />
 
       <Grid spacing={5} container>
@@ -111,6 +123,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
             State
           </InputLabel>
           <SelectControl
+            value={values.state}
             onChange={(e) => setValues({ ...values, state: e.target.value })}
             options={Object.keys(stateDistrict).map((state) => ({
               label: state,
@@ -123,6 +136,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
             District
           </InputLabel>
           <SelectControl
+            value={values.state && values.district}
+            onChange={(e) => setValues({ ...values, district: e.target.value })}
             options={
               values.state
                 ? stateDistrict[values.state].map((district) => ({

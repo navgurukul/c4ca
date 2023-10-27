@@ -23,7 +23,7 @@ const images = [
 ];
 
 const Dashboard = () => {
-  // const authToken = JSON.parse(localStorage.getItem("AUTH"));
+
   const [showAllTeams, setShowAllTeams] = useState(false);
 
   const [Leaderboard, setLeaderboard] = useState([]);
@@ -46,6 +46,7 @@ const Dashboard = () => {
     return shuffledImages;
   };
   useEffect(() => {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
     customAxios
       .get("/c4ca/teams", {
         headers: {

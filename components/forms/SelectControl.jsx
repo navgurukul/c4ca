@@ -1,5 +1,3 @@
-
-
 // import {
 //   FormControl,
 //   InputLabel,
@@ -36,7 +34,6 @@
 
 // export default SelectControl;
 
-
 import React from "react";
 import {
   FormControl,
@@ -45,7 +42,7 @@ import {
   MenuItem,
   Box,
   Typography,
-  styled
+  styled,
 } from "@mui/material";
 // import styled from "styled-components"; // Import styled-components
 
@@ -53,14 +50,13 @@ const CustomSelect = styled(Select)`
   width: 100%;
   height: 48px;
   padding: 8px 16px;
-  border: 1px solid #2E2E2E;
+  border: 1px solid #2e2e2e;
   border-radius: 100px; /* Rounded border */
   font-family: "Amazon Ember";
   font-size: 18px;
-  color: #2E2E2E;
+  color: #2e2e2e;
   cursor: pointer; /* Use "pointer" for select-like behavior */
   outline: none;
-
 `;
 
 const SelectControl = (props) => {
@@ -75,7 +71,10 @@ const SelectControl = (props) => {
         {props.label && <InputLabel>{props.label}</InputLabel>}
         <CustomSelect {...props}>
           {props.options.map((option, index) => (
-            <MenuItem key={index} value={option.value}>
+            <MenuItem
+              key={index}
+              value={option.value}
+            >
               {option.label}
             </MenuItem>
           ))}
@@ -86,4 +85,3 @@ const SelectControl = (props) => {
 };
 
 export default SelectControl;
-
