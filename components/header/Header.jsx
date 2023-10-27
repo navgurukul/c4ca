@@ -44,6 +44,9 @@ const Header = () => {
     // localStorage.clear();
     localStorage.removeItem("AUTH");
     localStorage.removeItem("user");
+    
+    localStorage.removeItem("teacherData")
+    localStorage.removeItem("ally-supports-cache")
     localStorage.removeItem("token")
     localStorage.setItem("loggedOut", true);
     localStorage.setItem("isFirstLogin", false);

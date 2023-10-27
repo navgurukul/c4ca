@@ -7,7 +7,7 @@ import { useCookies } from "react-cookie";
 import axios from "axios";
 import "@/styles/globals.css";
 import Header from "@/components/header/Header";
-import "../styles/app.css"
+import "../styles/app.css";
 import { Typography } from "@mui/material";
 
 export default function App({ Component, pageProps }) {
@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }) {
 
   const sendGoogleUserData = (token) => {
     setLoading(true);
-    console.log("token", token)
+    console.log("token", token);
     return axios({
       url: `https://merd-api.merakilearn.org/users/auth/google`,
       method: "post",
@@ -43,32 +43,61 @@ export default function App({ Component, pageProps }) {
       data: { idToken: token, mode: "web" },
     })
       .then((res) => {
-        res.data.role = "teacher";
-        localStorage.setItem("AUTH", JSON.stringify(res.data));
-        setCookie("user", JSON.stringify(res.data), {
-          path: "/",
-          maxAge: 604800, // Expires after 1hr
-          sameSite: true,
-        });
+        axios
+          .get("https://merd-api.merakilearn.org/c4ca/teacher_Data", {
+            headers: {
+              accept: "application/json",
+              Authorization: res.data.token,
+            },
+          })
+          .then((resp) => {
+            if (resp.data.data === null) {
+              setLoading(false);
+              if (partner_id) {
+                res.data.role = "teacher";
+                localStorage.setItem("AUTH", JSON.stringify(res.data));
+                setCookie("user", JSON.stringify(res.data), {
+                  path: "/",
+                  maxAge: 604800, // Expires after 1hr
+                  sameSite: true,
+                });
+                return router.push(`/teacher/profile?partner_id=${partner_id}`);
+              } else {
+                return setError(
+                  "Apologies, the entered Gmail ID is not linked with a C4CA partner."
+                );
+              }
+              return setError(resp.data.status);
+            } else {
+              res.data.role = "teacher";
+              localStorage.setItem("AUTH", JSON.stringify(res.data));
+              setCookie("user", JSON.stringify(res.data), {
+                path: "/",
+                maxAge: 604800, // Expires after 1hr
+                sameSite: true,
+              });
+              if (resp.data.data.school) {
+                localStorage.setItem(
+                  "teacherData",
+                  JSON.stringify(resp.data.data)
+                );
 
-        axios({
-          method: "get",
-          url: `https://merd-api.merakilearn.org/users/me`,
-          headers: {
-            accept: "application/json",
-            Authorization: res.data.token,
-          },
-        }).then((res) => {
-          if (res.status === 200) {
-            // Only redirect if the request is successful
-            router.push("/teacher/profile");
-          }
-
-          setLoading(false);
-        });
+                setLoading(false);
+                return router.push("/teacher/teams");
+              }
+              // Only redirect if the request is successful
+              router.push("/teacher/profile");
+              setLoading(false);
+            }
+          })
+          .catch((err) => {
+            console.log("error in google data", err);
+            setLoading(false);
+          });
       })
       .catch((err) => {
         console.log("error in google data", err);
+        setLoading(false);
       });
   };
 
@@ -86,7 +115,7 @@ export default function App({ Component, pageProps }) {
       localStorage.setItem("loggedOut", null);
     !localStorage.getItem("isFirstLogin") &&
       localStorage.setItem("isFirstLogin", true);
-  },[]);
+  }, []);
 
   return (
     <>
