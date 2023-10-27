@@ -34,12 +34,14 @@ const OverView = () => {
             <Card sx={{ border: 1, borderColor: 'gray', borderRadius: '8px', width:'90%',p:'24px'}}>
               <CardContent>
                 <Box display="flex" alignItems="center">
-               { item.icon !== ""&&<Avatar src={item.icon} />}
-                  <Typography variant="h6" sx={{ marginLeft: 1 }}>
-                    {item.value}
+               {/* { item.icon !== ""&&<Avatar src={item.icon} />} */}
+               {<Avatar src={item.icon} />}
+                  <Typography variant="body1" sx={{ marginLeft: 1 }}>
+                    {/* {item.value} */}
+                    Coming soon....
                   </Typography>
                 </Box>
-                <Typography variant='body1'>{item.title}</Typography>
+                {/* <Typography variant='body1'>{item.title}</Typography> */}
               </CardContent>
             </Card>
           </Grid>

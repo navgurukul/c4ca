@@ -73,7 +73,7 @@ const Header = () => {
                   fontSize: "15px",
                 }}
               >
-                Teacher and Partners
+                Teachers and Partners
               </Button>{" "}
             </Link>
             <Link href="/student/login">

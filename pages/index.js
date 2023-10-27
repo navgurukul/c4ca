@@ -48,7 +48,7 @@ export default function Home() {
           <Box sx={{ marginTop: 4 }} alignItems="center">
             <Link href="/teacher/login">
               <Button sx={{ width: '100%' }}  color="secondary" variant="contained">
-                <Typography variant="ButtonLarge">Teacher and Partners</Typography>
+                <Typography variant="ButtonLarge">Teachers and Partners</Typography>
               </Button>
             </Link>
           </Box>
@@ -79,7 +79,7 @@ export default function Home() {
                 <img src="/Gather.svg" alt="logo" />
               </Box>
               <Box sx={{ paddingLeft: "5%" }}>
-                <Typography variant="body1">
+                <Typography variant="subtitle1">
                   Gather your friends and form a team
                 </Typography>
                 <Typography variant="body1">
@@ -95,7 +95,7 @@ export default function Home() {
                 <img src="/Learn.svg" alt="logo" />
               </Box>
               <Box sx={{ paddingLeft: "5%" }}>
-                <Typography variant="body1">Learn and practice</Typography>
+                <Typography variant="subtitle1">Learn and practice</Typography>
                 <Typography variant="body1">
                   Learn via interactive curriculum and projects on the Meraki
                   platform through your dashboard
@@ -108,7 +108,7 @@ export default function Home() {
                 <img src="/Define.svg" alt="logo" />
               </Box>
               <Box sx={{ paddingLeft: "5%" }}>
-                <Typography variant="body1">Define your topic</Typography>
+                <Typography variant="subtitle1">Define your topic</Typography>
                 <Typography variant="body1">
                   Think of a pressing problem you want to solve for and submit
                   it to the platform
@@ -121,7 +121,7 @@ export default function Home() {
                 <img src="/Build.svg" alt="logo" />
               </Box>
               <Box sx={{ paddingLeft: "5%" }}>
-                <Typography variant="body1">
+                <Typography variant="subtitle1">
                   Build and submit your cool project
                 </Typography>
                 <Typography variant="body1">
@@ -135,7 +135,7 @@ export default function Home() {
                 <img src="/rewards.svg" alt="logo" />
               </Box>
               <Box sx={{ paddingLeft: "5%" }}>
-                <Typography variant="body1">Evaluation and rewards</Typography>
+                <Typography variant="subtitle1">Evaluation and rewards</Typography>
                 <Typography variant="body1">
                   The best of the solutions with actionable steps will be
                   eligible to exciting rewards
