@@ -14,7 +14,7 @@ import FacilitatorAddModal from "./FacilitatorAddModal";
 import FacilatorTable from "./FacilatorTable";
 
 function FacilitatorFilter({ data,id }) {
-  console.log("filter", id);
+  // console.log("filter", id);
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -23,11 +23,13 @@ function FacilitatorFilter({ data,id }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    
     if (data) {
       setAllFacilitator(data);
       setFilteredFacilitator(data);
+      console.log("ko");
     }
-  }, [data]);
+  }, [data,openModal,allFacilitator,filteredFacilitator]);
 
   // const [searchResults, setSearchResults] = useState([]);
 

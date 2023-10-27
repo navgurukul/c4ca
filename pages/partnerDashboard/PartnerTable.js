@@ -173,7 +173,7 @@ const PartnerTable = ({data}) => {
 
   const handleRowClick = (event, dataIndex) => {
     partnerId = data[dataIndex.dataIndex].id;
-    router.push(`partner/facilitator/${partnerId}`);
+    router.push(`partnerDashboard/facilitator/${partnerId}`);
   };
 
   return (
@@ -186,11 +186,7 @@ const PartnerTable = ({data}) => {
       >
         <ThemeProvider theme={getMuiTheme}>
           <MUIDataTable
-            title={
-              <Typography variant="h6" style={{ fontFamily: "Noto Sans" }}>
-                Partner's List
-              </Typography>
-            }
+            
             data={data}
             columns={columns}
             options={{ ...options, onRowClick: handleRowClick }}

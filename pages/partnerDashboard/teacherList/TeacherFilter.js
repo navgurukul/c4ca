@@ -179,15 +179,16 @@ const TeacherFilter = () => {
             }}
             sx={{ width: "360px" }}
           />
-          <Box style={{ display: "flex", margin: "16px 0" }}>
+          <Box style={{ display: "flex", margin: "16px 0", gap:"20px" }}>
             <FormControl>
-              <InputLabel id="district-label">District</InputLabel>
+              {/* <InputLabel id="district-label">District</InputLabel> */}
               <Select
                 sx={{ width: "250px" }}
+                style={{borderRadius:"30px",width:"250px",height:"50px"}}
                 labelId="district-label"
                 id="district-select"
                 value={selectedDistrict}
-                label="District"
+                // label="District"
                 onChange={handleDistrictChange}
               >
                 <MenuItem value="All District">All District</MenuItem>
@@ -200,13 +201,14 @@ const TeacherFilter = () => {
             </FormControl>
             {selectedDistrict === "All District" ? (
               <FormControl>
-                <InputLabel id="school-label">School</InputLabel>
+                {/* <InputLabel id="school-label">School</InputLabel> */}
                 <Select
                   sx={{ width: "250px" }}
+                  style={{borderRadius:"30px",width:"250px",height:"50px"}}
                   labelId="school-label"
                   id="school-select"
                   value={selectedSchool}
-                  label="School"
+                  // label="School"
                   onChange={handleSchoolChange}
                 >
                   <MenuItem value="All School">All School</MenuItem>
@@ -219,13 +221,14 @@ const TeacherFilter = () => {
               </FormControl>
             ) : (
               <FormControl>
-                <InputLabel id="school-label">School</InputLabel>
+                {/* <InputLabel id="school-label">School</InputLabel> */}
                 <Select
                   sx={{ width: "250px" }}
+                  style={{borderRadius:"30px",width:"250px",height:"50px"}}
                   labelId="school-label"
                   id="school-select"
                   value={selectedSchool}
-                  label="All School"
+                  // label="All School"
                   onChange={handleSchoolChange}
                 >
                   <MenuItem value="All School">All School</MenuItem>

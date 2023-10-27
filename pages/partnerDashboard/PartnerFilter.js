@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Box,
@@ -9,7 +9,7 @@ import {
   useMediaQuery,
   styled,
 } from "@mui/material";
-import { SearchOutlined, Add } from "@mui/icons-material"; 
+import { SearchOutlined, Add } from "@mui/icons-material";
 import PartnerAddModal from "./PartnerAddModal";
 import PartnerTable from "./PartnerTable";
 import axios from "axios";
@@ -22,31 +22,34 @@ function PartnerFilter() {
   const [searchTerm, setSearchTerm] = useState("");
 
   //add query
-  useEffect(() => {
-    const apiUrl = "https://merd-api.merakilearn.org/partners";
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQyNDA4IiwiZW1haWwiOiJsb2RoaS5wcmFiaGF0QGdtYWls.lmNvbSIsImlhdCI6MTY5NzY4NjQ0NywiZXhwIjoxNzI5MjQ0MDQ3fQ.Jt9Vrp_399fK9oXhqqtEZn_kWzjFlnScBJsXfcM6dIk";
-    axios
-      .get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        const partnerList = response.data.partners;
-        if (partnerList !== undefined) {
-          setAllPartner(partnerList);
-          setfilteredPartner(partnerList);
-          // console.log(partnerList);
-        } else {
-          console.error("Data is undefined.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-  //   const isActive = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)"); 
+  // Function to fetch data from the API
+    //add query
+    useEffect(() => {
+      const apiUrl = "https://merd-api.merakilearn.org/partners";
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQyNDA4IiwiZW1haWwiOiJsb2RoaS5wcmFiaGF0QGdtYWls.lmNvbSIsImlhdCI6MTY5NzY4NjQ0NywiZXhwIjoxNzI5MjQ0MDQ3fQ.Jt9Vrp_399fK9oXhqqtEZn_kWzjFlnScBJsXfcM6dIk";
+      axios
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const partnerList = response.data.partners;
+          if (partnerList !== undefined) {
+            setAllPartner(partnerList);
+            setfilteredPartner(partnerList);
+            // console.log(partnerList);
+          } else {
+            console.error("Data is undefined.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }, [openModal]);
+  
+  //   const isActive = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
   const filterTerms = [
     "All Partners",
@@ -55,7 +58,6 @@ function PartnerFilter() {
     "Inactive",
     "Archived",
   ];
- 
 
   const handleModalToggle = () => {
     setOpenModal(!openModal);
@@ -64,19 +66,22 @@ function PartnerFilter() {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     const data = filterPartner(searchTerm, allPartner);
-    setfilteredPartner(data); 
+    setfilteredPartner(data);
   };
 
   function filterPartner(searchText, allPartner) {
     console.log(allPartner);
-    const filterData = allPartner.filter((partner) =>
-      partner?.name?.toLowerCase()?.includes(searchText?.toLowerCase()) ||
-      partner?.point_of_contact_name?.toLowerCase()?.includes(searchText?.toLowerCase()) 
+    const filterData = allPartner.filter(
+      (partner) =>
+        partner?.name?.toLowerCase()?.includes(searchText?.toLowerCase()) ||
+        partner?.point_of_contact_name
+          ?.toLowerCase()
+          ?.includes(searchText?.toLowerCase())
     );
     return filterData;
   }
 
-  const handleStatus = (term, allPartner) => { 
+  const handleStatus = (term, allPartner) => {
     const filterByStatus = statusFilter(term, allPartner);
     setfilteredPartner(filterByStatus);
   };
@@ -90,7 +95,7 @@ function PartnerFilter() {
       partner?.status?.toLowerCase()?.includes(term?.toLowerCase())
     );
     return filterDataf;
-  } 
+  }
 
   const filterButtons = filterTerms.map((term) => (
     <Button
@@ -102,8 +107,8 @@ function PartnerFilter() {
         borderRadius: "30px",
         borderColor: "#29458C",
         p: "12px",
-        border:"1px solid  #29458C",
-        color:"#BDBDBD"
+        border: "1px solid  #29458C",
+        color: "#BDBDBD",
       }}
     >
       <Typography
@@ -116,7 +121,7 @@ function PartnerFilter() {
   ));
 
   return (
-    <Box sx={{ mt: 8, mb: 2 }}>
+    <Box sx={{ mt: 4, mb: 2 }}>
       <Box display="flex" justifyContent={"space-between"} mb={3}>
         <TextField
           placeholder="Search Partner, Point of Contact"
@@ -154,7 +159,9 @@ function PartnerFilter() {
         </Box>
       </Box>
       <Box style={{ display: "flex" }}>{filterButtons}</Box>
-      <PartnerTable data={filteredPartner} />
+       
+        <PartnerTable data={filteredPartner} />
+      
     </Box>
   );
 }

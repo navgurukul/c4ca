@@ -171,7 +171,7 @@ function PartnerAddModal({ boolean, onOpen }) {
               variant="contained"
               onClick={handleSubmit}
             >
-              Create Partner
+              Add Partner
             </Button>
           </DialogActions>
         </Box>
