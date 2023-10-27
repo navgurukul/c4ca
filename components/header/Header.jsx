@@ -21,21 +21,46 @@ const Header = () => {
   const [loggedOut, setLoggedOut] = useState("");
   const [isFirstLogin, setIsFirstLogin] = useState("");
   const [authData, setAuthData] = useState({});
+
+  const [reloadCount, setReloadCount] = useState(0);
+  useEffect(() => {
+    setIsFirstLogin(localStorage.getItem("isFirstLogin"));
+    setLoggedOut(localStorage.getItem("loggeOut"));
+  }, [loggedOut, isFirstLogin]);
+
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("teacherData"));
     setUser(authToken);
-    setIsFirstLogin(localStorage.getItem("isFirstLogin"));
-    setLoggedOut(localStorage.getItem("loggeOut"));
-
     const data = JSON.parse(localStorage.getItem("AUTH"));
     setAuthData(data);
-  }, [loggedOut, isFirstLogin]);
+  }, []);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      const authToken = JSON.parse(localStorage.getItem("teacherData"));
+      setUser(authToken);
+      const data = JSON.parse(localStorage.getItem("AUTH"));
+      setAuthData(data);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, []);
+
+  const handleReloadHeader = () => {
+    router.reload();
+  }
+  
+
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-  };
+  }; 
   const handleClose = () => {
     setAnchorEl(null);
   };

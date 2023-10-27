@@ -4,7 +4,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function Home() {
   const isActive = useMediaQuery("(max-width:600px)");
+
+  
   return (
+    <>
     <Box maxWidth="false">
       <Container maxWidth="md" sx={{ marginTop: 10, marginBottom: 10 }}>
         <Stack alignItems={"center"}>
@@ -138,6 +141,8 @@ export default function Home() {
         <img style={{ width: "100%" }} src="/footer.svg" alt="logo" />
       </Box>
     </Box>
+    
+    </>
   );
 }
 

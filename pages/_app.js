@@ -10,15 +10,23 @@ import Header from "@/components/header/Header";
 import "../styles/app.css";
 import { Typography } from "@mui/material";
 
+import { redirect, useSearchParams } from "next/navigation";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-
   const [loading, setLoading] = useState(false);
 
   const styles = {
     marginTop: "30vh",
   };
 
+  const style = {
+    textalign: "center",
+    margin: "10vh 33vw",
+  };
+
+  const searchParams = useSearchParams();
+  const partner_id = searchParams.get("partner_id");
+  const [error, setError] = useState("");
   const [cookie, setCookie] = useCookies(["user"]);
   const { token } = router.query;
 
@@ -35,7 +43,6 @@ export default function App({ Component, pageProps }) {
 
   const sendGoogleUserData = (token) => {
     setLoading(true);
-    console.log("token", token);
     return axios({
       url: `https://merd-api.merakilearn.org/users/auth/google`,
       method: "post",
@@ -117,6 +124,7 @@ export default function App({ Component, pageProps }) {
       localStorage.setItem("isFirstLogin", true);
   }, []);
 
+
   return (
     <>
       <Head>
@@ -125,20 +133,27 @@ export default function App({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/c4ca.svg" />
       </Head>
-      {/* <h1 style={{color:"red", zIndex:"1"}}>Helllllllllllllllllllllllo</h1> */}
 
       <ThemeProvider theme={theme}>
         {router.pathname.split("/").reverse()[0] === "login" ? null : (
           <Header />
-        )}
-        {loading ? (
-          <div class="loading-container">
-            <div class="loading"></div>
-            <div id="loading-text">Logging In</div>
-          </div>
-        ) : (
-          <Component {...pageProps} />
-        )}
+        )}{" "}
+        <>
+          {error && router.pathname.split("/").reverse()[0] !== "login" &&  (
+            <Typography variant="h6" color="error" style={style}>
+              {error}
+            </Typography>
+          )}
+
+          {loading ? (
+            <div class="loading-container">
+              <div class="loading"></div>
+              <div id="loading-text">Logging In</div>
+            </div>
+          ) : (
+            <Component {...pageProps} />
+          )}
+        </>
       </ThemeProvider>
     </>
   );

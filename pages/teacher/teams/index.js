@@ -56,7 +56,6 @@ const TeacherDashboard = () => {
 
   useEffect(() => {
     refreshTeams();
-    console.log("teams", teams);
   }, []);
 
   const handleCloseDialog = () => {
