@@ -65,14 +65,13 @@ const ProfileForm = () => {
       .then((res) => {
         if (res.data.data !== null) {
           setExistingData(true);
-          console.log("ites herel....", res);
-          localStorage.setItem("teacherData", JSON.stringify(res.data.data));
           setFormData({
             phone_number: res.data.data.phone_number,
             school: res.data.data.school,
             district: res.data.data.district,
             state: res.data.data.state,
-            profile_url: res.data.data.profile_url,
+            profile_url:
+              res.data.data.profile_url || res.data.data.profile_link,
           });
           setUserData({
             ...userData,
@@ -91,6 +90,10 @@ const ProfileForm = () => {
               setUserData({
                 name: response.data.user.name,
                 email: response.data.user.email,
+              });
+              setFormData({
+                ...formData,
+                profile_url: response.data?.user?.profile_picture,
               });
             })
             .catch((error) => {
@@ -118,7 +121,7 @@ const ProfileForm = () => {
   const handleSaveProfile = () => {
     // Create a FormData object to send the image
     const profileData = new FormData();
-    profileData.append("profile_url", selectedImage); // Add the selected image
+    profileData.append("profile_url", selectedImage || formData.profile_url); // Add the selected image
     profileData.append("name", userData.name);
     profileData.append("email", userData.email);
     profileData.append("phone_number", formData.phone_number);
@@ -137,6 +140,10 @@ const ProfileForm = () => {
       })
       .then((response) => {
         if (response.data.data) {
+          localStorage.setItem(
+            "teacherData",
+            JSON.stringify(response.data.data)
+          );
           setActiveStep(1);
         }
       })
@@ -164,7 +171,7 @@ const ProfileForm = () => {
         sx={{ display: "grid", placeItems: "center", gap: 4 }}
       >
         {partner_id && (
-          <Box  sx={{ width: isMobile ? "100%" : "35%" }}>
+          <Box sx={{ width: isMobile ? "100%" : "35%" }}>
             <Stepper activeStep={activeStep}>
               {steps.map((label, index) => (
                 <Step key={label}>
@@ -209,6 +216,7 @@ const ProfileForm = () => {
                 <input
                   id="image-input"
                   type="file"
+                  disabled={!partner_id}
                   accept="image/*"
                   onChange={handleImageChange}
                   style={{ display: "none" }}
@@ -218,6 +226,7 @@ const ProfileForm = () => {
               <InputControl
                 label="Full Name"
                 type="text"
+                disabled={!partner_id}
                 placeholder="Enter Your Name"
                 value={userData.name || formData.name}
               />
@@ -225,6 +234,7 @@ const ProfileForm = () => {
               <InputControl
                 label="Email Address"
                 type="email"
+                disabled={!partner_id}
                 placeholder="Enter Email Address"
                 value={userData.email || formData.email}
               />
@@ -236,6 +246,7 @@ const ProfileForm = () => {
                 name="phone_number"
                 value={formData?.phone_number}
                 onChange={handleInputChange}
+                disabled={!partner_id}
               />
 
               <InputControl
@@ -245,6 +256,7 @@ const ProfileForm = () => {
                 name="school"
                 value={formData?.school}
                 onChange={handleInputChange}
+                disabled={!partner_id}
               />
 
               <Box>
@@ -263,6 +275,7 @@ const ProfileForm = () => {
                         style={{ borderRadius: 100 }}
                         labelId="state"
                         id="state"
+                        disabled={!partner_id}
                         name="state"
                         value={formData?.state}
                         onChange={handleInputChange}
@@ -290,6 +303,7 @@ const ProfileForm = () => {
                         labelId="district"
                         id="district"
                         name="district"
+                        disabled={!partner_id}
                         value={formData?.district}
                         onChange={handleInputChange}
                       >

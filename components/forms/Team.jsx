@@ -32,9 +32,9 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
 
     setValues({
-      school: teacherData.school,
-      state: teacherData.state,
-      district: teacherData.district,
+      school: teacherData?.school,
+      state: teacherData?.state,
+      district: teacherData?.district,
     });
   }, []);
 

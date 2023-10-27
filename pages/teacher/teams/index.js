@@ -41,6 +41,7 @@ const TeacherDashboard = () => {
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
+    console.log('refreshing....', teacherId, authToken);
     if (teacherId && authToken) {
       customAxios
         .get(`/c4ca/teams/${teacherId}`, {
@@ -79,7 +80,7 @@ const TeacherDashboard = () => {
           sx={{ paddingY: 8, padding: 4 }}
           spacing={isMobile ? 4 : 6}
         >
-          {teams.map((team) => (
+          {teams?.map((team) => (
             <Grid item md={4} sm={6} xs={12} key={team.id}>
               <Box
                 sx={{
@@ -97,7 +98,7 @@ const TeacherDashboard = () => {
                       {team.team_name}
                     </Typography>
                   </Link>
-                  <EditOutlined style={{ color: "gray" }} />
+                  {/* <EditOutlined style={{ color: "gray" }} /> */}
                 </Box>
                 <Box
                   sx={{
@@ -136,7 +137,7 @@ const TeacherDashboard = () => {
                         sx={{ fontSize: 15 }}
                         onClick={() =>
                           navigator.clipboard.writeText(
-                            `User ID: ${team.login_id}\nPassword: ${team.password}}`
+                            `User ID: ${team.login_id}\nPassword: ${team.password}`
                           )
                         }
                         variant="text"
