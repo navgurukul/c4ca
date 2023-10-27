@@ -98,7 +98,7 @@ const TeacherDashboard = () => {
                       {team.team_name}
                     </Typography>
                   </Link>
-                  <EditOutlined style={{ color: "gray" }} />
+                  {/* <EditOutlined style={{ color: "gray" }} /> */}
                 </Box>
                 <Box
                   sx={{
@@ -137,7 +137,7 @@ const TeacherDashboard = () => {
                         sx={{ fontSize: 15 }}
                         onClick={() =>
                           navigator.clipboard.writeText(
-                            `User ID: ${team.login_id}\nPassword: ${team.password}}`
+                            `User ID: ${team.login_id}\nPassword: ${team.password}`
                           )
                         }
                         variant="text"

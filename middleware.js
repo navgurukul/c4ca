@@ -6,6 +6,14 @@ export default async function middleware(req) {
   const openRoutes = ["/login"];
   const handlePage = pathname.split("/")[1];
   const user = req.cookies.get("user");
+  if (pathname == "/" && loggedIn) {
+    if (JSON.parse(user.value).role == "teacher") {
+      req.nextUrl.pathname = "/teacher/teams";
+    } else {
+      req.nextUrl.pathname = "/student/dashboard";
+    }
+    return NextResponse.redirect(req.nextUrl);
+  }
   if (!pathname.startsWith("/teacher") && !pathname.startsWith("/student")) {
     return NextResponse.next();
   }

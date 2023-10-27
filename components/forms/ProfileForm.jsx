@@ -216,6 +216,7 @@ const ProfileForm = () => {
                 <input
                   id="image-input"
                   type="file"
+                  disabled={!partner_id}
                   accept="image/*"
                   onChange={handleImageChange}
                   style={{ display: "none" }}
@@ -225,6 +226,7 @@ const ProfileForm = () => {
               <InputControl
                 label="Full Name"
                 type="text"
+                disabled={!partner_id}
                 placeholder="Enter Your Name"
                 value={userData.name || formData.name}
               />
@@ -232,6 +234,7 @@ const ProfileForm = () => {
               <InputControl
                 label="Email Address"
                 type="email"
+                disabled={!partner_id}
                 placeholder="Enter Email Address"
                 value={userData.email || formData.email}
               />
@@ -243,6 +246,7 @@ const ProfileForm = () => {
                 name="phone_number"
                 value={formData?.phone_number}
                 onChange={handleInputChange}
+                disabled={!partner_id}
               />
 
               <InputControl
@@ -252,6 +256,7 @@ const ProfileForm = () => {
                 name="school"
                 value={formData?.school}
                 onChange={handleInputChange}
+                disabled={!partner_id}
               />
 
               <Box>
@@ -270,6 +275,7 @@ const ProfileForm = () => {
                         style={{ borderRadius: 100 }}
                         labelId="state"
                         id="state"
+                        disabled={!partner_id}
                         name="state"
                         value={formData?.state}
                         onChange={handleInputChange}
@@ -297,6 +303,7 @@ const ProfileForm = () => {
                         labelId="district"
                         id="district"
                         name="district"
+                        disabled={!partner_id}
                         value={formData?.district}
                         onChange={handleInputChange}
                       >
