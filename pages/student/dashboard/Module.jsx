@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Typography, CircularProgress, Button, Grid, Card, CardContent, CardMedia } from '@mui/material';
+import { Box, Typography, CircularProgress, Button, Grid, Card, CardContent, CardMedia,useMediaQuery } from '@mui/material';
 import jsonData from './data.json';
 import LockIcon from '@mui/icons-material/Lock'; // Import the Lock icon
 import LaunchIcon from '@mui/icons-material/Launch'; // Import the Launch icon
 
 const Module = () => {
 const [openedCards, setOpenedCards] = useState(0);
+const isActive = useMediaQuery("(max-width:600px)");
+
 
 const handleCardOpen = () => {
   

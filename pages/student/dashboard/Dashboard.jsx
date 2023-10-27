@@ -10,7 +10,8 @@ import {
   Button,
   CircularProgress,
   CardActions,
-  Avatar
+  Avatar,
+  useMediaQuery,
 } from '@mui/material';
 import OverView from './OverView';
 import Module from './Module';
@@ -56,7 +57,7 @@ const teamData = [
 
 const Dashboard = () => {
   const [showAllTeams, setShowAllTeams] = useState(false);
-
+  const isActive = useMediaQuery("(max-width:600px)");
   const displayTeams = showAllTeams ? teamData : teamData.slice(0, 3);
 
   const handleSeeAllTeamsClick = () => {
@@ -82,7 +83,7 @@ const Dashboard = () => {
             sx={{
               borderRadius: '8px',
               border: '1px solid #ccc',
-              width: '50%',
+              width:isActive?'100%':'50%',
               padding: '5px',
             }}
           >
@@ -98,7 +99,7 @@ const Dashboard = () => {
           </Box>
 
           <OverView />
-          <Module />
+          { !isActive&& <Module />}
         </Grid>
         <Grid item xs={12} md={4} lg={4}>
           <Card sx={{ border: 1, borderColor: 'gray', borderRadius: '8px' }}>
@@ -201,6 +202,7 @@ const Dashboard = () => {
 
         </Grid>
       </Grid>
+      { isActive&& <Module />}
     </Container>
   );
 };
