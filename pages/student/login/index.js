@@ -90,7 +90,7 @@ const LoginForm = () => {
               sameSite: true,
             });
             if (res.data.data.last_login == null) {
-              router.push("/student/team-profile?first_login=true");
+              router.push("/student/profile?first_login=true");
             } else {
               router.push("/student/dashboard");
             }

@@ -127,7 +127,7 @@ const Header = () => {
                     router.push(
                       authData.role == "teacher"
                         ? "/teacher/profile"
-                        : "/student/team-profile"
+                        : "/student/profile"
                     );
                   }}
                 >
