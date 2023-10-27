@@ -201,7 +201,7 @@ const TeacherFilter = () => {
             </FormControl>
             {selectedDistrict === "All District" ? (
               <FormControl>
-                {/* <InputLabel id="school-label">School</InputLabel> */}
+                {/* <InputLabel id="school-label">Schoo</InputLabel> */}
                 <Select
                   sx={{ width: "250px" }}
                   style={{borderRadius:"30px",width:"250px",height:"50px"}}
