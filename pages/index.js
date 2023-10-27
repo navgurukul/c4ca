@@ -1,6 +1,8 @@
-import { Container, Grid, Typography, Box, Button, Stack } from "@mui/material";
+import { Container, Grid, Typography, Box, Button, Stack,Divider } from "@mui/material";
 import Link from "next/link";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
+
 
 export default function Home() {
   const isActive = useMediaQuery("(max-width:600px)");
@@ -34,6 +36,27 @@ export default function Home() {
           solutions that help reduce carbon footprint, increase renewable energy
           adoption and promote sustainable living
         </Typography>
+        {isActive?
+          <>
+          <Box sx={{ marginTop: 4 }} alignItems="center">
+            <Link href="/student/login">
+              <Button sx={{ width: '100%' }} className="profileBtn">
+                <Typography variant="ButtonLarge">Student Login</Typography>
+              </Button>
+            </Link>
+          </Box>
+          <Box sx={{ marginTop: 4 }} alignItems="center">
+            <Link href="/teacher/login">
+              <Button sx={{ width: '100%' }}  color="secondary" variant="contained">
+                <Typography variant="ButtonLarge">Teacher and Partners</Typography>
+              </Button>
+            </Link>
+          </Box>
+          <Box  sx={{ marginTop: 4 }} alignItems="center">
+            <Divider />
+          </Box>
+            
+          </>:
         <Stack sx={{ marginTop: 5 }} alignItems={"center"}>
           <Link href="/student/login">
           <Button alignItems={"center"} className="profileBtn">
@@ -41,6 +64,9 @@ export default function Home() {
           </Button>
           </Link>
         </Stack>
+        }
+        
+        
         <Container maxWidth="md" sx={{ marginTop: 10, marginBottom: 10 }}>
           <Typography variant="h5" align="center">
             {" "}
@@ -135,7 +161,7 @@ export default function Home() {
       </Container>
 
       <Box className="footer">
-        <img style={{ width: "100%" }} src="/footer.svg" alt="logo" />
+        <img style={{ width: "100%" ,marginBottom:"-1.23rem"}} src="/footer.svg" alt="logo" />
       </Box>
     </Box>
   );
