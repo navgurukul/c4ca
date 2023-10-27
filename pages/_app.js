@@ -13,8 +13,8 @@ import { Typography } from "@mui/material";
 import { redirect, useSearchParams } from "next/navigation";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(true);
+  const [showComponent, setShowComponent] = useState(true);
   const styles = {
     marginTop: "30vh",
   };
@@ -89,7 +89,9 @@ export default function App({ Component, pageProps }) {
                   JSON.stringify(resp.data.data)
                 );
 
-                setLoading(false);
+                setTimeout(() => {
+                  setLoading(false);
+                }, 1000);
                 return router.push("/teacher/teams");
               }
               // Only redirect if the request is successful
@@ -113,8 +115,11 @@ export default function App({ Component, pageProps }) {
 
     let tokenVal = urlParams?.get("token");
     if (tokenVal) {
+      setLoading(true);
       localStorage.setItem("token", reverseLastFiveChars(tokenVal));
       sendGoogleUserData(reverseLastFiveChars(tokenVal));
+    } else {
+      setLoading(false);
     }
 
     !localStorage.getItem("token") && localStorage.setItem("token", null);
@@ -123,7 +128,6 @@ export default function App({ Component, pageProps }) {
     !localStorage.getItem("isFirstLogin") &&
       localStorage.setItem("isFirstLogin", true);
   }, []);
-
 
   return (
     <>
@@ -139,7 +143,7 @@ export default function App({ Component, pageProps }) {
           <Header />
         )}{" "}
         <>
-          {error && router.pathname.split("/").reverse()[0] !== "login" &&  (
+          {error && router.pathname.split("/").reverse()[0] !== "login" && (
             <Typography variant="h6" color="error" style={style}>
               {error}
             </Typography>
