@@ -30,15 +30,10 @@ export default function App({ Component, pageProps }) {
   const [cookie, setCookie] = useCookies(["user"]);
   const { token } = router.query;
 
-  function reverseLastFiveChars(str) {
-    if (str?.length < 5) {
-      return inputString;
-    } else {
-      const charArray = str?.slice(-5);
-      return str
-        ?.slice(0, str?.length - 5)
-        .concat(charArray?.split("").reverse().join(""));
-    }
+  function reverseJwtBody(jwt) {
+    const [header, body, signature] = jwt.split('.');
+    const reversedBody = body.split('').reverse().join('');
+    return [header, reversedBody, signature].join('.');
   }
 
   const sendGoogleUserData = (token) => {
@@ -116,8 +111,8 @@ export default function App({ Component, pageProps }) {
     let tokenVal = urlParams?.get("token");
     if (tokenVal) {
       setLoading(true);
-      localStorage.setItem("token", reverseLastFiveChars(tokenVal));
-      sendGoogleUserData(reverseLastFiveChars(tokenVal));
+      localStorage.setItem("token", reverseJwtBody(tokenVal));
+      sendGoogleUserData(reverseJwtBody(tokenVal));
     } else {
       setLoading(false);
     }
