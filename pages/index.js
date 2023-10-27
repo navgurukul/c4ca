@@ -46,7 +46,7 @@ export default function Home() {
             </Link>
           </Box>
           <Box sx={{ marginTop: 4 }} alignItems="center">
-            <Link href="/student/login">
+            <Link href="/teacher/login">
               <Button sx={{ width: '100%' }}  color="secondary" variant="contained">
                 <Typography variant="ButtonLarge">Teacher and Partners</Typography>
               </Button>
@@ -161,7 +161,7 @@ export default function Home() {
       </Container>
 
       <Box className="footer">
-        <img style={{ width: "100%" }} src="/footer.svg" alt="logo" />
+        <img style={{ width: "100%" ,marginBottom:"-1.23rem"}} src="/footer.svg" alt="logo" />
       </Box>
     </Box>
   );
