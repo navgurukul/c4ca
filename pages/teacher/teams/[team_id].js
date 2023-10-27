@@ -50,7 +50,7 @@ const TeamDetail = () => {
     axios
       .get(apiUrl)
       .then((response) => {
-        console.log("hey bhagwan", response.data);
+        // console.log("hey bhagwan", response.data);
         setData(response.data.data);
       })
       .catch((err) => {
