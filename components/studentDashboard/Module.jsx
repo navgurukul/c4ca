@@ -64,7 +64,6 @@ const Module = () => {
               border: 1,
               borderColor: module.borderColor,
               backgroundColor: module.color,
-
               borderRadius: "8px",
               mb: "32px",
               width: "96%",
@@ -98,7 +97,7 @@ const Module = () => {
                     <Typography variant="body1" sx={{ marginLeft: "5px" }}>
                       {openedCards >= index && module.completed_portion !== ""
                         ? `${module.completed_portion}%`
-                        : module.completed_portion !== "" && "Not Started"}
+                        : module.completed_portion !== "" && ""}
                     </Typography>
                   </Box>
                 </Grid>
@@ -120,7 +119,9 @@ const Module = () => {
                     ) : module.button_type === "project_topic" ? (
                       "Share Project Topic"
                     ) : (
-                      "Learn on Meraki"
+                      <>
+                        Learn on Meraki <LaunchIcon />
+                      </>
                     )
                   ) : (
                     <>
