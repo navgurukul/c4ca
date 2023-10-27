@@ -65,14 +65,13 @@ const ProfileForm = () => {
       .then((res) => {
         if (res.data.data !== null) {
           setExistingData(true);
-          console.log("ites herel....", res);
-          localStorage.setItem("teacherData", JSON.stringify(res.data.data));
           setFormData({
             phone_number: res.data.data.phone_number,
             school: res.data.data.school,
             district: res.data.data.district,
             state: res.data.data.state,
-            profile_url: res.data.data.profile_url,
+            profile_url:
+              res.data.data.profile_url || res.data.data.profile_link,
           });
           setUserData({
             ...userData,
@@ -91,6 +90,10 @@ const ProfileForm = () => {
               setUserData({
                 name: response.data.user.name,
                 email: response.data.user.email,
+              });
+              setFormData({
+                ...formData,
+                profile_url: response.data?.user?.profile_picture,
               });
             })
             .catch((error) => {
@@ -118,7 +121,7 @@ const ProfileForm = () => {
   const handleSaveProfile = () => {
     // Create a FormData object to send the image
     const profileData = new FormData();
-    profileData.append("profile_url", selectedImage); // Add the selected image
+    profileData.append("profile_url", selectedImage || formData.profile_url); // Add the selected image
     profileData.append("name", userData.name);
     profileData.append("email", userData.email);
     profileData.append("phone_number", formData.phone_number);
@@ -137,6 +140,10 @@ const ProfileForm = () => {
       })
       .then((response) => {
         if (response.data.data) {
+          localStorage.setItem(
+            "teacherData",
+            JSON.stringify(response.data.data)
+          );
           setActiveStep(1);
         }
       })
@@ -164,7 +171,7 @@ const ProfileForm = () => {
         sx={{ display: "grid", placeItems: "center", gap: 4 }}
       >
         {partner_id && (
-          <Box  sx={{ width: isMobile ? "100%" : "35%" }}>
+          <Box sx={{ width: isMobile ? "100%" : "35%" }}>
             <Stepper activeStep={activeStep}>
               {steps.map((label, index) => (
                 <Step key={label}>
