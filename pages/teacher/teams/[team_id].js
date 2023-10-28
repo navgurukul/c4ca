@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import axios from "axios";
+// import axios from "axios";
+
+import customAxios from "../../../api"; // Import your custom Axios instance
 import {
   Container,
   Card,
@@ -21,6 +23,8 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 const TeamDetail = () => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
+  const [projectTopic, setProjectTopic] = useState(null);
+  const [projectStatus, setProjectStatus] = useState(null);
 
   const params = useParams();
 
@@ -45,9 +49,9 @@ const TeamDetail = () => {
 
   useEffect(() => {
     if (!params?.team_id) return;
-    const apiUrl = `https://merd-api.merakilearn.org/c4ca/team/${params?.team_id}`;
+    const apiUrl = `/c4ca/team/${params?.team_id}`;
 
-    axios
+    customAxios
       .get(apiUrl)
       .then((response) => {
         setData(response.data.data);
@@ -58,6 +62,29 @@ const TeamDetail = () => {
       });
   }, [params]);
   const teamMemberData = data.team_members || [];
+
+  useEffect(() => {
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    console.log("authToken", authToken);
+    customAxios
+      .get("/c4ca/projectTopic", {
+        headers: {
+          Authorization: authToken.token,
+        },
+      })
+      .then((response) => {
+        console.log("Success fetching data:", response);
+        setProjectTopic(response.data);
+        // if (response.data && response.data.data !== null) {
+        //   setProjectStatus("Submitted");
+        // } else {
+        //   setProjectStatus("To be Submitted");
+        // }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 10 }}>
@@ -187,13 +214,30 @@ const TeamDetail = () => {
           <Divider variant="middle" color="#DEDEDE" alignItems="flex-start" />
           <Box ml={2}>
             <Grid container sx={{ mb: "16px", mt: "32px" }}>
-              <Typography variant="subtitle1" sx={{ display: "flex", mr: 2 }}>
+              {/* <Typography variant="subtitle1" sx={{ display: "flex", mr: 2 }}>
                 Project Status:
               </Typography>
               <FiberManualRecordIcon color="success" sx={{ mr: 1 }} />
-              <Typography variant="body1">Submitted</Typography>
+              <Typography variant="body1">Submitted</Typography> */}
+              {/* <Typography variant="subtitle1">
+              Project Status: {projectTopic && projectTopic.data !== null ? 'Submitted' : 'To be Submitted'}
+              </Typography> */}
+
+              <Typography variant="body1" color={getStatusColor()}>
+                {projectTopic && projectTopic.data !== null ? (
+                  <>
+                    <FiberManualRecordIcon sx={{ mr: 1 }} />
+                    Project Status: Submitted
+                  </>
+                ) : (
+                  <>
+                    <FiberManualRecordIcon sx={{ mr: 1 }} />
+                    Project Status: To be Submitted
+                  </>
+                )}
+              </Typography>
             </Grid>
-            <Grid container mb="32px">
+            {/* <Grid container mb="32px">
               <Typography
                 variant="body1"
                 component="div"
@@ -210,7 +254,7 @@ const TeamDetail = () => {
                   </Typography>
                 </Link>
               </Typography>
-            </Grid>
+            </Grid> */}
           </Box>
         </Grid>
         <Grid item xs={12} md={4} lg={4} mt={9}>
