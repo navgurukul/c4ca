@@ -5,6 +5,7 @@ export default async function middleware(req) {
   const loggedIn = req.cookies.has("user");
   const openRoutes = ["/login"];
   const handlePage = pathname.split("/")[1];
+  console.log( "handlePager" ,handlePage);
   const user = req.cookies.get("user");
   if (pathname == "/" && loggedIn) {
     if (JSON.parse(user.value).role == "teacher") {
