@@ -1,4 +1,5 @@
 import Head from "next/head";
+import * as React from 'react';
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/theme/theme";
@@ -9,9 +10,16 @@ import "@/styles/globals.css";
 import Header from "@/components/header/Header";
 import "../styles/app.css";
 import { Typography } from "@mui/material";
-
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from '@mui/material/Alert';
 import { redirect, useSearchParams } from "next/navigation";
+import customAxios from "@/api";
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function App({ Component, pageProps }) {
+  
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [showComponent, setShowComponent] = useState(true);
@@ -25,28 +33,43 @@ export default function App({ Component, pageProps }) {
   };
 
   const searchParams = useSearchParams();
-  const partner_id = searchParams.get("partner_id");
+  const [open, setOpen] = useState(false);
+  // const [partner_id, setPartner_id] = useState("");
+  let partner_id = "";
   const [error, setError] = useState("");
   const [cookie, setCookie] = useCookies(["user"]);
   const { token } = router.query;
 
   function reverseJwtBody(jwt) {
-    const [header, body, signature] = jwt.split('.');
-    const reversedBody = body.split('').reverse().join('');
-    return [header, reversedBody, signature].join('.');
+    const [header, body, signature] = jwt.split(".");
+    const reversedBody = body.split("").reverse().join("");
+    return [header, reversedBody, signature].join(".");
   }
+
+  const handleClose = (event) => {
+     const { reason } = event??{};
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+  
+
 
   const sendGoogleUserData = (token) => {
     setLoading(true);
-    return axios({
-      url: `https://merd-api.merakilearn.org/users/auth/google`,
-      method: "post",
-      headers: { accept: "application/json", Authorization: token },
-      data: { idToken: token, mode: "web" },
-    })
+   customAxios
+      .post(
+        "/users/auth/google",
+        { idToken: token, mode: "web" },
+        {
+          headers: { Authorization: token },
+        }
+      )
       .then((res) => {
-        axios
-          .get("https://merd-api.merakilearn.org/c4ca/teacher_Data", {
+          customAxios
+          .get("/c4ca/teacher_Data", {
             headers: {
               accept: "application/json",
               Authorization: res.data.token,
@@ -55,7 +78,7 @@ export default function App({ Component, pageProps }) {
           .then((resp) => {
             if (resp.data.data === null) {
               setLoading(false);
-              if (partner_id) {
+              if (partner_id && partner_id !== "null") {
                 res.data.role = "teacher";
                 localStorage.setItem("AUTH", JSON.stringify(res.data));
                 setCookie("user", JSON.stringify(res.data), {
@@ -65,7 +88,9 @@ export default function App({ Component, pageProps }) {
                 });
                 return router.push(`/teacher/profile?partner_id=${partner_id}`);
               } else {
-                return setError(
+                return setOpen(true);
+                
+                setError(
                   "Apologies, the entered Gmail ID is not linked with a C4CA partner."
                 );
               }
@@ -86,7 +111,7 @@ export default function App({ Component, pageProps }) {
 
                 setTimeout(() => {
                   setLoading(false);
-                }, 1000);
+                }, 1500);
                 return router.push("/teacher/teams");
               }
               // Only redirect if the request is successful
@@ -107,7 +132,8 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-
+    // setPartner_id(localStorage.getItem("partner_id"));
+    partner_id = localStorage.getItem("partner_id");
     let tokenVal = urlParams?.get("token");
     if (tokenVal) {
       setLoading(true);
@@ -143,6 +169,16 @@ export default function App({ Component, pageProps }) {
               {error}
             </Typography>
           )}
+
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert
+              onClose={handleClose}
+              severity="error"
+              sx={{ width: "100%" }}
+            >
+            Apologies, the entered Gmail ID is not linked with a C4CA partner.
+            </Alert>
+          </Snackbar>
 
           {loading ? (
             <div class="loading-container">

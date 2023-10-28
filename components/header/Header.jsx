@@ -29,6 +29,10 @@ const Header = () => {
   }, [loggedOut, isFirstLogin]);
 
   useEffect(() => {
+
+    const partnerId =  new URLSearchParams(window.location.search)?.get("partner_id");
+    partnerId && localStorage.setItem("partner_id", partnerId);
+
     const authToken = JSON.parse(localStorage.getItem("teacherData"));
     setUser(authToken);
     const data = JSON.parse(localStorage.getItem("AUTH"));
@@ -70,6 +74,7 @@ const Header = () => {
     localStorage.removeItem("AUTH");
     localStorage.removeItem("user");
     localStorage.removeItem("teacherData")
+    localStorage.removeItem("partner_id")
     localStorage.removeItem("ally-supports-cache")
     localStorage.removeItem("token")
     localStorage.setItem("loggedOut", true);
