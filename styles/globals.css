@@ -284,6 +284,33 @@ textarea{
 }
 
 
+/* Partner dashboard */
+
+
+.dashboardContainer{
+  width: 1108px;
+  margin: 0 auto;
+  height: 197px;
+  margin-top: 63px;
+  border: 0.002px solid white;
+}
+
+.InfoBox{
+  width: 281px;
+  height: 137px;
+  border: 1.005px solid var(--grey-400, #949494);
+  border-radius: 8px;
+  margin-top: 32px;
+  padding: 24px;
+}
+
+ .InfoTextStyle{
+  color: var(--text-secondary, #6D6D6D);
+  text-align: left;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 500;
+};
 
 #link {
   color: #e45635;

@@ -50,7 +50,6 @@ const TeamDetail = () => {
     axios
       .get(apiUrl)
       .then((response) => {
-        console.log("hey bhagwan", response.data);
         setData(response.data.data);
       })
       .catch((err) => {
@@ -157,14 +156,14 @@ const TeamDetail = () => {
               </Typography>
               <CircularProgress
                 variant="determinate"
-                value={100}
+                value={data.completed_portion}
                 color="success"
                 size={25}
                 thickness={6}
                 sx={{ mr: 1 }}
               />
               <Typography variant="body1" mr={3}>
-                {100} %
+                {data.completed_portion}%
               </Typography>
             </Grid>
             <Grid container mb="32px">
@@ -236,7 +235,7 @@ const TeamDetail = () => {
                     spacing={3}
                     sx={{ display: "flex", alignItems: "flex-end" }}
                   >
-                     <img src="/assets/Student.svg" alt="Team Image" />
+                    <img src="/img.svg" alt="Team Image" />
                     <Typography variant="body1" sx={{ ml: 2 }}>
                       {teamMemberData.length}
                     </Typography>

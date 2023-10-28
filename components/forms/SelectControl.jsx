@@ -60,6 +60,7 @@ const CustomSelect = styled(Select)`
 `;
 
 const SelectControl = (props) => {
+  const { error } = props;
   return (
     <Box sx={{ display: "grid" }}>
       {props.label && (
@@ -71,15 +72,17 @@ const SelectControl = (props) => {
         {props.label && <InputLabel>{props.label}</InputLabel>}
         <CustomSelect {...props}>
           {props.options.map((option, index) => (
-            <MenuItem
-              key={index}
-              value={option.value}
-            >
+            <MenuItem key={index} value={option.value}>
               {option.label}
             </MenuItem>
           ))}
         </CustomSelect>
       </FormControl>
+      {error && (
+        <Typography variant="caption" color="error">
+          {error}
+        </Typography>
+      )}
     </Box>
   );
 };

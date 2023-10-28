@@ -5,14 +5,17 @@ import {
   ButtonGroup,
   Menu,
   MenuItem,
+  useMediaQuery,
   Stack,
   Typography,
+  Divider,
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import * as React from "react";
 import { useCookies } from "react-cookie";
+import { breakpoints } from "@/theme/constant";
 
 const Header = () => {
   const router = useRouter();
@@ -23,6 +26,8 @@ const Header = () => {
   const [authData, setAuthData] = useState({});
 
   const [reloadCount, setReloadCount] = useState(0);
+  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
+
   useEffect(() => {
     setIsFirstLogin(localStorage.getItem("isFirstLogin"));
     setLoggedOut(localStorage.getItem("loggeOut"));
@@ -37,7 +42,7 @@ const Header = () => {
     setUser(authToken);
     const data = JSON.parse(localStorage.getItem("AUTH"));
     setAuthData(data);
-  }, []);
+  }, [router.pathname]);
 
   useEffect(() => {
     const handleRouteChange = () => {
@@ -87,9 +92,11 @@ const Header = () => {
   return (
     <>
       <header className="header">
-        <Link href={"/"}>
-          <img src="/c4ca.svg" alt="c4ca_logo" />
-        </Link>
+        {!isMobile && (
+          <Link href={"/"}>
+            <img src="/c4ca.svg" alt="c4ca_logo" />
+          </Link>
+        )}
 
         {router.pathname === "/" && user == null ? (
           <Stack spacing={2} direction="row">
@@ -125,47 +132,55 @@ const Header = () => {
             </Link>
           </Stack>
         ) : (
-          <Box>
-            <div>
-              <Button
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-              >
-                <Avatar src={user?.profile_url}>
-                  {authData?.data?.team_name?.split(" ")[0]?.charAt(0)}
-                  {authData?.data?.team_name?.split(" ")[1]?.charAt(0)}
-                </Avatar>
-              </Button>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                <MenuItem
-                  onClick={() => {
-                    handleClose();
-                    router.push(
-                      authData.role == "teacher"
-                        ? "/teacher/profile"
-                        : "/student/team-profile"
-                    );
+          <>
+            {isMobile && (
+              <Link href={"/"}>
+                <img src="/CCA_Logo.svg" alt="CCA_Logo" />
+              </Link>
+            )}
+            <Box>
+              <div>
+                <Button
+                  id="basic-button"
+                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={handleClick}
+                >
+                  <Avatar src={user?.profile_url || user?.profile_link}>
+                    {authData?.data?.team_name?.split(" ")[0]?.charAt(0)}
+                    {authData?.data?.team_name?.split(" ")[1]?.charAt(0)}
+                  </Avatar>
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
                   }}
                 >
-                  Profile
-                </MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
-            </div>
-          </Box>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      router.push(
+                        authData.role == "teacher"
+                          ? "/teacher/profile"
+                          : "/student/team-profile"
+                      );
+                    }}
+                  >
+                    Profile
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </div>
+            </Box>
+          </>
         )}
       </header>
+      {isMobile && <Divider />}
     </>
   );
 };

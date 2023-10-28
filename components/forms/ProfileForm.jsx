@@ -16,6 +16,7 @@ import {
   Stepper,
   Step,
   StepLabel,
+  CircularProgress,
 } from "@mui/material";
 import { Camera } from "@mui/icons-material";
 import Link from "next/link";
@@ -47,10 +48,11 @@ const ProfileForm = () => {
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
-
+  const [errors, setErrors] = useState({});
   useEffect(() => {
     const stateNames = Object.keys(jsonData);
     setStates(stateNames);
@@ -65,14 +67,13 @@ const ProfileForm = () => {
       .then((res) => {
         if (res.data.data !== null) {
           setExistingData(true);
-          console.log("ites herel....", res);
-          localStorage.setItem("teacherData", JSON.stringify(res.data.data));
           setFormData({
             phone_number: res.data.data.phone_number,
             school: res.data.data.school,
             district: res.data.data.district,
             state: res.data.data.state,
-            profile_url: res.data.data.profile_url,
+            profile_url:
+              res.data.data.profile_url || res.data.data.profile_link,
           });
           setUserData({
             ...userData,
@@ -87,10 +88,14 @@ const ProfileForm = () => {
               },
             })
             .then((response) => {
-              console.log(response, "resp....");
+              console.log("res", response, "resp....");
               setUserData({
                 name: response.data.user.name,
                 email: response.data.user.email,
+              });
+              setFormData({
+                ...formData,
+                profile_url: response.data?.user?.profile_picture,
               });
             })
             .catch((error) => {
@@ -103,6 +108,10 @@ const ProfileForm = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    if (name === "phone_number" && value.length > 10) {
+      return;
+    }
+
     setFormData({
       ...formData,
       [name]: value,
@@ -117,33 +126,77 @@ const ProfileForm = () => {
   const [existingData, setExistingData] = useState(false);
 
   const handleSaveProfile = () => {
-    // Create a FormData object to send the image
-    const profileData = new FormData();
-    profileData.append("profile_url", selectedImage); // Add the selected image
-    profileData.append("name", userData.name);
-    profileData.append("email", userData.email);
-    profileData.append("phone_number", formData.phone_number);
-    profileData.append("school", formData.school);
-    profileData.append("district", formData.district);
-    profileData.append("state", formData.state);
+    setIsLoading(true);
 
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
 
-    customAxios
-      .post("/c4ca/teacher_profile", profileData, {
-        headers: {
-          Authorization: `Bearer ${authToken.token}`,
-          "Content-Type": "multipart/form-data", // Set the content type for FormData
-        },
-      })
-      .then((response) => {
-        if (response.data.data) {
-          setActiveStep(1);
-        }
-      })
-      .catch((error) => {
-        console.error("Error saving profile data:", error);
-      });
+    clearErrors();
+    if (validateInputs()) {
+      // Create a FormData object to send the image
+      const profileData = new FormData();
+      profileData.append("profile_url", selectedImage || formData.profile_url); // Add the selected image
+      profileData.append("name", userData.name);
+      profileData.append("email", userData.email);
+      profileData.append("phone_number", formData.phone_number);
+      profileData.append("school", formData.school);
+      profileData.append("district", formData.district);
+      profileData.append("state", formData.state);
+
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+
+      customAxios
+        .post("/c4ca/teacher_profile", profileData, {
+          headers: {
+            Authorization: `Bearer ${authToken.token}`,
+            "Content-Type": "multipart/form-data", // Set the content type for FormData
+          },
+        })
+        .then((response) => {
+          if (response.data.data) {
+            localStorage.setItem(
+              "teacherData",
+              JSON.stringify(response.data.data)
+            );
+            setActiveStep(1);
+          }
+        })
+        .catch((error) => {
+          console.error("Error saving profile data:", error);
+        });
+    }
+  };
+  const validateInputs = () => {
+    const newErrors = {};
+
+    if (!selectedImage && formData.profile_url == "") {
+      newErrors.profileImage = "Please select a profile image.";
+    }
+
+    if (!formData.phone_number || formData.phone_number.length !== 10) {
+      newErrors.phone_number = "Please enter a valid 10-digit phone number.";
+    }
+
+    if (!formData.school) {
+      newErrors.school = "School is required.";
+    }
+
+    if (!formData.state) {
+      newErrors.state = "Please select a State.";
+    }
+
+    if (!formData.district) {
+      newErrors.district = "Please select a District.";
+    }
+
+    setErrors(newErrors);
+    console.log(Object.keys(newErrors).length === 0, newErrors, formData);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const clearErrors = () => {
+    setErrors({});
   };
 
   useEffect(() => {
@@ -165,7 +218,7 @@ const ProfileForm = () => {
         sx={{ display: "grid", placeItems: "center", gap: 4 }}
       >
         {partner_id && (
-          <Box  sx={{ width: isMobile ? "100%" : "35%" }}>
+          <Box sx={{ width: isMobile ? "100%" : "35%" }}>
             <Stepper activeStep={activeStep}>
               {steps.map((label, index) => (
                 <Step key={label}>
@@ -194,7 +247,12 @@ const ProfileForm = () => {
             <Container maxWidth="sm" sx={{ display: "grid", gap: 4 }}>
               <Box className="AvatarBox">
                 <label htmlFor="image-input">
-                  {selectedImage ? (
+                  {isLoading ? (
+                    <CircularProgress
+                      size="sm"
+                      sx={{ width: "100%", height: "100%", color: "gray" }}
+                    />
+                  ) : selectedImage ? (
                     <Avatar
                       src={URL.createObjectURL(selectedImage)}
                       sx={{ width: "100%", height: "100%" }}
@@ -210,6 +268,7 @@ const ProfileForm = () => {
                 <input
                   id="image-input"
                   type="file"
+                  disabled={!partner_id}
                   accept="image/*"
                   onChange={handleImageChange}
                   style={{ display: "none" }}
@@ -219,6 +278,7 @@ const ProfileForm = () => {
               <InputControl
                 label="Full Name"
                 type="text"
+                disabled
                 placeholder="Enter Your Name"
                 value={userData.name || formData.name}
               />
@@ -226,6 +286,7 @@ const ProfileForm = () => {
               <InputControl
                 label="Email Address"
                 type="email"
+                disabled
                 placeholder="Enter Email Address"
                 value={userData.email || formData.email}
               />
@@ -237,6 +298,8 @@ const ProfileForm = () => {
                 name="phone_number"
                 value={formData?.phone_number}
                 onChange={handleInputChange}
+                disabled={!partner_id}
+                error={errors.phone_number}
               />
 
               <InputControl
@@ -246,6 +309,8 @@ const ProfileForm = () => {
                 name="school"
                 value={formData?.school}
                 onChange={handleInputChange}
+                disabled={!partner_id}
+                error={errors.school}
               />
 
               <Box>
@@ -258,12 +323,16 @@ const ProfileForm = () => {
                     >
                       Select State
                     </Typography>
-                    <FormControl style={{ borderColor: "black" }} fullWidth>
-                      {/* <InputLabel id="state">Select State</InputLabel> */}
+                    <FormControl
+                      style={{ borderColor: "black" }}
+                      sx={{ mb: 1 }}
+                      fullWidth
+                    >
                       <Select
                         style={{ borderRadius: 100 }}
                         labelId="state"
                         id="state"
+                        disabled={!partner_id}
                         name="state"
                         value={formData?.state}
                         onChange={handleInputChange}
@@ -275,6 +344,11 @@ const ProfileForm = () => {
                         ))}
                       </Select>
                     </FormControl>
+                    {errors.state && (
+                      <Typography variant="caption" color="error">
+                        {errors.state}
+                      </Typography>
+                    )}
                   </Grid>
                   <Grid item md={6} sm={6} xs={12}>
                     <Typography
@@ -284,13 +358,13 @@ const ProfileForm = () => {
                     >
                       District
                     </Typography>
-                    <FormControl fullWidth>
-                      {/* <InputLabel id="district">Select District</InputLabel> */}
+                    <FormControl fullWidth sx={{ mb: 1 }}>
                       <Select
                         style={{ borderRadius: 100 }}
                         labelId="district"
                         id="district"
                         name="district"
+                        disabled={!partner_id}
                         value={formData?.district}
                         onChange={handleInputChange}
                       >
@@ -301,6 +375,11 @@ const ProfileForm = () => {
                         ))}
                       </Select>
                     </FormControl>
+                    {errors.district && (
+                      <Typography variant="caption" color="error">
+                        {errors.district}
+                      </Typography>
+                    )}
                   </Grid>
                 </Grid>
               </Box>
@@ -312,7 +391,12 @@ const ProfileForm = () => {
             ) : (
               <Button
                 className="profileBtn"
-                onClick={() => router.push("/teacher/teams")}
+                onClick={() => {
+                  if (validateInputs()) {
+                    router.push("/teacher/teams");
+                  }
+                }}
+                // onClick={() => router.push("/teacher/teams")}
               >
                 <Typography variant="ButtonLarge">Go To Dashboard</Typography>
               </Button>

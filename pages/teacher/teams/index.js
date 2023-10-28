@@ -41,6 +41,7 @@ const TeacherDashboard = () => {
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
+    console.log('refreshing....', teacherId, authToken);
     if (teacherId && authToken) {
       customAxios
         .get(`/c4ca/teams/${teacherId}`, {
@@ -49,6 +50,7 @@ const TeacherDashboard = () => {
           },
         })
         .then((response) => {
+          console.log('response', response);
           setTeams(response.data);
         });
     }
@@ -97,7 +99,7 @@ const TeacherDashboard = () => {
                       {team.team_name}
                     </Typography>
                   </Link>
-                  <EditOutlined style={{ color: "gray" }} />
+                  {/* <EditOutlined style={{ color: "gray" }} /> */}
                 </Box>
                 <Box
                   sx={{
@@ -112,12 +114,12 @@ const TeacherDashboard = () => {
                   </Typography>
                   <CircularProgress
                     variant="determinate"
-                    value={team.course_progress || 10}
+                    value={team.completed_portion}
                     size={20}
                     thickness={6}
                     color="typhoon"
                   />{" "}
-                  <Typography>{team.course_progress || 0}%</Typography>
+                  <Typography>{team.completed_portion }%</Typography>
                 </Box>
                 {showLoginDetails[team.id] && (
                   <div>
@@ -136,7 +138,7 @@ const TeacherDashboard = () => {
                         sx={{ fontSize: 15 }}
                         onClick={() =>
                           navigator.clipboard.writeText(
-                            `User ID: ${team.login_id}\nPassword: ${team.password}}`
+                            `User ID: ${team.login_id}\nPassword: ${team.password}`
                           )
                         }
                         variant="text"
