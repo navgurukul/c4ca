@@ -50,6 +50,7 @@ const TeacherDashboard = () => {
           },
         })
         .then((response) => {
+          console.log('response', response);
           setTeams(response.data);
         });
     }
@@ -80,7 +81,7 @@ const TeacherDashboard = () => {
           sx={{ paddingY: 8, padding: 4 }}
           spacing={isMobile ? 4 : 6}
         >
-          {teams?.map((team) => (
+          {teams.map((team) => (
             <Grid item md={4} sm={6} xs={12} key={team.id}>
               <Box
                 sx={{
@@ -113,12 +114,12 @@ const TeacherDashboard = () => {
                   </Typography>
                   <CircularProgress
                     variant="determinate"
-                    value={team.course_progress || 10}
+                    value={team.completed_portion}
                     size={20}
                     thickness={6}
                     color="typhoon"
                   />{" "}
-                  <Typography>{team.course_progress || 0}%</Typography>
+                  <Typography>{team.completed_portion }%</Typography>
                 </Box>
                 {showLoginDetails[team.id] && (
                   <div>
