@@ -7,11 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Typography, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
-// import showToast from "../showToast";
-import PartnerUpdateModal from "./PartnerAddModal"
-// import { useRemovePartnerMutation } from "../../store";
-import { useRouter } from 'next/router';
-
+import { useRouter } from "next/router";
 
 const getMuiTheme = () =>
   createTheme({
@@ -63,12 +59,24 @@ let btnsContainerStyles = {
   justifyContent: "flex-end",
 };
 
-const PartnerTable = ({data}) => { 
-  let partnerId = "";
+const FacilatorTable = ({ data }) => {
+  console.log(data);
+
+  const router = useRouter();
+  const { id } = router.query;
+
+  let facilitatorId = "";
+  const handleRowClick = (event, dataIndex) => {
+    facilitatorId = data[dataIndex.dataIndex].id;
+    console.log("facilitatorId", facilitatorId);
+    console.log(router.query);
+    router.push(`/partner/teacherList/${facilitatorId}`);
+  };
+
   const columns = [
     {
       name: "name",
-      label: "Partner Name",
+      label: "Name",
       options: {
         filter: false,
         sort: false,
@@ -78,47 +86,29 @@ const PartnerTable = ({data}) => {
       },
     },
     {
-      name: "point_of_contact_name",
-      label: "Point of Contact",
-      options: {
-        filter: false,
-        sort: false,
-        customCellClass: "custom-cell",
-      },
-    },
-    {
       name: "email",
       label: "Email",
       options: {
         filter: false,
-        sort: false,
+        sort: true,
         customCellClass: "custom-cell",
       },
     },
     {
-        name: "phone_number",
-        label: "Phone Number",
-        options: {
-          filter: false,
-          sort: false,
-          customCellClass: "custom-cell",
-        },
+      name: "phone_number",
+      label: "Phone Number",
+      options: {
+        filter: false,
+        sort: true,
+        customCellClass: "custom-cell",
       },
+    },
     {
-      name: "salary",
+      name: "user",
       label: "Number of Students",
       options: {
         filter: false,
-        sort: false,
-        customCellClass: "custom-cell",
-      },
-    },
-    {
-      name: "status",
-      label: "Status",
-      options: {
-        filter: false,
-        sort: false,
+        sort: true,
         customCellClass: "custom-cell",
       },
     },
@@ -134,7 +124,7 @@ const PartnerTable = ({data}) => {
           color: "red",
         },
         customBodyRender: (_, tableMeta) => {
-          partnerId = data[tableMeta.rowIndex].id;
+          facilitatorId = data[tableMeta.rowIndex].id;
           const partneredit = data[tableMeta.rowIndex];
           return (
             <div style={btnsContainerStyles}>
@@ -155,29 +145,17 @@ const PartnerTable = ({data}) => {
     },
   ];
 
-  const handleDeleteClick = (partnerId) => {
-    removePartner(partnerId);
-  };
-
-  const handleEditClick = (partnerId) => {
-    setOpen(!open);
-    setUpdateData(partnerId);
-  };
-
-  const handleEditButtonClick = (partneredit, event) => {
-    event.stopPropagation(); // Stop the event propagation to prevent handleRowClick from being called
-    handleEditClick(partneredit);
-  };
-
-  const router = useRouter();  
-
-  const handleRowClick = (event, dataIndex) => {
-    partnerId = data[dataIndex.dataIndex].id;
-    router.push(`partnerDashboard/facilitator/${partnerId}`);
-  };
-
   return (
     <Box>
+      <Typography
+        style={{
+          fontFamily: "Amazon Ember Display",
+          fontSize: "24px",
+          fontWeight: "800px",
+        }}
+      >
+        Facilitator List
+      </Typography>
       <div
         style={{
           overflowX: "hidden",
@@ -186,7 +164,6 @@ const PartnerTable = ({data}) => {
       >
         <ThemeProvider theme={getMuiTheme}>
           <MUIDataTable
-            
             data={data}
             columns={columns}
             options={{ ...options, onRowClick: handleRowClick }}
@@ -197,4 +174,4 @@ const PartnerTable = ({data}) => {
   );
 };
 
-export default PartnerTable;
+export default FacilatorTable;

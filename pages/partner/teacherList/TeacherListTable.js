@@ -112,7 +112,7 @@ function TeachersList({ filteredTeacher }) {
 
   const handleRowClick = (event, dataIndex) => {
     // partnerId = data[dataIndex.dataIndex].id;
-    router.push(`/partnerDashboard/teacherList/Progress`);
+    router.push(`/partner/teacherList/Progress`);
   };
 
 
