@@ -56,8 +56,7 @@ const TeacherDashboard = () => {
           setTimeout(() => {
             setLoading(false);
           }, 500);
-          console.log("response", response);
-          setTeams(response.data);
+          setTeams(response.data.data);
         })
         .catch((err) => {
           console.log(err);
