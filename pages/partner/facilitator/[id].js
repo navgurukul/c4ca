@@ -40,6 +40,31 @@ const FacilatorHome = () => {
     }
   }, [id]);
 
+  //fetching the total data
+  useEffect(() => {
+    const apiUrl = `https://merd-api.merakilearn.org/c4ca/totalData?partner_id=${id}`;
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
+    axios
+      .get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const partnerList = response.data.partners;
+        if (partnerList !== undefined) {
+          setAllPartner(partnerList); 
+          console.log(partnerList);
+        } else {
+          console.error("Data is undefined.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
   return (
     <Box className="dashboardContainer">
       <MyBreadcrumbs />

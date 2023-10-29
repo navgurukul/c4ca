@@ -11,11 +11,10 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
   console.log(typeof id);
   const [values, setValues] = useState({
     name: "",
-    email: "",
-    phone_number: "",
     point_of_contact: "string",
-    teacher_invite_link: "link",
-    partner_id: Number(id),
+    email: "", 
+    c4ca_partner_id: Number(id),
+    phone_number: "",
   });
 
   const createNewFacilitator = (values) => {

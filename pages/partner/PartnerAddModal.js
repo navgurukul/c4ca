@@ -19,16 +19,16 @@ import axios from "axios";
 
 function PartnerAddModal({ boolean, onOpen }) {
   const [values, setValues] = useState({
+ 
     name: "",
-    point_of_contact_name: "",
+    point_of_contact: "",
     email: "",
-    phone_number: "",
-    platform:"c4ca"
+    phone_number: "", 
   });
 
   const createNewPartner = (values) => {
     const apiUrl =
-      "https://merd-api.merakilearn.org/partners/create/newpartner";
+      "https://merd-api.merakilearn.org/c4caPartners";
     const headers = {
       Authorization:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA", // Replace with your actual access token
@@ -58,7 +58,7 @@ function PartnerAddModal({ boolean, onOpen }) {
   const handleSubmit = () => {
     if (
       !values.name.trim() ||
-      !values.point_of_contact_name.trim() ||
+      !values.point_of_contact.trim() ||
       !values.email.trim() ||
       !values.phone_number.trim()
     ) {
@@ -118,8 +118,8 @@ function PartnerAddModal({ boolean, onOpen }) {
           <TextField
             margin="dense"
             label="Point of Contact Name"
-            name="point_of_contact_name"
-            value={values.point_of_contact_name}
+            name="point_of_contact"
+            value={values.point_of_contact}
             onChange={handleChange}
             fullWidth
             InputProps={{

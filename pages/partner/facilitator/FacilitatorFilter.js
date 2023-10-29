@@ -64,46 +64,8 @@ function FacilitatorFilter({ data,id }) {
     return filterData;
   }
 
-  // function handleFilterClick(data, selectedTerm) {
-  //   let filterData = [];
-  //   console.log(`Selected filter term: ${selectedTerm}`);
-  //   if (selectedTerm === "All Partners") {
-  //     return data;
-  //   } else {
-  //     filterData = data.filter((item) => item.status === selectedTerm);
-  //     console.log(filterData, "filterData");
-  //     return filterData;
-  //   }
-  // }
-
-  // const filterButtons = filterTerms.map((term) => (
-  //   <Button
-  //     key={term}
-  //     sx={{
-  //       mr: 2,
-  //       borderRadius: "18px",
-  //       borderColor: "#DCDCDC",
-  //       p: "12px",
-  //       border: "1px solid lightBlue",
-  //     }}
-  //     onClick={() => handleFilterClick(data,term)}
-  //   >
-  //     <Typography variant="body2">{term}</Typography>
-  //   </Button>
-  // ));
-
-  // const handleSearch = (event) => {
-  //   const query = event.target.value.toLowerCase();
-  //   setSearchTerm(query);
-
-  //   const filteredResults = data.filter((filteredData) => {
-  //     return (
-  //       filteredData.firstName.toLowerCase().includes(query) ||
-  //       filteredData.email.toLowerCase().includes(query)
-  //     );
-  //   });
-  //   setSearchResults(filteredResults);
-  // };
+   
+ 
 
   return (
     <Box sx={{ mt: 8, mb: 2 }}>
