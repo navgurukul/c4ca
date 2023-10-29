@@ -1,7 +1,5 @@
 import { breakpoints } from "@/theme/constant";
-import {
-  OpenInNewOutlined,
-} from "@mui/icons-material";
+import { OpenInNewOutlined } from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import CopyAll from "@mui/icons-material/CopyAll";
@@ -15,6 +13,7 @@ import {
   Dialog,
   DialogContent,
   Grid,
+  Skeleton,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -33,13 +32,14 @@ const TeacherDashboard = () => {
   const [showLoginDetails, setShowLoginDetails] = useState({});
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
+  const [loading, setLoading] = useState(true);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
 
   const refreshTeams = () => {
+    setLoading(true);
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
@@ -53,8 +53,14 @@ const TeacherDashboard = () => {
           },
         })
         .then((response) => {
+          setTimeout(() => {
+            setLoading(false);
+          }, 500);
           console.log("response", response);
           setTeams(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
   };
@@ -92,162 +98,179 @@ const TeacherDashboard = () => {
           sx={{ paddingY: 8, padding: 4 }}
           spacing={isMobile ? 4 : 6}
         >
-          {teams.map((team) => (
-            <Grid item md={4} sm={6} xs={12} key={team.id}>
+          {loading &&
+            [1, 2, 3, 4, 5, 6].map((team) => (
+              <Grid item md={4} sm={6} xs={12} key={team.id}>
+                <Skeleton
+                  variant="rectangular"
+                  width="100%"
+                  height={200}
+                  animation="wave"
+                  style={{ borderRadius: 10 }}
+                />
+              </Grid>
+            ))}
+          {!loading &&
+            teams.map((team) => (
+              <Grid item md={4} sm={6} xs={12} key={team.id}>
+                <Box
+                  sx={{
+                    width: "100%",
+                    border: "2px solid",
+                    borderColor: "lightgray",
+                    padding: 4,
+                    borderRadius: 3,
+                    borderSpacing: "5px",
+                  }}
+                >
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Link href={`/teacher/teams/${team.id}`}>
+                      <Typography variant="subtitle1" color="dark">
+                        {team.team_name}
+                      </Typography>
+                    </Link>
+                    {/* <EditOutlined style={{ color: "gray" }} /> */}
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      marginTop: 2,
+                    }}
+                  >
+                    <Typography variant="body1" color="dark">
+                      Course Progress:
+                    </Typography>
+                    <CircularProgress
+                      variant="determinate"
+                      value={team.completed_portion}
+                      size={20}
+                      thickness={6}
+                      color="typhoon"
+                    />{" "}
+                    <Typography>{team.completed_portion}%</Typography>
+                  </Box>
+                  {showLoginDetails[team.id] && (
+                    <div>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                          alignItems: "center",
+                          marginTop: 2,
+                        }}
+                      >
+                        <Typography variant="subtitle1" color="dark">
+                          Team Login Details
+                        </Typography>
+                        <Button
+                          sx={{ fontSize: 15 }}
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              `User ID: ${team.login_id}\nPassword: ${team.password}`
+                            );
+                            handleSnackbarOpen("Text Copied to Clipboard");
+                          }}
+                          variant="text"
+                        >
+                          <CopyAll style={{ color: "gray" }} /> Copy
+                        </Button>
+                        <Snackbar
+                          open={snackbarOpen}
+                          autoHideDuration={3000} // Adjust as needed
+                          onClose={handleSnackbarClose}
+                        >
+                          <MuiAlert
+                            elevation={6}
+                            variant="filled"
+                            severity="success"
+                            onClose={handleSnackbarClose}
+                          >
+                            {snackbarMessage}
+                          </MuiAlert>
+                        </Snackbar>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          marginTop: 1,
+                        }}
+                      >
+                        <img src="/assets/icon-id.svg" alt="" />
+                        <Typography variant="body2" color="dark">
+                          User ID: {team.login_id}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          marginTop: 1,
+                        }}
+                      >
+                        <img src="/assets/security-password.svg" alt="" />
+                        <Typography variant="body2" color="dark">
+                          Password: {team.password}
+                        </Typography>
+                      </Box>
+                    </div>
+                  )}
+
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowLoginDetails({
+                        ...showLoginDetails,
+                        [team.id]: !showLoginDetails[team.id],
+                      });
+                    }}
+                    size="small"
+                    style={{
+                      height: 35,
+                      borderWidth: 2,
+                      marginLeft: "auto",
+                      marginTop: 20,
+                      fontWeight: 900,
+                    }}
+                    variant="outlined"
+                  >
+                    {showLoginDetails[team.id] ? "Hide" : "Show"} Login ID &
+                    Password
+                  </Button>
+                </Box>
+              </Grid>
+            ))}
+          {!loading && (
+            <Grid item md={4} sm={6} xs={12}>
               <Box
                 sx={{
                   width: "100%",
-                  border: "2px solid",
-                  borderColor: "lightgray",
-                  padding: 4,
+                  placeContent: "center",
+                  border: "2px dashed",
+                  borderBlockEndWidth: "2px 10px",
+                  borderColor: "gray",
+                  padding: 8.5,
                   borderRadius: 3,
+                  textAlign: "center",
                   borderSpacing: "5px",
+                  cursor: "pointer",
                 }}
+                // onClick={handleAddTeam}
+                onClick={handleOpenDialog}
               >
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Link href={`/teacher/teams/${team.id}`}>
-                    <Typography variant="subtitle1" color="dark">
-                      {team.team_name}
-                    </Typography>
-                  </Link>
-                  {/* <EditOutlined style={{ color: "gray" }} /> */}
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    marginTop: 2,
-                  }}
-                >
-                  <Typography variant="body1" color="dark">
-                    Course Progress:
-                  </Typography>
-                  <CircularProgress
-                    variant="determinate"
-                    value={team.completed_portion}
-                    size={20}
-                    thickness={6}
-                    color="typhoon"
-                  />{" "}
-                  <Typography>{team.completed_portion}%</Typography>
-                </Box>
-                {showLoginDetails[team.id] && (
-                  <div>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 1,
-                        alignItems: "center",
-                        marginTop: 2,
-                      }}
-                    >
-                      <Typography variant="subtitle1" color="dark">
-                        Team Login Details
-                      </Typography>
-                      <Button
-                        sx={{ fontSize: 15 }}
-                        onClick={() => {
-                          navigator.clipboard.writeText(
-                            `User ID: ${team.login_id}\nPassword: ${team.password}`
-                          );
-                          handleSnackbarOpen("Text Copied to Clipboard");
-                        }}
-                        variant="text"
-                      >
-                        <CopyAll style={{ color: "gray" }} /> Copy
-                      </Button>
-                      <Snackbar
-                        open={snackbarOpen}
-                        autoHideDuration={3000} // Adjust as needed
-                        onClose={handleSnackbarClose}
-                      >
-                        <MuiAlert
-                          elevation={6}
-                          variant="filled"
-                          severity="success"
-                          onClose={handleSnackbarClose}
-                        >
-                          {snackbarMessage}
-                        </MuiAlert>
-                      </Snackbar>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        marginTop: 1,
-                      }}
-                    >
-                      <img src="/assets/icon-id.svg" alt="" />
-                      <Typography variant="body2" color="dark">
-                        User ID: {team.login_id}
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        marginTop: 1,
-                      }}
-                    >
-                      <img src="/assets/security-password.svg" alt="" />
-                      <Typography variant="body2" color="dark">
-                        Password: {team.password}
-                      </Typography>
-                    </Box>
-                  </div>
-                )}
-
-                <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowLoginDetails({
-                      ...showLoginDetails,
-                      [team.id]: !showLoginDetails[team.id],
-                    });
-                  }}
-                  size="small"
-                  style={{
-                    height: 35,
-                    borderWidth: 2,
-                    marginLeft: "auto",
-                    marginTop: 20,
-                    fontWeight: 900,
-                  }}
-                  variant="outlined"
-                >
-                  {showLoginDetails[team.id] ? "Hide" : "Show"} Login ID &
-                  Password
-                </Button>
+                <AddCircleOutlinedIcon color="primary" />
+                <Typography variant="body1" color="primary">
+                  Add a Team
+                </Typography>
               </Box>
             </Grid>
-          ))}
-          <Grid item md={4} sm={6} xs={12}>
-            <Box
-              sx={{
-                width: "100%",
-                placeContent: "center",
-                border: "2px dashed",
-                borderBlockEndWidth: "2px 10px",
-                borderColor: "gray",
-                padding: 8.5,
-                borderRadius: 3,
-                textAlign: "center",
-                borderSpacing: "5px",
-                cursor: "pointer",
-              }}
-              // onClick={handleAddTeam}
-              onClick={handleOpenDialog}
-            >
-              <AddCircleOutlinedIcon color="primary" />
-              <Typography variant="body1" color="primary">
-                Add a Team
-              </Typography>
-            </Box>
-          </Grid>
+          )}
         </Grid>
 
         {/* Awards and Certifications... */}
