@@ -14,13 +14,13 @@ import {
   Button,
 } from "@mui/material";
 import Chip from "@mui/material/Chip";
-import Link from "@mui/material/Link";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import CopyAll from "@mui/icons-material/CopyAll";
 import Divider from "@mui/material/Divider";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Link from "next/link";
 
 const TeamDetail = () => {
   const [data, setData] = useState({});
@@ -72,31 +72,29 @@ const TeamDetail = () => {
     setSnackbarOpen(false);
   };
 
-
   return (
-    <Container maxWidth="lg" sx={{ mt: 10 }}>
+    <Container maxWidth="lg" sx={{ my: 10 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={7} lg={7}>
-          <Box sx={{ display: "flex", alignItems: "center"}}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <Link href="/teacher/teams" underline="none">
-            <Typography
-              variant="body1"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              {" "}
-              Dashboard{" "}
-            </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  color: "#29458C"
+                }}
+              >
+                Dashboard
+              </Typography>
             </Link>
 
             <Typography
               variant="body1"
               component="span"
-              sx={{ color: "#29458C" }}
             >
-              / {data.team_name}
+              <span>/</span>{data.team_name}
             </Typography>
           </Box>
           <Typography

@@ -38,25 +38,22 @@ const TeamProfile = () => {
         <Avatar
           sx={{
             width: 70,
-
             height: 70,
-            bgcolor: "lightgray",
           }}
         >
-          <span style={{ color: "#192954", fontWeight: 900, fontSize: 25 }}>
+          <span style={{ textTransform: "capitalize", fontWeight: 900, fontSize: 30 }}>
             {team.team_name?.split(" ")[0]?.charAt(0)}
-            {team.team_name?.split(" ")[1]?.charAt(0)}
           </span>
         </Avatar>
         <Typography
-          style={{ textAlign: "left" }}
+          style={{ textAlign: "left", textTransform: 'capitalize' }}
           variant="body1"
           color="primary"
         >
           {team.team_name}
         </Typography>
       </Box>
-      <Typography style={{ textAlign: "left" }} variant="body1" color="gray">
+      <Typography style={{ textAlign: "left" }} variant="body1" color="#212121">
         Note: If any details are incorrect, please reach out to your teacher to
         have them corrected
       </Typography>

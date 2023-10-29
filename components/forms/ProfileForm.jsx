@@ -262,7 +262,7 @@ const ProfileForm = () => {
                       sx={{ width: "100%", height: "100%" }}
                     />
                   )}
-                  <Camera className="Camera" />
+                  {partner_id && <Camera className="Camera" />}
                 </label>
                 <input
                   id="image-input"
