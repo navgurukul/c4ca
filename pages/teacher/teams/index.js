@@ -1,11 +1,10 @@
 import { breakpoints } from "@/theme/constant";
 import {
-  CircleRounded,
-  CopyAll,
-  DataUsage,
-  EditOutlined,
   OpenInNewOutlined,
 } from "@mui/icons-material";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import CopyAll from "@mui/icons-material/CopyAll";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import Team from "../add-team";
 import {
@@ -21,7 +20,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Axios from "axios";
+
 import customAxios from "@/api";
 import Link from "next/link";
 
@@ -31,6 +30,10 @@ const TeacherDashboard = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teams, setTeams] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
+  const [showLoginDetails, setShowLoginDetails] = useState({});
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -41,7 +44,7 @@ const TeacherDashboard = () => {
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
-    console.log('refreshing....', teacherId, authToken);
+    console.log("refreshing....", teacherId, authToken);
     if (teacherId && authToken) {
       customAxios
         .get(`/c4ca/teams/${teacherId}`, {
@@ -50,7 +53,7 @@ const TeacherDashboard = () => {
           },
         })
         .then((response) => {
-          console.log('response', response);
+          console.log("response", response);
           setTeams(response.data);
         });
     }
@@ -65,7 +68,15 @@ const TeacherDashboard = () => {
     refreshTeams();
   };
 
-  const [showLoginDetails, setShowLoginDetails] = useState({});
+  const handleSnackbarOpen = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <>
       <Container
@@ -119,7 +130,7 @@ const TeacherDashboard = () => {
                     thickness={6}
                     color="typhoon"
                   />{" "}
-                  <Typography>{team.completed_portion }%</Typography>
+                  <Typography>{team.completed_portion}%</Typography>
                 </Box>
                 {showLoginDetails[team.id] && (
                   <div>
@@ -136,15 +147,30 @@ const TeacherDashboard = () => {
                       </Typography>
                       <Button
                         sx={{ fontSize: 15 }}
-                        onClick={() =>
+                        onClick={() => {
                           navigator.clipboard.writeText(
                             `User ID: ${team.login_id}\nPassword: ${team.password}`
-                          )
-                        }
+                          );
+                          handleSnackbarOpen("Text Copied to Clipboard");
+                        }}
                         variant="text"
                       >
                         <CopyAll style={{ color: "gray" }} /> Copy
                       </Button>
+                      <Snackbar
+                        open={snackbarOpen}
+                        autoHideDuration={3000} // Adjust as needed
+                        onClose={handleSnackbarClose}
+                      >
+                        <MuiAlert
+                          elevation={6}
+                          variant="filled"
+                          severity="success"
+                          onClose={handleSnackbarClose}
+                        >
+                          {snackbarMessage}
+                        </MuiAlert>
+                      </Snackbar>
                     </Box>
                     <Box
                       sx={{
