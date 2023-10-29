@@ -40,7 +40,7 @@ const FacilatorHome = () => {
     }
   }, [id]);
 
-  //fetching the total data
+  //fetching the total dataa
   useEffect(() => {
     const apiUrl = `https://merd-api.merakilearn.org/c4ca/totalData?partner_id=${id}`;
     const token =
