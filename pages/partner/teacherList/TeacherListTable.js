@@ -43,6 +43,7 @@ const getMuiTheme = () =>
 
 function TeachersList({ filteredTeacher }) {
   console.log(filteredTeacher);
+  let teacherId= "";
   const options = {
     filterType: "checkbox",
     download: true,
@@ -110,9 +111,11 @@ function TeachersList({ filteredTeacher }) {
 
   const router = useRouter();  
 
+  
   const handleRowClick = (event, dataIndex) => {
-    // partnerId = data[dataIndex.dataIndex].id;
-    router.push(`/partner/teacherList/Progress`);
+    teacherId = filteredTeacher[dataIndex.dataIndex].id;
+    console.log(teacherId);
+    router.push(`/partner/progress/${teacherId}`);
   };
 
 

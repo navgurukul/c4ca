@@ -9,16 +9,17 @@ import axios from "axios";
 import FacilitatorFilter from "./FacilitatorFilter";
 
 const FacilatorHome = () => {
-  const router = useRouter();
+  const router = useRouter(); 
   const { id } = router.query;
   const [data, setData] = useState([]);
+  const [partnerName, setPartnerName] = useState();
+  const [totalCountData, settotalCountData] = useState();
 
   useEffect(() => {
     if (id) {
       const apiUrl = `https://merd-api.merakilearn.org/c4ca/facilitator/getByPartnerId/${id}`;
       const token =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-
       axios
         .get(apiUrl, {
           headers: {
@@ -26,10 +27,12 @@ const FacilatorHome = () => {
           },
         })
         .then((response) => {
-          const datae = response?.data?.data;
+          const datae = response?.data?.data?.teachersData;
+          const partnerName = response?.data?.data?.partner_name;
           setData(datae);
           if (datae !== undefined) {
             setData(datae);
+            setPartnerName(partnerName);
           } else {
             console.error("Data is undefined.");
           }
@@ -38,7 +41,7 @@ const FacilatorHome = () => {
           console.error("Error fetching data:", error);
         });
     }
-  }, [id]);
+  }, [id, data]);
 
   //fetching the total dataa
   useEffect(() => {
@@ -52,10 +55,10 @@ const FacilatorHome = () => {
         },
       })
       .then((response) => {
-        const partnerList = response.data.partners;
-        if (partnerList !== undefined) {
-          setAllPartner(partnerList); 
-          console.log(partnerList);
+        const totalData = response?.data?.data;
+        if (totalData !== undefined) {
+          // console.log(totalData);
+          settotalCountData(totalData);
         } else {
           console.error("Data is undefined.");
         }
@@ -63,11 +66,11 @@ const FacilatorHome = () => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []);
+  }, [id]);
 
   return (
     <Box className="dashboardContainer">
-      <MyBreadcrumbs />
+      <MyBreadcrumbs partnerName={partnerName} />
       <Typography
         style={{
           fontSize: "24px",
@@ -76,7 +79,7 @@ const FacilatorHome = () => {
           lineHeight: "75px",
         }}
       >
-        Aarti for Girls
+        {partnerName}
       </Typography>
 
       <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
@@ -85,9 +88,10 @@ const FacilatorHome = () => {
       <Box
         sx={{
           display: "inline",
-          fontSize: "24px",
-          fontWeight: "800",
+          fontSize: "22px",
+          fontWeight: "800px",
           lineHeight: "28px",
+          fontFamily:"Amazon Ember Display"
         }}
       >
         Overview
@@ -97,7 +101,7 @@ const FacilatorHome = () => {
       >
         <Box className="InfoBox centerElements">
           <Typography variant="body1" fontWeight="bold">
-            0
+            {totalCountData?.totalNoOfTeams}
           </Typography>
           <Typography className="InfoTextStyle">
             Total Number of Teams
@@ -105,19 +109,30 @@ const FacilatorHome = () => {
         </Box>
         <Box className="InfoBox centerElements">
           <Typography variant="body1" fontWeight="bold">
-            0
+            {totalCountData?.totalNoOfStundents}
           </Typography>
           <Typography className="InfoTextStyle">Number of Students</Typography>
         </Box>
         <Box className="InfoBox centerElements">
           <Typography variant="body1" fontWeight="bold">
-            0
+            {totalCountData?.totalProjectsSubmitByTeams}
           </Typography>
           <Typography className="InfoTextStyle">
             Total Projects Submitted
           </Typography>
         </Box>
       </Box>
+      <Typography
+        style={{
+          fontFamily: "Amazon Ember Display",
+          fontSize: "20px",
+          fontWeight: "700px",
+          marginTop: "30px",
+          // lineHeight:"70px"
+        }}
+      >
+        Facilitator List
+      </Typography>
       <FacilitatorFilter data={data} id={id} />
     </Box>
   );

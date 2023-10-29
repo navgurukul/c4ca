@@ -13,7 +13,7 @@ import { SearchOutlined, Add } from "@mui/icons-material";
 import FacilitatorAddModal from "./FacilitatorAddModal";
 import FacilatorTable from "./FacilatorTable";
 
-function FacilitatorFilter({ data,id }) {
+function FacilitatorFilter({ data, id }) {
   // console.log("filter", id);
 
   const [openModal, setOpenModal] = useState(false);
@@ -23,13 +23,11 @@ function FacilitatorFilter({ data,id }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    
     if (data) {
       setAllFacilitator(data);
       setFilteredFacilitator(data);
-      console.log("ko");
     }
-  }, [data,openModal,allFacilitator,filteredFacilitator]);
+  }, [data, openModal]);
 
   // const [searchResults, setSearchResults] = useState([]);
 
@@ -48,27 +46,19 @@ function FacilitatorFilter({ data,id }) {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     const datar = filterFacilitator(searchTerm, allFacilitator);
-    console.log(datar);
     setFilteredFacilitator(datar);
   };
 
   function filterFacilitator(searchText, allFacilitator) {
-    console.log(allFacilitator);
-    const filterData = allFacilitator.filter(
-      (facilitator) =>
-        facilitator?.name?.toLowerCase()?.includes(searchText?.toLowerCase()) ||
-        facilitator?.point_of_contact_name
-          ?.toLowerCase()
-          ?.includes(searchText?.toLowerCase())
+   
+    const filterData = allFacilitator.filter((facilitator) =>
+      facilitator?.name?.toLowerCase()?.includes(searchText?.toLowerCase())
     );
     return filterData;
   }
 
-   
- 
-
   return (
-    <Box sx={{ mt: 8, mb: 2 }}>
+    <Box sx={{ mt: 2, mb: 2 }}>
       <Box display="flex" justifyContent={"space-between"} mb={3}>
         <TextField
           placeholder="Search Stakeholders..."
@@ -94,14 +84,18 @@ function FacilitatorFilter({ data,id }) {
             startIcon={<Add />}
             onClick={handleModalToggle}
             variant="contained"
-            sx={{}}
+            style={{
+              fontSize: "16px",
+              background:
+                "var(--midnight-blue-gradient, linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%))",
+            }}
           >
-            <Typography variant="subtitle2">Add Facilitator</Typography>
+            Add Facilitator
           </Button>
           {openModal && (
             <Box sx={{ position: "absolute", top: "100%", left: 0 }}>
               <FacilitatorAddModal
-              id={id}
+                id={id}
                 onOpen={handleModalToggle}
                 boolean={openModal}
               />
@@ -110,7 +104,7 @@ function FacilitatorFilter({ data,id }) {
         </Box>
       </Box>
       {searchTerm === "" ? (
-        <FacilatorTable data={allFacilitator}   />
+        <FacilatorTable data={filteredFacilitator} />
       ) : (
         <FacilatorTable data={filteredFacilitator} />
       )}

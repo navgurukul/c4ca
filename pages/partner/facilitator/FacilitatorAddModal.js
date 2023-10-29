@@ -2,7 +2,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { TextField } from "@mui/material";
+import { TextField,InputLabel } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Dialog, Grid, DialogContent, DialogActions } from "@mui/material";
 import axios from "axios";
@@ -61,7 +61,7 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
 
   return (
     <div>
-      <Dialog open={boolean} onClose={onOpen}>
+     <Dialog open={boolean} onClose={onOpen} fullWidth>
         <DialogContent>
           <Box
             style={{
@@ -87,53 +87,87 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
               }}
             />
           </Box>
-
-          <TextField
-            margin="dense"
-            label="Name"
-            name="name"
-            value={values.name}
-            onChange={handleChange}
-            fullWidth
-            InputProps={{
-              style: {
-                height: "50px",
-                borderRadius: "100px",
-              },
-            }}
-          />
-          <TextField
-            margin="dense"
-            label="Point of Contact Email"
-            name="email"
-            value={values.email}
-            onChange={handleChange}
-            fullWidth
-            InputProps={{
-              style: {
-                height: "50px",
-                borderRadius: "100px",
-              },
-            }}
-          />
-          <TextField
-            margin="dense"
-            label="Phone Number"
-            name="phone_number"
-            value={values.phone}
-            onChange={handleChange}
-            fullWidth
-            InputProps={{
-              style: {
-                height: "50px",
-                borderRadius: "100px",
-              },
-            }}
-          />
+          <Box style={{ marginTop: "15px", marginLeft: "10px" }}>
+            <InputLabel
+              style={{
+                fontSize: "15px",
+                color: "#2E2E2E",
+                fontFamily: "Amazon Ember",
+              }}
+            >
+              Name
+            </InputLabel>
+            <TextField
+              margin="dense"
+              label="Name"
+              name="name"
+              value={values.name}
+              onChange={handleChange}
+              fullWidth
+              InputProps={{
+                style: {
+                  height: "50px",
+                  borderRadius: "100px",
+                },
+              }}
+            />
+          </Box>
+          <Box style={{ marginTop: "15px", marginLeft: "10px" }}>
+            <InputLabel
+              style={{
+                fontSize: "15px",
+                color: "#2E2E2E",
+                fontFamily: "Amazon Ember",
+              }}
+            >
+              Point of Contact Email
+            </InputLabel>
+            <TextField
+              margin="dense"
+              label="Point of Contact Email"
+              name="email"
+              value={values.email}
+              onChange={handleChange}
+              fullWidth
+              InputProps={{
+                style: {
+                  height: "50px",
+                  borderRadius: "100px",
+                },
+              }}
+            />
+          </Box>
+          <Box style={{ marginTop: "15px", marginLeft: "10px" }}>
+            <InputLabel
+              style={{
+                fontSize: "15px",
+                color: "#2E2E2E",
+                fontFamily: "Amazon Ember",
+              }}
+            >Phone Number
+            </InputLabel>
+            <TextField
+              margin="dense"
+              label="Phone Number"
+              name="phone_number"
+              value={values.phone}
+              onChange={handleChange}
+              fullWidth
+              InputProps={{
+                style: {
+                  height: "50px",
+                  borderRadius: "100px",
+                },
+              }}
+            />
+          </Box>
         </DialogContent>
         <Box sx={{ pb: 2, px: 2 }}>
           <DialogActions>
-            <Button variant="contained" onClick={handleSubmit}>
+            <Button variant="contained" onClick={handleSubmit}
+            style={{
+              background: 'var(--midnight-blue-gradient, linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%))',
+          }}>
               Add Facilitator
             </Button>
           </DialogActions>

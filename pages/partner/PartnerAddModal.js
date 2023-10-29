@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { TextField } from "@mui/material";
+import { TextField,InputLabel } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Dialog,
@@ -74,7 +74,7 @@ function PartnerAddModal({ boolean, onOpen }) {
   return (
     <div>
       {/* <Button onClick={handleOpen}>Open modal</Button> */}
-      <Dialog open={boolean} onClose={onOpen}>
+      <Dialog open={boolean} onClose={onOpen} fullWidth>
         <DialogContent>
           <Box
             style={{
@@ -100,63 +100,101 @@ function PartnerAddModal({ boolean, onOpen }) {
               }}
             />
           </Box>
-
-          <TextField
-            margin="dense"
-            label="Partner Name"
-            name="name"
-            value={values.name}
-            onChange={handleChange}
-            fullWidth
-            InputProps={{
-              style: {
-                height: "50px",
-                borderRadius: "100px",
-              },
-            }}
-          />
-          <TextField
-            margin="dense"
-            label="Point of Contact Name"
-            name="point_of_contact"
-            value={values.point_of_contact}
-            onChange={handleChange}
-            fullWidth
-            InputProps={{
-              style: {
-                height: "50px",
-                borderRadius: "100px",
-              },
-            }}
-          />
-          <TextField
-            margin="dense"
-            label="Point of Contact Email"
-            name="email"
-            value={values.email}
-            onChange={handleChange}
-            fullWidth
-            InputProps={{
-              style: {
-                height: "50px",
-                borderRadius: "100px",
-              },
-            }}
-          />
-          <TextField
-            margin="dense"
-            label="Phone Number"
-            name="phone_number"
-            value={values.phone}
-            onChange={handleChange}
-            fullWidth
-            InputProps={{
-              style: {
-                height: "50px",
-                borderRadius: "100px",
-              },
-            }}
-          />
+          <Box style={{ marginTop: "15px", marginLeft: "10px" }}>
+            <InputLabel
+              style={{
+                fontSize: "15px",
+                color: "#2E2E2E",
+                fontFamily: "Amazon Ember",
+              }}
+            >
+              Partner Name
+            </InputLabel>
+            <TextField
+              margin="dense"
+              // label="Partner Name"
+              name="name"
+              value={values.name}
+              onChange={handleChange}
+              fullWidth
+              InputProps={{
+                style: {
+                  height: "48px",
+                  borderRadius: "100px",
+                  alignItems: "center",
+                },
+              }}
+            />
+          </Box>
+          <Box style={{ marginTop: "15px", marginLeft: "10px" }}>
+            <InputLabel
+              className="Input"
+              style={{ fontSize: "15px", color: "#2E2E2E", marginTop: "5px" }}
+            >
+              Point of Contact Name
+            </InputLabel>
+            <TextField
+              margin="dense"
+              // label="Point of Contact Name"
+              name="point_of_contact"
+              value={values.point_of_contact}
+              onChange={handleChange}
+              fullWidth
+              InputProps={{
+                style: {
+                  height: "48px",
+                  borderRadius: "100px",
+                  textAlign: "center",
+                },
+              }}
+            />
+          </Box>
+          <Box style={{ marginTop: "15px", marginLeft: "10px" }}>
+            <InputLabel
+              className="Input"
+              style={{ fontSize: "15px", color: "#2E2E2E", marginTop: "5px" }}
+            >
+              Point of Contact Email
+            </InputLabel>
+            <TextField
+              margin="dense"
+              // label="Point of Contact Email"
+              name="email"
+              value={values.email}
+              onChange={handleChange}
+              fullWidth
+              InputProps={{
+                style: {
+                  height: "48px",
+                  borderRadius: "100px",
+                  textAlign: "center",
+                },
+              }}
+            />
+          </Box>
+          <Box style={{ marginTop: "15px", marginLeft: "10px" }}>
+            <InputLabel
+              className="Input"
+              style={{ fontSize: "15px", color: "#2E2E2E", marginTop: "10px" }}
+            >
+              Phone Number
+            </InputLabel>
+            <TextField
+              margin="dense"
+              // label="Phone Number"
+              name="phone_number"
+              value={values.phone}
+              onChange={handleChange}
+              fullWidth
+              InputProps={{
+                style: {
+                  height: "48px",
+                  borderRadius: "100px",
+                  textAlign: "center",
+                },
+              }}
+            />
+          </Box>
           {/* {values.email === "" ? "" : !isValidEmail && (
             <Typography sx={{ fontSize: "14px", color: "red" }}>
               Please enter a valid email
@@ -167,9 +205,12 @@ function PartnerAddModal({ boolean, onOpen }) {
           <DialogActions>
             <Button
               // disabled={!isValidEmail || values.email.trim() === ""}
-              
               variant="contained"
               onClick={handleSubmit}
+              style={{
+                background:
+                  "var(--midnight-blue-gradient, linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%))",
+              }}
             >
               Add Partner
             </Button>
