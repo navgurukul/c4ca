@@ -4,9 +4,16 @@ import theme from "@/theme/theme";
 import { useRouter } from "next/router";
 import "@/styles/globals.css";
 import Header from "@/components/header/Header";
+import { reactLocalStorage } from "reactjs-localstorage";
+import { useEffect, useState } from "react";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
+  const [authData, setAuthData] = useState({});
+  useEffect(() => {
+    const authData = reactLocalStorage.getObject("AUTH");
+    setAuthData(authData);
+  }, [router.pathname]);
   return (
     <>
       <Head>
@@ -17,7 +24,10 @@ export default function App({ Component, pageProps }) {
       </Head>
 
       <ThemeProvider theme={theme}>
-        {router.pathname.split("/").reverse()[0] === "login" ? null : <Header />}
+        {router.pathname.split("/").reverse()[0] === "login" ||
+        (Object.keys(authData).length > 0 && router.pathname == "/") ? null : (
+          <Header />
+        )}
         <Component {...pageProps} />
       </ThemeProvider>
     </>
