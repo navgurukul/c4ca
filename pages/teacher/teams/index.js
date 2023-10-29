@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import customAxios from "@/api";
 import Link from "next/link";
 
-const TeacherDashboard = () => {
+const TeacherDashboard = ({ authToken }) => {
   const router = useRouter();
 
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
@@ -33,20 +33,21 @@ const TeacherDashboard = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState(null);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
 
   const refreshTeams = () => {
-     
     const authToken = localStorage.getItem("token");
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
     // console.log("refreshing....", teacherId, authToken);
     if (teacherId && authToken) {
-      console.log("teacher id is present", teacherId)
+      console.log("teacher id is present", teacherId);
       customAxios
         .get(`/c4ca/teams/${teacherId}`, {
           headers: {
@@ -71,6 +72,16 @@ const TeacherDashboard = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    refreshTeams();
+  };
+  const handleOpenEditDialog = (team) => {
+    setSelectedTeam(team);
+    setEditDialogOpen(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setSelectedTeam(null);
+    setEditDialogOpen(false);
     refreshTeams();
   };
 
@@ -246,33 +257,7 @@ const TeacherDashboard = () => {
                 </Box>
               </Grid>
             ))}
-          {!loading && (
-            <Grid item md={4} sm={6} xs={12}>
-              <Box
-                sx={{
-                  width: "100%",
-                  placeContent: "center",
-                  border: "2px dashed",
-                  borderBlockEndWidth: "2px 10px",
-                  borderColor: "gray",
-                  padding: 8.5,
-                  borderRadius: 3,
-                  textAlign: "center",
-                  borderSpacing: "5px",
-                  cursor: "pointer",
-                }}
-                // onClick={handleAddTeam}
-                onClick={handleOpenDialog}
-              >
-                <AddCircleOutlinedIcon color="primary" />
-                <Typography variant="body1" color="primary">
-                  Add a Team
-                </Typography>
-              </Box>
-            </Grid>
-          )}
         </Grid>
-
         {/* Awards and Certifications... */}
       </Container>
       <Dialog
@@ -288,6 +273,23 @@ const TeacherDashboard = () => {
           />
         </DialogContent>
       </Dialog>
+
+      {selectedTeam && (
+        <Dialog
+          open={editDialogOpen}
+          onClose={handleCloseEditDialog}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogContent>
+            <Team
+              handleCloseEditDialog={handleCloseEditDialog}
+              onClose={handleCloseEditDialog}
+              team={selectedTeam}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
 
       <Container maxWidth="lg" sx={{ padding: 5 }} disableGutters>
         <Typography variant="h5" color="primary">

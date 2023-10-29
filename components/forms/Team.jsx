@@ -15,8 +15,9 @@ import stateDistrict from "../../data/state.json";
 import { useRouter } from "next/router";
 import customAxios from "../../api";
 import Link from "next/link";
+import TeacherDashboard from "@/pages/teacher/teams";
 
-const Team = ({ handleCloseDialog, setActiveStep = null }) => {
+const Team = ({handleCloseEditDialog, handleCloseDialog, setActiveStep = null, team }) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
@@ -70,6 +71,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
             team_name: teamName,
             team_size: teamSize,
             team_members: filteredTeamMembers,
+     
             school: values.school,
             district: values.district,
             state: values.state,
@@ -97,6 +99,39 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
         console.error("Error creating a team:", error);
       }
     }
+  };
+
+  const handleEditTeam = (team) => {
+    
+    const updatedTeam = {
+      team_name: teamName,
+      team_size: teamSize,
+      team_members: teamMembers,
+      
+      
+    };
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+  
+      console.log('Team ID:', team.id);
+      const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
+      console.log('URL:', url);
+
+      customAxios.put(url, updatedTeam, {
+        headers: {
+          Authorization: `Bearer ${authToken.token}`,
+        },
+      })
+      .then((response) => {
+        if (response.data.status === "success") {
+          console.log('Edited team data:', response.data);
+          handleCloseEditDialog()
+
+        }
+     
+      })
+      .catch((error) => {
+        console.error('Error editing team data:', error);
+      });
   };
   const validateInputs = () => {
     const newErrors = {};
@@ -152,9 +187,19 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
       maxWidth="sm"
       sx={{ display: "grid", gap: isMobile ? 2 : 4, paddingY: 5 }}
     >
-      <Typography variant="h5" color="text.primary">
+      {!team? <Typography variant="h5" color="text.primary">
         Add a Team
+      </Typography>:
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Typography variant="h6" color="text.primary">
+      Edit Team
       </Typography>
+      <Button  onClick={() =>handleCloseEditDialog()}>
+        <img src="/assets/close.svg" alt="close icon" />
+      </Button>
+
+      </Box>
+     }
       <InputControl
         label="Team Name"
         type="text"
@@ -297,8 +342,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
         team later
       </Typography>
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Button
+      <Box sx={{ display: "flex", justifyContent: team?"flex-end": "space-between" }}>
+     { !team && <Button
           onClick={() =>
             setActiveStep ? setActiveStep(0) : handleCloseDialog()
           }
@@ -306,8 +351,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
           color="primary"
         >
           Back
-        </Button>
-        {setActiveStep && (
+        </Button>}
+        {!team&&(setActiveStep && (
           <Button
             className="Button"
             color="primary"
@@ -315,15 +360,18 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
           >
             Skip
           </Button>
-        )}
+        ))}
+       
+     
         <Button
           className="Button"
           color="primary"
           variant="contained"
           sx={{ minWidth: 240, display: "block" }}
-          onClick={createTeam}
+          onClick= { team ?handleEditTeam(team) : createTeam}
+          
         >
-          Add Team
+         { team ? "Update Details" : "Add Team"}
         </Button>
       </Box>
     </Container>
