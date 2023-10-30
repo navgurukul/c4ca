@@ -69,7 +69,7 @@ const LoginPage = () => {
           // let roles = res.data.c4ca_roles;
           console.log(c4ca_roles,'<<<<<<<<<<');
           if (c4ca_roles.includes('superAdmin')){
-            localStorage.setItem("AUTH", JSON.stringify(res.data));
+            localStorage.setItem("AUTH", JSON.stringify(resp.data));
             setCookie("user", JSON.stringify(res.data), {
             path: "/",
             maxAge: 604800, // Expires after 1hr
@@ -77,7 +77,7 @@ const LoginPage = () => {
           });
             return router.push(`/partner`);
           }else if (c4ca_roles.includes('facilitator') && c4ca_facilitator_id) {
-            localStorage.setItem("AUTH", JSON.stringify(res.data));
+            localStorage.setItem("AUTH", JSON.stringify(resp.data));
             setCookie("user", JSON.stringify(res.data), {
             path: "/",
             maxAge: 604800, // Expires after 1hr
@@ -85,7 +85,7 @@ const LoginPage = () => {
           });
             return router.push(`/partner/teacherList/${c4ca_facilitator_id}`);
           } else if (c4ca_roles.includes('c4caPartner') && c4ca_partner_id) {
-            localStorage.setItem("AUTH", JSON.stringify(res.data));
+            localStorage.setItem("AUTH", JSON.stringify(resp.data));
             setCookie("user", JSON.stringify(res.data), {
             path: "/",
             maxAge: 604800, // Expires after 1hr
@@ -136,6 +136,7 @@ const LoginPage = () => {
               });
             } else{
               console.log(resp.data);
+              let {c4ca_facilitator_id, c4ca_partner_id,c4ca_roles} = resp.data.data
               return setError('invalied user try to login ');
             }
           })
