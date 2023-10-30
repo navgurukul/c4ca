@@ -36,6 +36,7 @@ const TeacherFilter = () => {
   const [breadCumData, setBreadCumData] = useState();
 
   useEffect(() => {
+  if(id){
     const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/${id}`;
     const token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
@@ -46,9 +47,8 @@ const TeacherFilter = () => {
         },
       })
       .then((response) => {
-        console.log(response);
-
-        const teacherList = response?.data?.data?.teachersData;
+        console.log(response); 
+        const teacherList = response?.data?.data?.teachersDetails;
         const breadCrumb = response?.data?.data;
         console.log(breadCrumb);
         if (teacherList !== undefined) {
@@ -62,6 +62,7 @@ const TeacherFilter = () => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+  }
   }, [id]);
 
   //fetching data for the breadcrumb

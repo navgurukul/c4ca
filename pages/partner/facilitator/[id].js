@@ -27,7 +27,8 @@ const FacilatorHome = () => {
           },
         })
         .then((response) => {
-          const datae = response?.data?.data?.teachersData;
+          console.log(response); 
+          const datae = response?.data?.data?.facilitatorsDetails;
           const partnerName = response?.data?.data?.partner_name;
           setData(datae);
           if (datae !== undefined) {
@@ -41,10 +42,11 @@ const FacilatorHome = () => {
           console.error("Error fetching data:", error);
         });
     }
-  }, [id, data]);
+  }, [id,]);
 
   //fetching the total data
   useEffect(() => {
+    if (id) {
     const apiUrl = `https://merd-api.merakilearn.org/c4ca/totalData?partner_id=${id}`;
     const token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
@@ -66,6 +68,7 @@ const FacilatorHome = () => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+    }
   }, [id]);
 
   return (
