@@ -2,32 +2,31 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { TextField,InputLabel } from "@mui/material";
+import { TextField, InputLabel } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Dialog, Grid, DialogContent, DialogActions } from "@mui/material";
-import axios from "axios";
+import customAxios from "../../../api"; // Import your custom Axios instance
 
 function FacilitatorAddModal({ boolean, onOpen, id }) {
   console.log(typeof id);
   const [values, setValues] = useState({
     name: "",
     point_of_contact: "string",
-    email: "", 
+    email: "",
     c4ca_partner_id: Number(id),
     phone_number: "",
   });
 
   const createNewFacilitator = (values) => {
-    console.log(values);
-    const apiUrl = "https://merd-api.merakilearn.org/c4ca/facilitator/create";
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+
     const headers = {
-      Authorization:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA", // Replace with your actual access token
+      Authorization: authToken.token,
       "Content-Type": "application/json",
     };
 
-    axios
-      .post(apiUrl, values, { headers })
+    customAxios
+      .post("/c4ca/facilitator/create", values, { headers })
       .then((response) => {
         console.log("POST request successful:", response.data);
         alert(response?.data.status);
@@ -53,7 +52,6 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
       alert("Fill all fields");
       return;
     } else {
-      console.log(values);
       createNewFacilitator(values);
       onOpen();
     }
@@ -61,7 +59,7 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
 
   return (
     <div>
-     <Dialog open={boolean} onClose={onOpen} fullWidth>
+      <Dialog open={boolean} onClose={onOpen} fullWidth>
         <DialogContent>
           <Box
             style={{
@@ -144,7 +142,8 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
                 color: "#2E2E2E",
                 fontFamily: "Amazon Ember",
               }}
-            >Phone Number
+            >
+              Phone Number
             </InputLabel>
             <TextField
               margin="dense"
@@ -164,10 +163,14 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
         </DialogContent>
         <Box sx={{ pb: 2, px: 2 }}>
           <DialogActions>
-            <Button variant="contained" onClick={handleSubmit}
-            style={{
-              background: 'var(--midnight-blue-gradient, linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%))',
-          }}>
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              style={{
+                background:
+                  "var(--midnight-blue-gradient, linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%))",
+              }}
+            >
               Add Facilitator
             </Button>
           </DialogActions>

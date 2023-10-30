@@ -5,11 +5,11 @@ import { useState, useEffect } from "react";
 import FacilatorTable from "./FacilatorTable";
 import { useRouter } from "next/router";
 import MyBreadcrumbs from "@/components/breadcrumb/breadcrumb";
-import axios from "axios";
 import FacilitatorFilter from "./FacilitatorFilter";
+import customAxios from "../../../api"; // Import your custom Axios instance
 
 const FacilatorHome = () => {
-  const router = useRouter(); 
+  const router = useRouter();
   const { id } = router.query;
   const [data, setData] = useState([]);
   const [partnerName, setPartnerName] = useState();
@@ -17,17 +17,15 @@ const FacilatorHome = () => {
 
   useEffect(() => {
     if (id) {
-      const apiUrl = `https://merd-api.merakilearn.org/c4ca/facilitator/getByPartnerId/${id}`;
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-      axios
-        .get(apiUrl, {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      customAxios
+        .get(`/c4ca/facilitator/getByPartnerId/${id}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: authToken.token,
           },
         })
         .then((response) => {
-          console.log(response); 
+          console.log(response);
           const datae = response?.data?.data?.facilitatorsDetails;
           const partnerName = response?.data?.data?.partner_name;
           setData(datae);
@@ -42,32 +40,31 @@ const FacilatorHome = () => {
           console.error("Error fetching data:", error);
         });
     }
-  }, [id,]);
+  }, [id]);
 
   //fetching the total data
   useEffect(() => {
     if (id) {
-    const apiUrl = `https://merd-api.merakilearn.org/c4ca/totalData?partner_id=${id}`;
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-    axios
-      .get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        const totalData = response?.data?.data;
-        if (totalData !== undefined) {
-          // console.log(totalData);
-          settotalCountData(totalData);
-        } else {
-          console.error("Data is undefined.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+
+      customAxios
+        .get(`/c4ca/totalData?partner_id=${id}`, {
+          headers: {
+            Authorization: authToken.token,
+          },
+        })
+        .then((response) => {
+          const totalData = response?.data?.data;
+          if (totalData !== undefined) {
+            // console.log(totalData);
+            settotalCountData(totalData);
+          } else {
+            console.error("Data is undefined.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
     }
   }, [id]);
 
@@ -94,7 +91,7 @@ const FacilatorHome = () => {
           fontSize: "22px",
           fontWeight: "800px",
           lineHeight: "28px",
-          fontFamily:"Amazon Ember Display"
+          fontFamily: "Amazon Ember Display",
         }}
       >
         Overview
