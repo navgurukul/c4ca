@@ -16,8 +16,10 @@ import { useRouter } from "next/router";
 import customAxios from "../../api";
 import Link from "next/link";
 import TeacherDashboard from "@/pages/teacher/teams";
+import axios from 'axios';
 
-const Team = ({handleCloseEditDialog, handleCloseDialog, setActiveStep = null, team }) => {
+
+const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDialog }) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
@@ -50,9 +52,24 @@ const Team = ({handleCloseEditDialog, handleCloseDialog, setActiveStep = null, t
       }));
       setTeamMembers((prevMembers) => [...prevMembers, ...newMembers]);
     } else if (membersCount > teamSize) {
-      setTeamMembers(teamMembers.slice(0, teamSize));
+      setTeamMembers(teamMembers.slice(0, teamSize));      
     }
   }, [teamSize]);
+
+  useEffect(() => {
+    if (team && team.id) {
+      axios.get(`https://merd-api.merakilearn.org/c4ca/team/${team.id}`)
+        .then((response) => {
+          const teamData = response.data;
+          setTeamName(teamData.data.team_name);
+          setTeamSize(teamData.data.team_size);
+          setTeamMembers(teamData.data.team_members);
+        })
+        .catch((error) => {
+          console.error("Error fetching team data:", error);
+        });
+    }
+  }, [team]);
 
   const createTeam = async () => {
     clearErrors();
@@ -101,37 +118,38 @@ const Team = ({handleCloseEditDialog, handleCloseDialog, setActiveStep = null, t
     }
   };
 
-  const handleEditTeam = (team) => {
-    
+  const handleEditTeam = () => {  
     const updatedTeam = {
       team_name: teamName,
       team_size: teamSize,
-      team_members: teamMembers,
-      
-      
+      team_members: teamMembers.map((member) => ({
+        name: member.name,
+        class: member.class,
+      })),    
     };
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
-  
-      console.log('Team ID:', team.id);
-      const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
-      console.log('URL:', url);
+      // console.log('Team ID:', team.id);
+    const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
+    // console.log('URL:', url);
 
-      customAxios.put(url, updatedTeam, {
-        headers: {
-          Authorization: `Bearer ${authToken.token}`,
-        },
-      })
-      .then((response) => {
-        if (response.data.status === "success") {
-          console.log('Edited team data:', response.data);
-          handleCloseEditDialog()
-
-        }
-     
-      })
-      .catch((error) => {
-        console.error('Error editing team data:', error);
-      });
+    customAxios.put(url, updatedTeam, {
+      headers: {
+        Authorization: `Bearer ${authToken.token}`,
+        'Content-Type': 'application/json', 
+      },
+    })
+    .then((response) => {
+      if (response.data.status === "success") {
+        console.log('Edited team data:', response.data);
+        handleCloseEditDialog();
+      } else {
+        console.log('Edit request failed with response:', response.data);
+      }
+    })
+    .catch((error) => {
+      console.error('Error editing team data:', error);
+      console.log('Response:', error.response);
+    });
   };
   const validateInputs = () => {
     const newErrors = {};
@@ -214,6 +232,7 @@ const Team = ({handleCloseEditDialog, handleCloseDialog, setActiveStep = null, t
         error={errors.school}
         value={values.school}
         onChange={(e) => setValues({ ...values, school: e.target.value })}
+        disabled= {true}
       />
 
       <Grid spacing={5} container>
@@ -229,6 +248,7 @@ const Team = ({handleCloseEditDialog, handleCloseDialog, setActiveStep = null, t
               value: state,
             }))}
             sx={{ mb: 1 }}
+            disabled= {true}
           />
         </Grid>
         <Grid xs={6} item>
@@ -247,6 +267,7 @@ const Team = ({handleCloseEditDialog, handleCloseDialog, setActiveStep = null, t
                 : []
             }
             sx={{ mb: 1 }}
+            disabled= {true}
           />
         </Grid>
       </Grid>
@@ -368,7 +389,7 @@ const Team = ({handleCloseEditDialog, handleCloseDialog, setActiveStep = null, t
           color="primary"
           variant="contained"
           sx={{ minWidth: 240, display: "block" }}
-          onClick= { team ?handleEditTeam(team) : createTeam}
+          onClick= { team ?handleEditTeam : createTeam}
           
         >
          { team ? "Update Details" : "Add Team"}
