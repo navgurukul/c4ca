@@ -59,25 +59,24 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
   useEffect(() => {
     if (team && team.id) {
       const authToken = JSON.parse(localStorage.getItem("AUTH"));
-      const headers = {
-        Authorization: `Bearer ${authToken.token}`,
-        "Content-Type": "application/json",
-      };
-    
-      axios.get(`https://merd-api.merakilearn.org/c4ca/team/${team.id}`, {
-        headers: headers
-      })
-        .then((response) => {
-          const teamData = response.data;
-          setTeamName(teamData.data.team_name);
-          setTeamSize(teamData.data.team_size);
-          setTeamMembers(teamData.data.team_members);
+      customAxios
+        .get(`/c4ca/team/${team.id}`, {
+          headers: {
+            Authorization: authToken.token
+          },
         })
-        .catch((error) => {
-          console.error("Error fetching team data:", error);
-        });
+      .then((response) => {
+        const teamData = response.data;
+        setTeamName(teamData.data.team_name);
+        setTeamSize(teamData.data.team_size);
+        setTeamMembers(teamData.data.team_members);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
     }
   }, [team]);
+
 
   const createTeam = async () => {
     clearErrors();
