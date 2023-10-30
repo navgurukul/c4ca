@@ -58,7 +58,15 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
 
   useEffect(() => {
     if (team && team.id) {
-      axios.get(`https://merd-api.merakilearn.org/c4ca/team/${team.id}`)
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      const headers = {
+        Authorization: `Bearer ${authToken.token}`,
+        "Content-Type": "application/json",
+      };
+    
+      axios.get(`https://merd-api.merakilearn.org/c4ca/team/${team.id}`, {
+        headers: headers
+      })
         .then((response) => {
           const teamData = response.data;
           setTeamName(teamData.data.team_name);
