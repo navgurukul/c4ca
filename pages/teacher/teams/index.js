@@ -44,7 +44,7 @@ const TeacherDashboard = () => {
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
-    console.log("refreshing....", teacherId, authToken);
+    // console.log("refreshing....", teacherId, authToken);
     if (teacherId && authToken) {
       customAxios
         .get(`/c4ca/teams/${teacherId}`, {
