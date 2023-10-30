@@ -137,7 +137,7 @@ const LoginPage = () => {
             } else{
               console.log(resp.data);
               let {c4ca_facilitator_id, c4ca_partner_id,c4ca_roles} = resp.data.data
-              return setError('invalied user try to login '+JSON.stringify(c4ca_facilitator_id, c4ca_partner_id,c4ca_roles));
+              return setError('invalied user try to login ');
             }
           })
           .catch((err) => {
