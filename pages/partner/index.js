@@ -3,26 +3,24 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import styled from "styled-components";
 import PartnerFilter from "./PartnerFilter";
-import axios from "axios";
+import customAxios from "../../api"; // Import your custom Axios instance
 
 const PartnerDashboard = () => {
-
-  const [totalData, setTotalData] = useState()
+  const [totalData, setTotalData] = useState();
 
   useEffect(() => {
-    const apiUrl = "https://merd-api.merakilearn.org/c4ca/totalData";
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-    axios
-      .get(apiUrl, {
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+
+    customAxios
+      .get("c4ca/totalData", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: authToken.token,
         },
       })
       .then((response) => {
         const partnerList = response?.data?.data;
         if (partnerList !== undefined) {
-          setTotalData(partnerList); 
+          setTotalData(partnerList);
           // console.log(partnerList);
         } else {
           console.error("Data is undefined.");
@@ -33,9 +31,6 @@ const PartnerDashboard = () => {
       });
   }, []);
 
-   
-  
-
   return (
     <Box className="dashboardContainer">
       <Box
@@ -44,7 +39,7 @@ const PartnerDashboard = () => {
           fontSize: "22px",
           fontWeight: "800px",
           lineHeight: "28px",
-          fontFamily:"Amazon Ember Display"
+          fontFamily: "Amazon Ember Display",
         }}
       >
         Overview

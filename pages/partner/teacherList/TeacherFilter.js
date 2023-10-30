@@ -37,13 +37,11 @@ const TeacherFilter = () => {
 
   useEffect(() => {
   if(id){
-    const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/${id}`;
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
     axios
-      .get(apiUrl, {
+      .get(`/c4ca/teacher/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: authToken.token,
         },
       })
       .then((response) => {
