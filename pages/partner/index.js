@@ -23,7 +23,7 @@ const PartnerDashboard = () => {
         const partnerList = response?.data?.data;
         if (partnerList !== undefined) {
           setTotalData(partnerList); 
-          console.log(partnerList);
+          // console.log(partnerList);
         } else {
           console.error("Data is undefined.");
         }
@@ -33,6 +33,8 @@ const PartnerDashboard = () => {
       });
   }, []);
 
+   
+  
 
   return (
     <Box className="dashboardContainer">
@@ -102,7 +104,7 @@ const PartnerDashboard = () => {
               fontFamily: "Amazon Ember Display",
             }}
           >
-            {totalData?.totalUniqueSchools}
+            {totalData?.totalProjectsSubmission}
           </Typography>
           <Typography className="InfoTextStyle">
             Total Projects Submitted

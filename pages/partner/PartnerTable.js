@@ -78,7 +78,7 @@ const PartnerTable = ({data}) => {
       },
     },
     {
-      name: "point_of_contact_name",
+      name: "point_of_contact",
       label: "Point of Contact",
       options: {
         filter: false,
