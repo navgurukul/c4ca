@@ -67,6 +67,7 @@ const LoginPage = () => {
           })
           .then((resp) => {
             if (resp.data.data === null) {
+              
               setLoading(false);
               if (partner_id) {
                 res.data.role = "teacher";
