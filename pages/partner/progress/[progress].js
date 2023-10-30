@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import Link from "@mui/material/Link";
 import { Avatar, Box, Grid } from "@mui/material";
@@ -6,28 +6,25 @@ import Typography from "@mui/material/Typography";
 import girlImage from "../../../public/assets/girlImage.png";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import customAxios from "../../../api"; // Import your custom Axios instance
 
 function Progress() {
-
-  const router = useRouter(); 
+  const router = useRouter();
   const { progress } = router.query;
-  console.log(progress);  
-  console.log(router.query);  
-  
+  console.log(progress);
+  console.log(router.query);
+
   const [data, setData] = useState(null);
   const [partnerName, setPartnerName] = useState(null);
 
   useEffect(() => {
     if (progress) {
       console.log(progress);
-      const apiUrl = `https://merd-api.merakilearn.org/c4ca/${progress}`;
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-      axios
-        .get(apiUrl, {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      customAxios
+        .get(`/c4ca/${progress}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: authToken.token,
           },
         })
         .then((response) => {
@@ -47,24 +44,21 @@ function Progress() {
         });
     }
   }, [progress]);
-  
-const [teamsData, setTeamsData] = useState([])
-   
+
+  const [teamsData, setTeamsData] = useState([]);
+
   useEffect(() => {
     if (progress) {
-      console.log(progress);
-      const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/teams/${progress}`;
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-      axios
-        .get(apiUrl, {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      customAxios
+        .get(`/c4ca/teacher/teams/${progress}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: authToken.token,
           },
         })
         .then((response) => {
-          console.log(response?.data?.data); 
-          const teamsData = response?.data?.data;  
+          console.log(response?.data?.data);
+          const teamsData = response?.data?.data;
           if (teamsData !== undefined) {
             setTeamsData(teamsData);
           } else {
@@ -120,9 +114,9 @@ const [teamsData, setTeamsData] = useState([])
             {" "}
             {data?.teacher_name}
           </Typography>
-          <Typography style={{ color: "#2E2E2E", fontSize: "14px" }}>
-             
-          </Typography>
+          <Typography
+            style={{ color: "#2E2E2E", fontSize: "14px" }}
+          ></Typography>
         </Box>
       </Box>
       <Typography
@@ -187,7 +181,7 @@ const [teamsData, setTeamsData] = useState([])
                     fontWeight: "700px",
                   }}
                 >
-                   {person.current_topic}
+                  {person.current_topic}
                 </Typography>
               </Box>
             </Grid>
