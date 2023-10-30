@@ -92,7 +92,7 @@ const LoginPage = () => {
             sameSite: true,
           });
             router.push(`/partner/facilitator/${c4ca_partner_id}`);
-          } else if(c4ca_roles.includes('c4caTeacher') && c4ca_partner_id && c4ca_facilitator_id){
+          } else if(c4ca_roles.includes('c4caTeacher')){// && c4ca_partner_id && c4ca_facilitator_id){
             customAxios
               .get("/c4ca/teacher_Data", {
                 headers: {
