@@ -93,7 +93,7 @@ export default function Home() {
         ) : (
           <Stack sx={{ marginTop: 5 }} alignItems={"center"}>
             <Link href="/student/login">
-              <Button alignItems={"center"} className="profileBtn">
+              <Button alignItems={"center"} sx={{pl:6 ,pr:6}}  variant="contained">
                 <Typography variant="ButtonLarge">Get Started</Typography>
               </Button>
             </Link>
@@ -189,9 +189,16 @@ export default function Home() {
               width={isActive ? "220px" : "350px"}
             />
           </Stack>
-          <Typography variant="body1" align="center" sx={{ mt: 3 }}>
-            Brought Together by Amazon, Quest Alliance and NavGurukul
+          <Typography variant="body1" align="center" sx={{ mt: 3,mb:3 }}>
+            Brought by Amazon in partnership with NavGurukul and Quest alliance
           </Typography>
+          <Stack alignItems={"center"}>
+            <img
+              src="/Group.svg"
+              alt="logo"
+              width={isActive ? "100px" : "150px"}
+            />
+          </Stack>
         </Container>
       </Container>
 
