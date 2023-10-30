@@ -63,6 +63,27 @@ const TeamDetail = () => {
       });
   }, []);
 
+
+
+  useEffect(() => {
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    console.log("authToken", authToken);
+    customAxios
+      .get("/pathways/ongoingTopic", {
+        headers: {
+          Authorization: authToken.token,
+        },
+      })
+      .then((response) => {
+        console.log("Success fetching data:", response);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+
+
   const handleSnackbarOpen = (message) => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
