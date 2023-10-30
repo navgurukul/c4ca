@@ -57,7 +57,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
     clearErrors();
     if (validateInputs()) {
       try {
-        const authToken = JSON.parse(localStorage.getItem("AUTH"));
+       
+    const authToken = localStorage.getItem("token");
 
         const filteredTeamMembers = teamMembers.filter(
           (member) => member.name.trim() !== "" && member.class !== ""
@@ -76,7 +77,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
 
           {
             headers: {
-              Authorization: `Bearer ${authToken.token}`,
+              Authorization: `Bearer ${authToken}`,
               "Content-Type": "application/json",
             },
           }

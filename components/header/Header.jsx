@@ -35,8 +35,8 @@ const Header = () => {
 
   useEffect(() => {
 
-    const partnerId =  new URLSearchParams(window.location.search)?.get("partner_id");
-    partnerId && localStorage.setItem("partner_id", partnerId);
+    const partnerId =  new URLSearchParams(window.location.search)?.get("referrer");
+    partnerId && localStorage.setItem("referrer", `referrer=${partnerId}`);
 
     const authToken = JSON.parse(localStorage.getItem("teacherData"));
     setUser(authToken);
@@ -80,6 +80,7 @@ const Header = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("teacherData")
     localStorage.removeItem("partner_id")
+    localStorage.removeItem("referrer");
     localStorage.removeItem("ally-supports-cache")
     localStorage.removeItem("token")
     localStorage.setItem("loggedOut", true);

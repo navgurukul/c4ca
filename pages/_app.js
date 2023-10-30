@@ -1,5 +1,5 @@
 import Head from "next/head";
-import * as React from 'react';
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/theme/theme";
@@ -11,7 +11,7 @@ import Header from "@/components/header/Header";
 import "../styles/app.css";
 import { Typography } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from '@mui/material/Alert';
+import MuiAlert from "@mui/material/Alert";
 import { redirect, useSearchParams } from "next/navigation";
 import customAxios from "@/api";
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -19,7 +19,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 export default function App({ Component, pageProps }) {
-  
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [showComponent, setShowComponent] = useState(true);
@@ -35,7 +34,7 @@ export default function App({ Component, pageProps }) {
   const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
   // const [partner_id, setPartner_id] = useState("");
-  let partner_id = "";
+  let referrer = "";
   const [error, setError] = useState("");
   const [cookie, setCookie] = useCookies(["user"]);
   const { token } = router.query;
@@ -45,21 +44,20 @@ export default function App({ Component, pageProps }) {
     const reversedBody = body.split("").reverse().join("");
     return [header, reversedBody, signature].join(".");
   }
+  let partner_id
 
   const handleClose = (event) => {
-     const { reason } = event??{};
-    if (reason === 'clickaway') {
+    const { reason } = event ?? {};
+    if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
   };
-  
-
 
   const sendGoogleUserData = (token) => {
     setLoading(true);
-   customAxios
+    customAxios
       .post(
         "/users/auth/google",
         { idToken: token, mode: "web" },
@@ -68,35 +66,66 @@ export default function App({ Component, pageProps }) {
         }
       )
       .then((res) => {
-          customAxios
+        console.log("res from google data", res.data.token);
+        const userToken = res.data.token;
+        localStorage.setItem("token", userToken);
+
+        customAxios
           .get("/c4ca/teacher_Data", {
             headers: {
               accept: "application/json",
-              Authorization: res.data.token,
+              Authorization: res?.data?.token,
             },
           })
           .then((resp) => {
             if (resp.data.data === null) {
               setLoading(false);
-              if (partner_id && partner_id !== "null") {
-                res.data.role = "teacher";
-                localStorage.setItem("AUTH", JSON.stringify(res.data));
-                setCookie("user", JSON.stringify(res.data), {
-                  path: "/",
-                  maxAge: 604800, // Expires after 1hr
-                  sameSite: true,
+              if (referrer && referrer !== "null") {
+
+
+                console.log("referrer", referrer );
+                console.log(token, "token inside put api")
+
+
+                customAxios
+                .put(
+                  "/users/me",
+                  {
+                    referrer: referrer,
+                  },
+                  {
+                    headers: {
+                      accept: "application/json",
+                      Authorization: userToken,
+                    },
+                  }
+                )
+                .then((res) => {
+                  console.log("res from users me put api", res);
+                  // localStorage.setItem("AUTH", JSON.stringify(res.data));
+                  partner_id = res.data.user.c4ca_partner_id
+
+                  res.data.role = "teacher";
+                  localStorage.setItem("AUTH", JSON.stringify(res.data));
+                  setCookie("user", JSON.stringify(res.data), {
+                    path: "/",
+                    maxAge: 604800, // Expires after 1hr
+                    sameSite: true,
+                  });
+  
+                  setTimeout(() => {
+                    setLoading(false);
+                  }, 1500);
+              
+                  return router.push(`/teacher/profile?partner_id=${partner_id}`);
+
+                })
+                .catch((err) => {
+                  console.log("error in users me put api", err);
                 });
-                
-                setTimeout(() => {
-                  setLoading(false);
-                }, 1500);
-                return router.push(`/teacher/profile?partner_id=${partner_id}`);
+
               } else {
                 return setOpen(true);
-                
-                setError(
-                  "Apologies, the entered Gmail ID is not linked with a C4CA partner."
-                );
               }
               return setError(resp.data.status);
             } else {
@@ -129,6 +158,7 @@ export default function App({ Component, pageProps }) {
           });
       })
       .catch((err) => {
+        setOpen(true);
         console.log("error in google data", err);
         setLoading(false);
       });
@@ -137,7 +167,7 @@ export default function App({ Component, pageProps }) {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     // setPartner_id(localStorage.getItem("partner_id"));
-    partner_id = localStorage.getItem("partner_id");
+    referrer = localStorage.getItem("referrer");
     let tokenVal = urlParams?.get("token");
     if (tokenVal) {
       setLoading(true);
@@ -168,11 +198,6 @@ export default function App({ Component, pageProps }) {
           <Header />
         )}{" "}
         <>
-          {error && router.pathname.split("/").reverse()[0] !== "login" && (
-            <Typography variant="h6" color="error" style={style}>
-              {error}
-            </Typography>
-          )}
 
           <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
             <Alert
@@ -180,7 +205,7 @@ export default function App({ Component, pageProps }) {
               severity="error"
               sx={{ width: "100%" }}
             >
-            Apologies, the entered Gmail ID is not linked with a C4CA partner.
+              Apologies, the entered Gmail ID is not linked with a C4CA partner.
             </Alert>
           </Snackbar>
 

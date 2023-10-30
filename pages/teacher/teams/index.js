@@ -37,16 +37,18 @@ const TeacherDashboard = () => {
   };
 
   const refreshTeams = () => {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+     
+    const authToken = localStorage.getItem("token");
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
     console.log('refreshing....', teacherId, authToken);
     if (teacherId && authToken) {
+      console.log("teacher id is present", teacherId)
       customAxios
         .get(`/c4ca/teams/${teacherId}`, {
           headers: {
-            Authorization: `Bearer ${authToken.token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         })
         .then((response) => {
@@ -81,7 +83,7 @@ const TeacherDashboard = () => {
           sx={{ paddingY: 8, padding: 4 }}
           spacing={isMobile ? 4 : 6}
         >
-          {teams.map((team) => (
+          {teams?.data?.map((team) => (
             <Grid item md={4} sm={6} xs={12} key={team.id}>
               <Box
                 sx={{

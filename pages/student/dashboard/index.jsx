@@ -45,12 +45,12 @@ const Dashboard = () => {
     }
     return shuffledImages;
   };
-  useEffect(() => {
-      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+  useEffect(() => {   
+    const authToken = localStorage.getItem("token");
     customAxios
       .get("/c4ca/teams", {
         headers: {
-          Authorization: authToken.data.token
+          Authorization: authToken
         },
       })
       .then((res) => {
