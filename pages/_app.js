@@ -94,24 +94,24 @@ export default function App({ Component, pageProps }) {
             // let roles = res.data.c4ca_roles;
             // console.log(c4ca_roles, "<<<<<<<<<<");
             if (c4ca_roles.includes("superAdmin")) {
-              res.data.role = "superAdmin";
-              setCookie("user", JSON.stringify(resp.data.user), {
+              resp.data.role = "superAdmin";
+              setCookie("user", JSON.stringify(resp.data), {
                 path: "/",
                 maxAge: 604800, // Expires after 1hr
                 sameSite: true,
               });
               return router.push(`/partner`);
             } else if (c4ca_roles.includes("facilitator")) {
-              res.data.role = "facilitator";
-              setCookie("user", JSON.stringify(resp.data.user), {
+              resp.data.role = "facilitator";
+              setCookie("user", JSON.stringify(resp.data), {
                 path: "/",
                 maxAge: 604800, // Expires after 1hr
                 sameSite: true,
               });
               return router.push(`/partner/teacherList/${c4ca_facilitator_id}`);
             } else if (c4ca_roles.includes("c4caPartner")) {
-              res.data.role = "c4caPartner";
-              setCookie("user", JSON.stringify(resp.data.user), {
+              resp.data.role = "c4caPartner";
+              setCookie("user", JSON.stringify(resp.data), {
                 path: "/",
                 maxAge: 604800, // Expires after 1hr
                 sameSite: true,
