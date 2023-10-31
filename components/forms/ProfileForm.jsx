@@ -84,7 +84,7 @@ const ProfileForm = () => {
           });
         } else {
           customAxios
-            .get("https://merd-api.merakilearn.org/users/me", {
+            .get("/users/me", {
               headers: {
                 Authorization: `Bearer ${authToken}`,
               },

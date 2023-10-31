@@ -47,7 +47,6 @@ const Dashboard = () => {
   };
   useEffect(() => {
       const authToken = JSON.parse(localStorage.getItem("AUTH"));
-      console.log(authToken, "authToken--------");
     customAxios
       .get("/c4ca/teams", {
         headers: {
