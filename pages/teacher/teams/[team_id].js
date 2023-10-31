@@ -31,46 +31,35 @@ const TeamDetail = () => {
   const params = useParams();
 
   useEffect(() => {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
-    if (!params?.team_id) return;
-    const apiUrl = `/c4ca/team/${params?.team_id}`;
-
-    customAxios
-      .get(apiUrl, {
-        headers: {
-          Authorization: authToken.token,
-        },
-      })
-      .then((response) => {
-        console.log("Success fetching data:", response);
-        setData(response.data.data);
-      })
-      .catch((err) => {
-        console.log("error", err);
-        // setError(err);
-      });
+    const authToken = localStorage.getItem("token");
+    const teacherData = JSON.parse(localStorage.getItem("teacherData"));
+    const teacherId = teacherData?.id;
+    console.log("params", params?.team_id)
+ 
+    if (teacherId && authToken) {
+      console.log("teacher id is present", teacherId);
+      customAxios
+        .get(`/c4ca/teacher/teams/${teacherId}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        })
+        .then((response) => {
+            response.data.data.map((team1) => {
+              if (team1.id == params?.team_id) {
+                setData(team1);
+                // console.log("data", data)
+             }            
+            });       
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    
   }, [params]);
 
   const teamMemberData = data.team_members || [];
-
-  
-
-  useEffect(() => {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
-    console.log("authToken", authToken);
-    customAxios
-      .get("/c4ca/projectTopic", {
-        headers: {
-          Authorization: authToken.token,
-        },
-      })
-      .then((response) => {
-        console.log("Projct Topic:", response);
-      })
-      .catch((error) => {
-        // console.error("Error fetching data:", error);
-      });
-  }, []);
 
   const handleSnackbarOpen = (message) => {
     setSnackbarMessage(message);
@@ -202,7 +191,7 @@ const TeamDetail = () => {
                   sx={{ display: "flex", alignItems: "flex-start", ml: 1 }}
                 >
                   <Typography variant="body1">
-                    Intro to Scratch of Module 1
+                    {data.current_topic === null? "Not Started": data.current_topic }
                   </Typography>
                 </Link>
               </Typography>
@@ -212,7 +201,7 @@ const TeamDetail = () => {
           <Box sx={{ display: "flex", mr: 2, alignItems: "baseline" }}>
             <Grid container sx={{ mb: "16px", mt: "32px", display: "flex" }}>
               <Box sx={{ display: "flex", marginLeft: 2 }}>
-                {projectTopic && projectTopic.data !== null ? (
+                {data.Project_topic_submission !== null ? (
                   <>
                     <Typography variant="subtitle1">Project Status:</Typography>
                     <FiberManualRecordIcon
@@ -233,8 +222,8 @@ const TeamDetail = () => {
                 )}
               </Box>
             </Grid>
-
-            {/* <Grid container mb="32px">
+            {data.Project_topic_submission !== null &&
+            <Grid container mb="32px">
               <Typography
                 variant="body1"
                 component="div"
@@ -247,11 +236,13 @@ const TeamDetail = () => {
                   sx={{ display: "flex", alignItems: "flex-start", ml: 1 }}
                 >
                   <Typography variant="body1">
-                    https://scratch.merakilearn.org/team2
+                    {data.Link}
+                    {/* https://scratch.merakilearn.org/team2 */}
                   </Typography>
                 </Link>
               </Typography>
-            </Grid> */}
+            </Grid>
+            }
           </Box>
         </Grid>
         <Grid item xs={12} md={4} lg={4} mt={9}>
