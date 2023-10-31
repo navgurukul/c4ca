@@ -7,6 +7,7 @@ const redirectHandler = (req) => {
   const user = JSON.parse(req.cookies.get("user").value);
   const role = user.role;
   const c4ca_facilitator_id = user.user?.c4ca_facilitator_id;
+  const c4ca_partner_id = user.user?.c4ca_partner_id;
   switch (role) {
     case "teacher":
       req.nextUrl.pathname = "/teacher/teams";
@@ -21,7 +22,7 @@ const redirectHandler = (req) => {
       req.nextUrl.pathname = `/partner/teacherList/${c4ca_facilitator_id}`;
       break;
     case "c4caPartner":
-      req.nextUrl.pathname = `/partner/facilitator/${c4ca_facilitator_id}`;
+      req.nextUrl.pathname = `/partner/facilitator/${c4ca_partner_id}`;
       break;
     default:
       req.nextUrl.pathname = "/";

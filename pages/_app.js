@@ -90,7 +90,7 @@ export default function App({ Component, pageProps }) {
             c4ca_facilitator_id = resp.data.user.c4ca_facilitator_id;
             c4ca_partner_id = resp.data.user.c4ca_partner_id;
             c4ca_roles = resp.data.user.c4ca_roles;
-
+            console.log("login.....", c4ca_roles);
             // let roles = res.data.c4ca_roles;
             // console.log(c4ca_roles, "<<<<<<<<<<");
             if (c4ca_roles.includes("superAdmin")) {
@@ -110,6 +110,7 @@ export default function App({ Component, pageProps }) {
               });
               return router.push(`/partner/teacherList/${c4ca_facilitator_id}`);
             } else if (c4ca_roles.includes("c4caPartner")) {
+              console.log("here........................");
               resp.data.role = "c4caPartner";
               setCookie("user", JSON.stringify(resp.data), {
                 path: "/",
@@ -153,15 +154,16 @@ export default function App({ Component, pageProps }) {
 
                     res.data.role = "teacher";
                     localStorage.setItem("AUTH", JSON.stringify(res.data));
-                    setCookie("user", JSON.stringify(res.data), {
-                      path: "/",
-                      maxAge: 604800, // Expires after 1hr
-                      sameSite: true,
-                    });
-
-                    return router.push(
-                      `/teacher/profile?partner_id=${partner_id}`
-                    );
+                    if (!cookie) {
+                      setCookie("user", JSON.stringify(res.data), {
+                        path: "/",
+                        maxAge: 604800, // Expires after 1hr
+                        sameSite: true,
+                      });
+                      return router.push(
+                        `/teacher/profile?partner_id=${partner_id}`
+                      );
+                    }
                   })
                   .catch((err) => {
                     console.log("error in users me put api", err);
@@ -178,11 +180,13 @@ export default function App({ Component, pageProps }) {
             } else {
               res.data.role = "teacher";
               localStorage.setItem("AUTH", JSON.stringify(res.data));
-              setCookie("user", JSON.stringify(res.data), {
-                path: "/",
-                maxAge: 604800, // Expires after 1hr
-                sameSite: true,
-              });
+              if (!cookie) {
+                setCookie("user", JSON.stringify(res.data), {
+                  path: "/",
+                  maxAge: 604800, // Expires after 1hr
+                  sameSite: true,
+                });
+              }
               if (resp.data.data.school) {
                 localStorage.setItem(
                   "teacherData",
