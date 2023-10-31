@@ -44,6 +44,7 @@ const TeamDetail = () => {
         // setError(err);
       });
   }, [params]);
+  
   const teamMemberData = data.team_members || [];
 
   useEffect(() => {

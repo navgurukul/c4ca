@@ -57,11 +57,13 @@ const ProfileForm = () => {
     const stateNames = Object.keys(jsonData);
     setStates(stateNames);
 
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+  
+    const authToken = localStorage.getItem("token");
+    console.log("authToken", authToken);
     customAxios
       .get("/c4ca/teacher_Data", {
         headers: {
-          Authorization: `Bearer ${authToken.token}`,
+          Authorization: `Bearer ${authToken}`,
         },
       })
       .then((res) => {
@@ -84,7 +86,7 @@ const ProfileForm = () => {
           customAxios
             .get("https://merd-api.merakilearn.org/users/me", {
               headers: {
-                Authorization: `Bearer ${authToken.token}`,
+                Authorization: `Bearer ${authToken}`,
               },
             })
             .then((response) => {
@@ -102,7 +104,11 @@ const ProfileForm = () => {
               console.error("Error fetching user data:", error);
             });
         }
+      })
+      .catch((err) => {
+        console.error("Error fetching user data:", err);
       });
+    localStorage.setItem("isFirstLogin", false);
   }, []);
 
   const handleInputChange = (event) => {
@@ -143,12 +149,13 @@ const ProfileForm = () => {
       profileData.append("district", formData.district);
       profileData.append("state", formData.state);
 
-      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      
+    const authToken = localStorage.getItem("token");
 
       customAxios
         .post("/c4ca/teacher_profile", profileData, {
           headers: {
-            Authorization: `Bearer ${authToken.token}`,
+            Authorization: `Bearer ${authToken}`,
             "Content-Type": "multipart/form-data", // Set the content type for FormData
           },
         })

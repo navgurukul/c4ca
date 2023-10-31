@@ -15,26 +15,10 @@ import { useRouter } from "next/router";
 
 export default function Home() {
   const isActive = useMediaQuery("(max-width:600px)");
-  const router = useRouter();
-  const [auth, setAuth] = useState(null);
 
-  useEffect(() => {
-    const authData = reactLocalStorage.getObject("AUTH");
-    if (Object.keys(authData).length && router.pathname === "/") {
-      const { role } = authData;
-      if (role === "teacher") {
-        router.push("/teacher/teams");
-      } else {
-        router.push("/student/dashboard");
-      }
-    } else {
-      setAuth(false);
-    }
-  }, []);
-
-  if (auth === null) return null;
-
+  
   return (
+    <>
     <Box maxWidth="false">
       <Container maxWidth="md" sx={{ marginTop: 10, marginBottom: 10 }}>
         <Stack alignItems={"center"}>
@@ -203,5 +187,7 @@ export default function Home() {
         />
       </Box>
     </Box>
+    
+    </>
   );
 }

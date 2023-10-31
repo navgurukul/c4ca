@@ -16,14 +16,13 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
     c4ca_partner_id: Number(id),
     phone_number: "",
   });
+  const token = localStorage.getItem("token");
 
   const createNewFacilitator = (values) => {
     console.log(values);
     const apiUrl = "https://merd-api.merakilearn.org/c4ca/facilitator/create";
     const headers = {
-      Authorization:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA", // Replace with your actual access token
-      "Content-Type": "application/json",
+      Authorization: token
     };
 
     axios

@@ -39,17 +39,18 @@ const TeacherDashboard = () => {
   };
 
   const refreshTeams = () => {
-    setLoading(true);
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+     
+    const authToken = localStorage.getItem("token");
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
     // console.log("refreshing....", teacherId, authToken);
     if (teacherId && authToken) {
+      console.log("teacher id is present", teacherId)
       customAxios
         .get(`/c4ca/teams/${teacherId}`, {
           headers: {
-            Authorization: `Bearer ${authToken.token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         })
         .then((response) => {
