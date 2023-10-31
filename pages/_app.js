@@ -154,16 +154,15 @@ export default function App({ Component, pageProps }) {
 
                     res.data.role = "teacher";
                     localStorage.setItem("AUTH", JSON.stringify(res.data));
-                    if (!cookie) {
-                      setCookie("user", JSON.stringify(res.data), {
-                        path: "/",
-                        maxAge: 604800, // Expires after 1hr
-                        sameSite: true,
-                      });
-                      return router.push(
-                        `/teacher/profile?partner_id=${partner_id}`
-                      );
-                    }
+                    setCookie("user", JSON.stringify(res.data), {
+                      path: "/",
+                      maxAge: 604800, // Expires after 1hr
+                      sameSite: true,
+                    });
+
+                    return router.push(
+                      `/teacher/profile?partner_id=${partner_id}`
+                    );
                   })
                   .catch((err) => {
                     console.log("error in users me put api", err);
@@ -180,13 +179,12 @@ export default function App({ Component, pageProps }) {
             } else {
               res.data.role = "teacher";
               localStorage.setItem("AUTH", JSON.stringify(res.data));
-              if (!cookie) {
-                setCookie("user", JSON.stringify(res.data), {
-                  path: "/",
-                  maxAge: 604800, // Expires after 1hr
-                  sameSite: true,
-                });
-              }
+              setCookie("user", JSON.stringify(res.data), {
+                path: "/",
+                maxAge: 604800, // Expires after 1hr
+                sameSite: true,
+              });
+
               if (resp.data.data.school) {
                 localStorage.setItem(
                   "teacherData",
