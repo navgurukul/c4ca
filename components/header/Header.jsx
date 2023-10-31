@@ -34,8 +34,9 @@ const Header = () => {
   }, [loggedOut, isFirstLogin]);
 
   useEffect(() => {
-
-    const partnerId =  new URLSearchParams(window.location.search)?.get("referrer");
+    const partnerId = new URLSearchParams(window.location.search)?.get(
+      "referrer"
+    );
     partnerId && localStorage.setItem("referrer", `referrer=${partnerId}`);
 
     const authToken = JSON.parse(localStorage.getItem("teacherData"));
@@ -52,24 +53,22 @@ const Header = () => {
       setAuthData(data);
     };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
+    router.events.on("routeChangeComplete", handleRouteChange);
 
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, []);
 
   const handleReloadHeader = () => {
     router.reload();
-  }
-  
-
+  };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-  }; 
+  };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -78,16 +77,16 @@ const Header = () => {
     // localStorage.clear();
     localStorage.removeItem("AUTH");
     localStorage.removeItem("user");
-    localStorage.removeItem("teacherData")
-    localStorage.removeItem("partner_id")
+    localStorage.removeItem("teacherData");
+    localStorage.removeItem("partner_id");
     localStorage.removeItem("referrer");
-    localStorage.removeItem("ally-supports-cache")
-    localStorage.removeItem("token")
+    localStorage.removeItem("ally-supports-cache");
+    localStorage.removeItem("token");
     localStorage.setItem("loggedOut", true);
     localStorage.setItem("isFirstLogin", false);
-    removeCookie("user");
-    setUser(null)
-    router.push("/")
+    removeCookie("user", { path: "/" });
+    setUser(null);
+    router.push("/");
   };
 
   return (
@@ -102,7 +101,9 @@ const Header = () => {
         {router.pathname === "/" && user == null ? (
           <Stack spacing={2} direction="row">
             {" "}
-            <a href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}>
+            <a
+              href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}
+            >
               {/* <Link href="/teacher/login"> */}
               <Button
                 color="secondary"
