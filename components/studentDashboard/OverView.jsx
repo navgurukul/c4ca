@@ -1,57 +1,100 @@
-import { Typography,Grid,Paper,Box,Avatar,Card,CardContent } from '@mui/material';
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import {
+  Typography,
+  Grid,
+  Box,
+  Card,
+  CardContent,
+} from "@mui/material";
+import customAxios from "@/api";
 
 const OverView = () => {
-    const Data = [
-        {
-          title: "All Time Metric",
-          value: 200,
-          icon: "/avatar2.svg",
+  const [attemptedAssessmentCount, setAttemptedAssessmentCount] = useState();
+  const [teamCount, setTeamCount] = useState([]);
+
+  useEffect(() => {
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    customAxios
+      .get("/c4ca/assessment/getAttemptAssessment", {
+        headers: {
+          Authorization: authToken.data.token,
         },
-        {
-          title: "All Volunteers",
-          value: 140,
-          icon: "/avatar2.svg",
+      })
+      .then((response) => {
+        const { attempted_assessment_count } = response.data.data;
+        console.log(attempted_assessment_count);
+        setAttemptedAssessmentCount(attempted_assessment_count);
+      })
+      .catch((error) => {
+        console.error("API call error", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    customAxios
+      .get("/c4ca/teams", {
+        headers: {
+          Authorization: authToken.data.token,
         },
-        {
-          title: "Total Number",
-          value: 140,
-          icon: "",
-        }
-      ];
-   
+      })
+      .then((res) => {
+        console.log(res.data.data.length, "teamdata");
+        setTeamCount(res.data.data.length);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
+
   return (
     <>
-        <Box sx={{ display: 'flex' }}>
-            <Typography variant='h5' sx={{ mt: 4 }}>
-            Overview
-            </Typography>
-        </Box>
+      <Box sx={{ display: "flex" }}>
+        <Typography variant="h5" sx={{ mt: 4 }}>
+          Overview
+        </Typography>
+      </Box>
 
-      <Grid container sx={{ mt: "32px" }} spacing={1}>
-        {Data.map((item, index) => (
-          <Grid key={index} item xs={12} sm={6} md={4} gap="32px">
-            <Card sx={{ border: 1, borderColor: 'gray', borderRadius: '8px', width:'90%',p:'24px'}}>
-              <CardContent>
-                <Box display="flex" alignItems="center">
-               {/* { item.icon !== ""&&<Avatar src={item.icon} />} */}
-               {<Avatar src={item.icon} />}
-                  <Typography variant="body1" sx={{ marginLeft: 1 }}>
-                    {/* {item.value} */}
-                    Coming soon....
-                  </Typography>
-                </Box>
-                {/* <Typography variant='body1'>{item.title}</Typography> */}
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+      <Grid container sx={{ mt: "32px" }} spacing={3}>
+        <Grid item xs={12} sm={6} md={5}>
     
+          <Card
+            sx={{
+              border: 1,
+              borderColor: "gray",
+              borderRadius: "8px",
+           
+            }}
+          >
+            <CardContent>
+              <Typography variant="h5" align="left">
+                {teamCount}
+              </Typography>
+              <Typography variant="body2">Total Number of Teams</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={5}>
+  
+          <Card
+            sx={{
+              border: 1,
+              borderColor: "gray",
+              borderRadius: "8px",
+      
+            }}
+          >
+            <CardContent>
+              <Typography variant="h5" align="left">
+                {attemptedAssessmentCount}
+              </Typography>
+              <Typography variant="body2">Questions Completed</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
     </>
-  )
-}
+    
+  );
+};
 export default OverView;
-
-
-
