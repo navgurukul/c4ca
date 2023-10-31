@@ -18,7 +18,7 @@ export default function Home() {
   const router = useRouter();
   useEffect(() => {
     const user = reactLocalStorage.getObject("user");
-    if (!user) return;
+    if (Object.keys(user) == 0) return;
     let req = { nextUrl: { pathname: "" } };
     const role = user.role;
     const c4ca_facilitator_id = user.user?.c4ca_facilitator_id;
