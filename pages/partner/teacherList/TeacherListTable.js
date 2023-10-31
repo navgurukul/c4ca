@@ -42,7 +42,7 @@ const getMuiTheme = () =>
   });
 
 function TeachersList({ filteredTeacher }) {
-  console.log(filteredTeacher);
+  // console.log(filteredTeacher);
   const options = {
     filterType: "checkbox",
     download: true,

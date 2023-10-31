@@ -38,13 +38,16 @@ export default function App({ Component, pageProps }) {
   const [error, setError] = useState("");
   const [cookie, setCookie] = useCookies(["user"]);
   const { token } = router.query;
-
+  let c4ca_partner_id, c4ca_facilitator_id, c4ca_roles;
   function reverseJwtBody(jwt) {
     const [header, body, signature] = jwt.split(".");
     const reversedBody = body.split("").reverse().join("");
     return [header, reversedBody, signature].join(".");
   }
-  let partner_id
+  let partner_id;
+  const handleRouteChange = () => {
+    setLoading(false);
+  };
 
   const handleClose = (event) => {
     const { reason } = event ?? {};
@@ -66,9 +69,41 @@ export default function App({ Component, pageProps }) {
         }
       )
       .then((res) => {
-        console.log("res from google data", res.data.token);
+        // console.log("res from google data", res.data.token);
         const userToken = res.data.token;
         localStorage.setItem("token", userToken);
+
+        customAxios
+          .get("/users/me", {
+            headers: {
+              accept: "application/json",
+              Authorization: res?.data?.token,
+            },
+          })
+          .then((resp) => {
+            // setLoading(false);
+            // console.log(resp.data.c4ca_partner_id);
+
+            localStorage.setItem("AUTH", JSON.stringify(res.data.user));
+            // let { c4ca_partner_id, c4ca_facilitator_id, c4ca_roles } =
+            //   resp.data.user;
+            c4ca_facilitator_id = resp.data.user.c4ca_facilitator_id;
+            c4ca_partner_id = resp.data.user.c4ca_partner_id;
+            c4ca_roles = resp.data.user.c4ca_roles;
+
+            // let roles = res.data.c4ca_roles;
+            // console.log(c4ca_roles, "<<<<<<<<<<");
+            if (c4ca_roles.includes("superAdmin")) {
+              return router.push(`/partner`);
+            } else if (c4ca_roles.includes("facilitator")) {
+              return router.push(`/partner/teacherList/${c4ca_facilitator_id}`);
+            } else if (c4ca_roles.includes("c4caPartner")) {
+              return router.push(`/partner/teacherList/${c4ca_partner_id}`);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
 
         customAxios
           .get("/c4ca/teacher_Data", {
@@ -81,51 +116,45 @@ export default function App({ Component, pageProps }) {
             if (resp.data.data === null) {
               setLoading(false);
               if (referrer && referrer !== "null") {
-
-
-                console.log("referrer", referrer );
-                console.log(token, "token inside put api")
-
-
                 customAxios
-                .put(
-                  "/users/me",
-                  {
-                    referrer: referrer,
-                  },
-                  {
-                    headers: {
-                      accept: "application/json",
-                      Authorization: userToken,
-                    },
-                  }
-                )
-                .then((res) => {
-                  console.log("res from users me put api", res);
-                  // localStorage.setItem("AUTH", JSON.stringify(res.data));
-                  partner_id = res.data.user.c4ca_partner_id
+                  .put(
+                    "/users/me",
+                    { referrer: referrer },
+                    {
+                      headers: {
+                        accept: "application/json",
+                        Authorization: userToken,
+                      },
+                    }
+                  )
 
-                  res.data.role = "teacher";
-                  localStorage.setItem("AUTH", JSON.stringify(res.data));
-                  setCookie("user", JSON.stringify(res.data), {
-                    path: "/",
-                    maxAge: 604800, // Expires after 1hr
-                    sameSite: true,
+                  .then((res) => {
+                    // console.log("res from users me put api", res);
+                    // localStorage.setItem("AUTH", JSON.stringify(res.data));
+                    partner_id = res.data.user.c4ca_partner_id;
+
+                    res.data.role = "teacher";
+                    localStorage.setItem("AUTH", JSON.stringify(res.data));
+                    setCookie("user", JSON.stringify(res.data), {
+                      path: "/",
+                      maxAge: 604800, // Expires after 1hr
+                      sameSite: true,
+                    });
+
+                    return router.push(
+                      `/teacher/profile?partner_id=${partner_id}`
+                    );
+                  })
+                  .catch((err) => {
+                    console.log("error in users me put api", err);
                   });
-  
-                  setTimeout(() => {
-                    setLoading(false);
-                  }, 1500);
-              
-                  return router.push(`/teacher/profile?partner_id=${partner_id}`);
-
-                })
-                .catch((err) => {
-                  console.log("error in users me put api", err);
-                });
-
               } else {
-                return setOpen(true);
+                // console.log(c4ca_roles.length, "<<<<<<<<<< c4ca roles list");
+                return !c4ca_facilitator_id ||
+                  !c4ca_partner_id ||
+                  c4ca_roles.length === 0
+                  ? setOpen(true)
+                  : null;
               }
               return setError(resp.data.status);
             } else {
@@ -142,29 +171,26 @@ export default function App({ Component, pageProps }) {
                   JSON.stringify(resp.data.data)
                 );
 
-                setTimeout(() => {
-                  setLoading(false);
-                }, 1500);
                 return router.push("/teacher/teams");
               }
               // Only redirect if the request is successful
               router.push("/teacher/profile");
-              setLoading(false);
+              // setLoading(false);
             }
           })
           .catch((err) => {
             console.log("error in google data", err);
-            setLoading(false);
+            // setLoading(false);
           });
       })
       .catch((err) => {
-        setOpen(true);
-        console.log("error in google data", err);
-        setLoading(false);
+        // setLoading(false);
       });
   };
 
   useEffect(() => {
+    // console.log(router.pathname, "router pathname inside useeffect");
+
     const urlParams = new URLSearchParams(window.location.search);
     // setPartner_id(localStorage.getItem("partner_id"));
     referrer = localStorage.getItem("referrer");
@@ -182,6 +208,12 @@ export default function App({ Component, pageProps }) {
       localStorage.setItem("loggedOut", null);
     !localStorage.getItem("isFirstLogin") &&
       localStorage.setItem("isFirstLogin", true);
+
+    router.events.on("routeChangeComplete", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
   }, []);
 
   return (
@@ -198,17 +230,6 @@ export default function App({ Component, pageProps }) {
           <Header />
         )}{" "}
         <>
-
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <Alert
-              onClose={handleClose}
-              severity="error"
-              sx={{ width: "100%" }}
-            >
-              Apologies, the entered Gmail ID is not linked with a C4CA partner.
-            </Alert>
-          </Snackbar>
-
           {loading ? (
             <div class="loading-container">
               <div class="loading"></div>
@@ -218,6 +239,11 @@ export default function App({ Component, pageProps }) {
             <Component {...pageProps} />
           )}
         </>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            Apologies, the entered Gmail ID is not linked with a C4CA partner.
+          </Alert>
+        </Snackbar>
       </ThemeProvider>
     </>
   );

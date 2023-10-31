@@ -166,7 +166,7 @@ const Header = () => {
                     onClick={() => {
                       handleClose();
                       router.push(
-                        authData.role == "teacher"
+                        authData?.role == "teacher"
                           ? "/teacher/profile"
                           : "/student/team-profile"
                       );

@@ -23,7 +23,7 @@ import InsertLinkIcon from "@mui/icons-material/InsertLink";
 const TeacherFilter = () => {
   const router = useRouter();
   const { id } = router.query;
-  console.log(router.query);
+  // console.log(router.query);
 
   const [allTeacherList, setAllTeacherList] = useState([]);
   const [filteredTeacher, setFilteredTeacher] = useState([]);
@@ -34,8 +34,7 @@ const TeacherFilter = () => {
 
   useEffect(() => {
     const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/${id}`;
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
+    const token = localStorage.getItem("token");
     axios
       .get(apiUrl, {
         headers: {
@@ -44,7 +43,7 @@ const TeacherFilter = () => {
       })
       .then((response) => {
         const teacherList = response?.data?.data;
-        console.log(teacherList);
+        // console.log(teacherList);
         if (teacherList !== undefined) {
           setAllTeacherList(teacherList);
           setFilteredTeacher(teacherList);
@@ -59,7 +58,7 @@ const TeacherFilter = () => {
 
   const handleDistrictChange = (event) => {
     const selectedDistrict = event.target.value;
-    console.log(selectedDistrict);
+    // console.log(selectedDistrict);
     setSelectedDistrict(selectedDistrict);
     if (selectedDistrict === "All District") {
       setFilteredTeacher(allTeacherList);
@@ -75,7 +74,7 @@ const TeacherFilter = () => {
   const handleSchoolChange = (event) => {
     const selectedSchool = event.target.value;
     setSelectedSchool(selectedSchool);
-    console.log(selectedSchool);
+    // console.log(selectedSchool);
     const filterBySchool = filterSchool(selectedSchool, allTeacherList);
     setFilteredTeacher(filterBySchool);
   };

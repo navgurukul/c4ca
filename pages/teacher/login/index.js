@@ -66,6 +66,7 @@ const LoginPage = () => {
             },
           })
           .then((resp) => {
+            // console.log("res from google data", resp.data.data);
             if (resp.data.data === null) {
               setLoading(false);
               if (partner_id) {
