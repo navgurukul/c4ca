@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import { TextField,InputLabel } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Dialog, Grid, DialogContent, DialogActions } from "@mui/material";
-import axios from "axios";
+import customAxios from "@/api";
 
 function FacilitatorAddModal({ boolean, onOpen, id }) {
   console.log(typeof id);
@@ -20,12 +20,12 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
 
   const createNewFacilitator = (values) => {
     console.log(values);
-    const apiUrl = "https://merd-api.merakilearn.org/c4ca/facilitator/create";
+    const apiUrl = "/c4ca/facilitator/create";
     const headers = {
       Authorization: token
     };
 
-    axios
+    customAxios
       .post(apiUrl, values, { headers })
       .then((response) => {
         console.log("POST request successful:", response.data);

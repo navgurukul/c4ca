@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import girlImage from "../../../public/assets/girlImage.png";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import customAxios from "@/api";
 
 function Progress() {
 
@@ -21,10 +21,9 @@ function Progress() {
   useEffect(() => {
     if (progress) {
       console.log(progress);
-      const apiUrl = `https://merd-api.merakilearn.org/c4ca/${progress}`;
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-      axios
+      const apiUrl = `/c4ca/${progress}`;
+      const token = localStorage.getItem("token");
+      customAxios
         .get(apiUrl, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,10 +52,9 @@ const [teamsData, setTeamsData] = useState([])
   useEffect(() => {
     if (progress) {
       console.log(progress);
-      const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/teams/${progress}`;
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-      axios
+      const apiUrl = `/c4ca/teacher/teams/${progress}`;
+      const token = localStorage.getItem("token");
+      customAxios
         .get(apiUrl, {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -19,6 +19,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import customAxios from "@/api";
 
 const TeacherFilter = () => {
   const router = useRouter();
@@ -36,9 +37,9 @@ const TeacherFilter = () => {
 
   useEffect(() => {
   if(id){
-    const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/${id}`;
+    const apiUrl = `/c4ca/teacher/${id}`;
     const token = localStorage.getItem("token");
-    axios
+    customAxios
       .get(apiUrl, {
         headers: {
           Authorization: `Bearer ${token}`,

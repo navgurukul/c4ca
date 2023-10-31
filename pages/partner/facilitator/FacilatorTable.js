@@ -2,7 +2,6 @@
 import MUIDataTable from "mui-datatables";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Typography, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
