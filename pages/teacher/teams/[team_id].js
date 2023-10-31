@@ -31,11 +31,16 @@ const TeamDetail = () => {
   const params = useParams();
 
   useEffect(() => {
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
     if (!params?.team_id) return;
     const apiUrl = `/c4ca/team/${params?.team_id}`;
 
     customAxios
-      .get(apiUrl)
+      .get(apiUrl, {
+        headers: {
+          Authorization: authToken.token,
+        },
+      })
       .then((response) => {
         setData(response.data.data);
       })
@@ -44,7 +49,7 @@ const TeamDetail = () => {
         // setError(err);
       });
   }, [params]);
-  
+
   const teamMemberData = data.team_members || [];
 
   useEffect(() => {
@@ -84,18 +89,16 @@ const TeamDetail = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  color: "#29458C"
+                  color: "#29458C",
                 }}
               >
                 Dashboard
               </Typography>
             </Link>
 
-            <Typography
-              variant="body1"
-              component="span"
-            >
-              <span>/</span>{data.team_name}
+            <Typography variant="body1" component="span">
+              <span>/</span>
+              {data.team_name}
             </Typography>
           </Box>
           <Typography

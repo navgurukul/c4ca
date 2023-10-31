@@ -1,5 +1,5 @@
 import { breakpoints } from "@/theme/constant";
-import { OpenInNewOutlined } from "@mui/icons-material";
+import { EditOutlined, OpenInNewOutlined } from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import CopyAll from "@mui/icons-material/CopyAll";
@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import customAxios from "@/api";
 import Link from "next/link";
 
-const TeacherDashboard = () => {
+const TeacherDashboard = ({ authToken }) => {
   const router = useRouter();
 
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
@@ -33,20 +33,21 @@ const TeacherDashboard = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState(null);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
 
   const refreshTeams = () => {
-     
     const authToken = localStorage.getItem("token");
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
     // console.log("refreshing....", teacherId, authToken);
     if (teacherId && authToken) {
-      console.log("teacher id is present", teacherId)
+      console.log("teacher id is present", teacherId);
       customAxios
         .get(`/c4ca/teams/${teacherId}`, {
           headers: {
@@ -71,6 +72,16 @@ const TeacherDashboard = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    refreshTeams();
+  };
+  const handleOpenEditDialog = (team) => {
+    setSelectedTeam(team);
+    setEditDialogOpen(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setSelectedTeam(null);
+    setEditDialogOpen(false);
     refreshTeams();
   };
 
@@ -131,7 +142,10 @@ const TeacherDashboard = () => {
                         {team.team_name}
                       </Typography>
                     </Link>
-                    {/* <EditOutlined style={{ color: "gray" }} /> */}
+                    <EditOutlined
+                      style={{ color: "gray", cursor: "pointer" }}
+                      onClick={() => handleOpenEditDialog(team)}
+                    />
                   </Box>
                   <Box
                     sx={{
@@ -178,20 +192,6 @@ const TeacherDashboard = () => {
                         >
                           <CopyAll style={{ color: "gray" }} /> Copy
                         </Button>
-                        <Snackbar
-                          open={snackbarOpen}
-                          autoHideDuration={3000} // Adjust as needed
-                          onClose={handleSnackbarClose}
-                        >
-                          <MuiAlert
-                            elevation={6}
-                            variant="filled"
-                            severity="success"
-                            onClose={handleSnackbarClose}
-                          >
-                            {snackbarMessage}
-                          </MuiAlert>
-                        </Snackbar>
                       </Box>
                       <Box
                         sx={{
@@ -285,9 +285,28 @@ const TeacherDashboard = () => {
           <Team
             handleCloseDialog={handleCloseDialog}
             onClose={handleCloseDialog}
+            handleSnackbarOpen={handleSnackbarOpen}
           />
         </DialogContent>
       </Dialog>
+
+      {selectedTeam && (
+        <Dialog
+          open={editDialogOpen}
+          onClose={handleCloseEditDialog}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogContent>
+            <Team
+              handleSnackbarOpen={handleSnackbarOpen}
+              handleCloseEditDialog={handleCloseEditDialog}
+              onClose={handleCloseEditDialog}
+              team={selectedTeam}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
 
       <Container maxWidth="lg" sx={{ padding: 5 }} disableGutters>
         <Typography variant="h5" color="primary">
@@ -364,6 +383,20 @@ const TeacherDashboard = () => {
           </Grid>
         </Grid>
       </Container>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000} // Adjust as needed
+        onClose={handleSnackbarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          severity="success"
+          onClose={handleSnackbarClose}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };

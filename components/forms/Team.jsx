@@ -15,8 +15,11 @@ import stateDistrict from "../../data/state.json";
 import { useRouter } from "next/router";
 import customAxios from "../../api";
 import Link from "next/link";
+import TeacherDashboard from "@/pages/teacher/teams";
+import axios from 'axios';
 
-const Team = ({ handleCloseDialog, setActiveStep = null }) => {
+
+const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDialog , handleSnackbarOpen=null }) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
@@ -49,9 +52,31 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
       }));
       setTeamMembers((prevMembers) => [...prevMembers, ...newMembers]);
     } else if (membersCount > teamSize) {
-      setTeamMembers(teamMembers.slice(0, teamSize));
+      setTeamMembers(teamMembers.slice(0, teamSize));      
     }
   }, [teamSize]);
+
+  useEffect(() => {
+    if (team && team.id) {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      customAxios
+        .get(`/c4ca/team/${team.id}`, {
+          headers: {
+            Authorization: authToken.token
+          },
+        })
+      .then((response) => {
+        const teamData = response.data;
+        setTeamName(teamData.data.team_name);
+        setTeamSize(teamData.data.team_size);
+        setTeamMembers(teamData.data.team_members);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+    }
+  }, [team]);
+
 
   const createTeam = async () => {
     clearErrors();
@@ -70,6 +95,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
             team_name: teamName,
             team_size: teamSize,
             team_members: filteredTeamMembers,
+     
             school: values.school,
             district: values.district,
             state: values.state,
@@ -85,6 +111,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
         if (response.data.status === "success") {
           router.push("/teacher/teams");
           handleCloseDialog();
+          handleSnackbarOpen("Team created successfully");
         } else {
           if (response.data.status == "Unique Key Violation") {
             setErrors({
@@ -97,6 +124,42 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
         console.error("Error creating a team:", error);
       }
     }
+  };
+
+  const handleEditTeam = () => {  
+    const updatedTeam = {
+      team_name: teamName,
+      team_size: teamSize,
+      team_members: teamMembers.map((member) => ({
+        name: member.name,
+        class: member.class,
+      })),    
+    };
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      // console.log('Team ID:', team.id);
+    const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
+    // console.log('URL:', url);
+
+    customAxios.put(url, updatedTeam, {
+      headers: {
+        Authorization: `Bearer ${authToken.token}`,
+        'Content-Type': 'application/json', 
+      },
+    })
+    .then((response) => {
+      if (response.data.status === "success") {
+        console.log('Edited team data:', response.data);
+        handleCloseEditDialog();
+        handleSnackbarOpen("Team updated successfully");
+
+      } else {
+        console.log('Edit request failed with response:', response.data);
+      }
+    })
+    .catch((error) => {
+      console.error('Error editing team data:', error);
+      console.log('Response:', error.response);
+    });
   };
   const validateInputs = () => {
     const newErrors = {};
@@ -152,9 +215,19 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
       maxWidth="sm"
       sx={{ display: "grid", gap: isMobile ? 2 : 4, paddingY: 5 }}
     >
-      <Typography variant="h5" color="text.primary">
+      {!team? <Typography variant="h5" color="text.primary">
         Add a Team
+      </Typography>:
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Typography variant="h6" color="text.primary">
+      Edit Team
       </Typography>
+      <Button  onClick={() =>handleCloseEditDialog()}>
+        <img src="/assets/close.svg" alt="close icon" />
+      </Button>
+
+      </Box>
+     }
       <InputControl
         label="Team Name"
         type="text"
@@ -169,6 +242,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
         error={errors.school}
         value={values.school}
         onChange={(e) => setValues({ ...values, school: e.target.value })}
+        disabled= {team}
       />
 
       <Grid spacing={5} container>
@@ -184,6 +258,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
               value: state,
             }))}
             sx={{ mb: 1 }}
+            disabled= {team}
           />
         </Grid>
         <Grid xs={6} item>
@@ -202,6 +277,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
                 : []
             }
             sx={{ mb: 1 }}
+            disabled= {team}
           />
         </Grid>
       </Grid>
@@ -297,8 +373,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
         team later
       </Typography>
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Button
+      <Box sx={{ display: "flex", justifyContent: team?"flex-end": "space-between" }}>
+     { !team && <Button
           onClick={() =>
             setActiveStep ? setActiveStep(0) : handleCloseDialog()
           }
@@ -306,8 +382,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
           color="primary"
         >
           Back
-        </Button>
-        {setActiveStep && (
+        </Button>}
+        {!team&&(setActiveStep && (
           <Button
             className="Button"
             color="primary"
@@ -315,15 +391,18 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
           >
             Skip
           </Button>
-        )}
+        ))}
+       
+     
         <Button
           className="Button"
           color="primary"
           variant="contained"
           sx={{ minWidth: 240, display: "block" }}
-          onClick={createTeam}
+          onClick= { team ?handleEditTeam : createTeam}
+          
         >
-          Add Team
+         { team ? "Update Details" : "Add Team"}
         </Button>
       </Box>
     </Container>
