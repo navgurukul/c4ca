@@ -11,8 +11,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import PartnerUpdateModal from "./PartnerAddModal"
 // import { useRemovePartnerMutation } from "../../store";
 import { useRouter } from 'next/router';
-
-
 const getMuiTheme = () =>
   createTheme({
     components: {
@@ -47,7 +45,6 @@ const getMuiTheme = () =>
       },
     },
   });
-
 const options = {
   filterType: "checkbox",
   download: true,
@@ -57,13 +54,11 @@ const options = {
   rowFilter: false,
   selectableRows: "none",
 };
-
 let btnsContainerStyles = {
   display: "flex",
   justifyContent: "flex-end",
 };
-
-const PartnerTable = ({data}) => { 
+const PartnerTable = ({data}) => {
   let partnerId = "";
   const columns = [
     {
@@ -78,7 +73,7 @@ const PartnerTable = ({data}) => {
       },
     },
     {
-      name: "point_of_contact_name",
+      name: "point_of_contact",
       label: "Point of Contact",
       options: {
         filter: false,
@@ -154,28 +149,22 @@ const PartnerTable = ({data}) => {
       },
     },
   ];
-
   const handleDeleteClick = (partnerId) => {
     removePartner(partnerId);
   };
-
   const handleEditClick = (partnerId) => {
     setOpen(!open);
     setUpdateData(partnerId);
   };
-
   const handleEditButtonClick = (partneredit, event) => {
     event.stopPropagation(); // Stop the event propagation to prevent handleRowClick from being called
     handleEditClick(partneredit);
   };
-
-  const router = useRouter();  
-
+  const router = useRouter();
   const handleRowClick = (event, dataIndex) => {
     partnerId = data[dataIndex.dataIndex].id;
     router.push(`partner/facilitator/${partnerId}`);
   };
-
   return (
     <Box>
       <div
@@ -186,7 +175,6 @@ const PartnerTable = ({data}) => {
       >
         <ThemeProvider theme={getMuiTheme}>
           <MUIDataTable
-            
             data={data}
             columns={columns}
             options={{ ...options, onRowClick: handleRowClick }}
@@ -196,5 +184,4 @@ const PartnerTable = ({data}) => {
     </Box>
   );
 };
-
 export default PartnerTable;

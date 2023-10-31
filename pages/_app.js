@@ -98,7 +98,7 @@ export default function App({ Component, pageProps }) {
             } else if (c4ca_roles.includes("facilitator")) {
               return router.push(`/partner/teacherList/${c4ca_facilitator_id}`);
             } else if (c4ca_roles.includes("c4caPartner")) {
-              return router.push(`/partner/teacherList/${c4ca_partner_id}`);
+              return router.push(`/partner/facilitator/${c4ca_partner_id}`);
             }
           })
           .catch((err) => {
@@ -149,7 +149,7 @@ export default function App({ Component, pageProps }) {
                     console.log("error in users me put api", err);
                   });
               } else {
-                // console.log(c4ca_roles.length, "<<<<<<<<<< c4ca roles list");
+                console.log(c4ca_roles.length, "<<<<<<<<<< c4ca roles list");
                 return !c4ca_facilitator_id ||
                   !c4ca_partner_id ||
                   c4ca_roles.length === 0
