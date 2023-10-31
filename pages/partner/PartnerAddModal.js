@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { TextField,InputLabel } from "@mui/material";
+import { TextField, InputLabel } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Dialog,
@@ -14,28 +14,26 @@ import {
   // DialogContentText,
   DialogActions,
 } from "@mui/material";
-import axios from "axios";
+import customAxios from "@/api";
 // import useValidEmail from "../../hooks/useValidEmail";
 
 function PartnerAddModal({ boolean, onOpen }) {
   const [values, setValues] = useState({
- 
     name: "",
     point_of_contact: "",
     email: "",
-    phone_number: "", 
+    phone_number: "",
   });
 
   const createNewPartner = (values) => {
-    const apiUrl =
-      "https://merd-api.merakilearn.org/c4caPartners";
+    const token = localStorage.getItem("token");
+    const apiUrl = "/c4caPartners";
     const headers = {
-      Authorization:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA", // Replace with your actual access token
+      Authorization: token, // Replace with your actual access token
       "Content-Type": "application/json",
     };
 
-    axios
+    customAxios
       .post(apiUrl, values, { headers })
       .then((response) => {
         console.log("POST request successful:", response.data);

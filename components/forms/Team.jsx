@@ -14,12 +14,14 @@ import { useState, useEffect } from "react";
 import stateDistrict from "../../data/state.json";
 import { useRouter } from "next/router";
 import customAxios from "../../api";
-import Link from "next/link";
-import TeacherDashboard from "@/pages/teacher/teams";
-import axios from 'axios';
 
-
-const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDialog , handleSnackbarOpen=null }) => {
+const Team = ({
+  handleCloseDialog,
+  setActiveStep = null,
+  team,
+  handleCloseEditDialog,
+  handleSnackbarOpen = null,
+}) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
@@ -52,38 +54,36 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
       }));
       setTeamMembers((prevMembers) => [...prevMembers, ...newMembers]);
     } else if (membersCount > teamSize) {
-      setTeamMembers(teamMembers.slice(0, teamSize));      
+      setTeamMembers(teamMembers.slice(0, teamSize));
     }
   }, [teamSize]);
 
   useEffect(() => {
     if (team && team.id) {
-      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      const authToken = localStorage.getItem("token");
       customAxios
         .get(`/c4ca/team/${team.id}`, {
           headers: {
-            Authorization: authToken.token
+            Authorization: `Bearer ${authToken}`,
           },
         })
-      .then((response) => {
-        const teamData = response.data;
-        setTeamName(teamData.data.team_name);
-        setTeamSize(teamData.data.team_size);
-        setTeamMembers(teamData.data.team_members);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
+        .then((response) => {
+          const teamData = response.data;
+          setTeamName(teamData.data.team_name);
+          setTeamSize(teamData.data.team_size);
+          setTeamMembers(teamData.data.team_members);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
   }, [team]);
-
 
   const createTeam = async () => {
     clearErrors();
     if (validateInputs()) {
       try {
-       
-    const authToken = localStorage.getItem("token");
+        const authToken = localStorage.getItem("token");
 
         const filteredTeamMembers = teamMembers.filter(
           (member) => member.name.trim() !== "" && member.class !== ""
@@ -95,7 +95,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
             team_name: teamName,
             team_size: teamSize,
             team_members: filteredTeamMembers,
-     
+
             school: values.school,
             district: values.district,
             state: values.state,
@@ -126,40 +126,39 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
     }
   };
 
-  const handleEditTeam = () => {  
+  const handleEditTeam = () => {
     const updatedTeam = {
       team_name: teamName,
       team_size: teamSize,
       team_members: teamMembers.map((member) => ({
         name: member.name,
         class: member.class,
-      })),    
+      })),
     };
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
-      // console.log('Team ID:', team.id);
-    const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
+    const authToken = localStorage.getItem("token");    // console.log('Team ID:', team.id);
+    // const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
     // console.log('URL:', url);
 
-    customAxios.put(url, updatedTeam, {
-      headers: {
-        Authorization: `Bearer ${authToken.token}`,
-        'Content-Type': 'application/json', 
-      },
-    })
-    .then((response) => {
-      if (response.data.status === "success") {
-        console.log('Edited team data:', response.data);
-        handleCloseEditDialog();
-        handleSnackbarOpen("Team updated successfully");
-
-      } else {
-        console.log('Edit request failed with response:', response.data);
-      }
-    })
-    .catch((error) => {
-      console.error('Error editing team data:', error);
-      console.log('Response:', error.response);
-    });
+    customAxios
+      .put(`/c4ca/team/update/${team.id}`, updatedTeam, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        if (response.data.status === "success") {
+          console.log("Edited team data:", response.data);
+          handleCloseEditDialog();
+          handleSnackbarOpen("Team updated successfully");
+        } else {
+          console.log("Edit request failed with response:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error editing team data:", error);
+        console.log("Response:", error.response);
+      });
   };
   const validateInputs = () => {
     const newErrors = {};
@@ -215,19 +214,20 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
       maxWidth="sm"
       sx={{ display: "grid", gap: isMobile ? 2 : 4, paddingY: 5 }}
     >
-      {!team? <Typography variant="h5" color="text.primary">
-        Add a Team
-      </Typography>:
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-      <Typography variant="h6" color="text.primary">
-      Edit Team
-      </Typography>
-      <Button  onClick={() =>handleCloseEditDialog()}>
-        <img src="/assets/close.svg" alt="close icon" />
-      </Button>
-
-      </Box>
-     }
+      {!team ? (
+        <Typography variant="h5" color="text.primary">
+          Add a Team
+        </Typography>
+      ) : (
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h6" color="text.primary">
+            Edit Team
+          </Typography>
+          <Button onClick={() => handleCloseEditDialog()}>
+            <img src="/assets/close.svg" alt="close icon" />
+          </Button>
+        </Box>
+      )}
       <InputControl
         label="Team Name"
         type="text"
@@ -242,7 +242,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
         error={errors.school}
         value={values.school}
         onChange={(e) => setValues({ ...values, school: e.target.value })}
-        disabled= {team}
+        disabled={team}
       />
 
       <Grid spacing={5} container>
@@ -258,7 +258,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
               value: state,
             }))}
             sx={{ mb: 1 }}
-            disabled= {team}
+            disabled={team}
           />
         </Grid>
         <Grid xs={6} item>
@@ -277,7 +277,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
                 : []
             }
             sx={{ mb: 1 }}
-            disabled= {team}
+            disabled={team}
           />
         </Grid>
       </Grid>
@@ -373,17 +373,24 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
         team later
       </Typography>
 
-      <Box sx={{ display: "flex", justifyContent: team?"flex-end": "space-between" }}>
-     { !team && <Button
-          onClick={() =>
-            setActiveStep ? setActiveStep(0) : handleCloseDialog()
-          }
-          className="Button"
-          color="primary"
-        >
-          Back
-        </Button>}
-        {!team&&(setActiveStep && (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: team ? "flex-end" : "space-between",
+        }}
+      >
+        {!team && (
+          <Button
+            onClick={() =>
+              setActiveStep ? setActiveStep(0) : handleCloseDialog()
+            }
+            className="Button"
+            color="primary"
+          >
+            Back
+          </Button>
+        )}
+        {!team && setActiveStep && (
           <Button
             className="Button"
             color="primary"
@@ -391,18 +398,16 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
           >
             Skip
           </Button>
-        ))}
-       
-     
+        )}
+
         <Button
           className="Button"
           color="primary"
           variant="contained"
           sx={{ minWidth: 240, display: "block" }}
-          onClick= { team ?handleEditTeam : createTeam}
-          
+          onClick={team ? handleEditTeam : createTeam}
         >
-         { team ? "Update Details" : "Add Team"}
+          {team ? "Update Details" : "Add Team"}
         </Button>
       </Box>
     </Container>

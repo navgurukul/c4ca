@@ -45,7 +45,7 @@ const TeacherDashboard = ({ authToken }) => {
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
-    // console.log("refreshing....", teacherId, authToken);
+    console.log("authToken", authToken);
     if (teacherId && authToken) {
       console.log("teacher id is present", teacherId);
       customAxios
@@ -65,6 +65,8 @@ const TeacherDashboard = ({ authToken }) => {
         });
     }
   };
+
+
 
   useEffect(() => {
     refreshTeams();

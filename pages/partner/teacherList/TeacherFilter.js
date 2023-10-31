@@ -19,6 +19,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import customAxios from "@/api";
 
 const TeacherFilter = () => {
   const router = useRouter();
@@ -35,32 +36,32 @@ const TeacherFilter = () => {
   const [breadCumData, setBreadCumData] = useState();
 
   useEffect(() => {
-    if (id) {
-      const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/${id}`;
-      const token = localStorage.getItem("token");
-      axios
-        .get(apiUrl, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          const teacherList = response?.data?.data?.teachersDetails;
-          const breadCrumb = response?.data?.data;
-          console.log(breadCrumb);
-          if (teacherList !== undefined) {
-            setAllTeacherList(teacherList);
-            setFilteredTeacher(teacherList);
-            setBreadCumData(breadCrumb);
-          } else {
-            console.error("Data is undefined.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    }
+  if(id){
+    const apiUrl = `/c4ca/teacher/${id}`;
+    const token = localStorage.getItem("token");
+    customAxios
+      .get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response); 
+        const teacherList = response?.data?.data?.teachersDetails;
+        const breadCrumb = response?.data?.data;
+        console.log(breadCrumb);
+        if (teacherList !== undefined) {
+          setAllTeacherList(teacherList);
+          setFilteredTeacher(teacherList);
+          setBreadCumData(breadCrumb);
+        } else {
+          console.error("Data is undefined.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }
   }, [id]);
 
   const handleDistrictChange = (event) => {

@@ -12,7 +12,7 @@ import {
 import { SearchOutlined, Add } from "@mui/icons-material";
 import PartnerAddModal from "./PartnerAddModal";
 import PartnerTable from "./PartnerTable";
-import axios from "axios";
+import customAxios from "@/api";
 // import { breakpoints } from "../../theme/constant";
 
 function PartnerFilter() {
@@ -25,10 +25,9 @@ function PartnerFilter() {
   // Function to fetch data from the API
   //add query
   useEffect(() => {
-    const apiUrl = "https://merd-api.merakilearn.org/c4caPartners/admin";
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-    axios
+    const apiUrl = "/c4caPartners/admin";
+    const token = localStorage.getItem("token");
+    customAxios
       .get(apiUrl, {
         headers: {
           Authorization: `Bearer ${token}`,

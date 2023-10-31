@@ -23,6 +23,7 @@ const images = [
 ];
 
 const Dashboard = () => {
+
   const [showAllTeams, setShowAllTeams] = useState(false);
 
   const [Leaderboard, setLeaderboard] = useState([]);
@@ -44,12 +45,12 @@ const Dashboard = () => {
     }
     return shuffledImages;
   };
-  useEffect(() => {   
-    const authToken = localStorage.getItem("token");
+  useEffect(() => {
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
     customAxios
       .get("/c4ca/teams", {
         headers: {
-          Authorization: authToken
+          Authorization: authToken.data.token
         },
       })
       .then((res) => {
@@ -63,10 +64,19 @@ const Dashboard = () => {
   const [team, setTeam] = useState({});
   useEffect(() => {
     const teamData = JSON.parse(localStorage.getItem("AUTH"));
-    customAxios.get(`/c4ca/team/${teamData.data.id}`).then((res) => {
+    const authToken = teamData.data.token;
+
+    customAxios.get(`/c4ca/team/${teamData.data.id}`,
+    {
+      headers: {
+        Authorization: authToken
+      },
+    })
+    .then((res) => {
       setTeam(res.data.data);
     });
   }, []);
+
 
   return (
     <Container sx={{ marginTop: "3%" }} maxWidth="lg">
