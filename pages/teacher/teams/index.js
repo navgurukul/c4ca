@@ -1,5 +1,5 @@
 import { breakpoints } from "@/theme/constant";
-import { OpenInNewOutlined } from "@mui/icons-material";
+import { EditOutlined, OpenInNewOutlined } from "@mui/icons-material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import CopyAll from "@mui/icons-material/CopyAll";
@@ -142,7 +142,10 @@ const TeacherDashboard = ({ authToken }) => {
                         {team.team_name}
                       </Typography>
                     </Link>
-                    {/* <EditOutlined style={{ color: "gray" }} /> */}
+                    <EditOutlined
+                      style={{ color: "gray", cursor: "pointer" }}
+                      onClick={() => handleOpenEditDialog(team)}
+                    />
                   </Box>
                   <Box
                     sx={{
@@ -189,20 +192,6 @@ const TeacherDashboard = ({ authToken }) => {
                         >
                           <CopyAll style={{ color: "gray" }} /> Copy
                         </Button>
-                        <Snackbar
-                          open={snackbarOpen}
-                          autoHideDuration={3000} // Adjust as needed
-                          onClose={handleSnackbarClose}
-                        >
-                          <MuiAlert
-                            elevation={6}
-                            variant="filled"
-                            severity="success"
-                            onClose={handleSnackbarClose}
-                          >
-                            {snackbarMessage}
-                          </MuiAlert>
-                        </Snackbar>
                       </Box>
                       <Box
                         sx={{
@@ -257,7 +246,33 @@ const TeacherDashboard = ({ authToken }) => {
                 </Box>
               </Grid>
             ))}
+          {!loading && (
+            <Grid item md={4} sm={6} xs={12}>
+              <Box
+                sx={{
+                  width: "100%",
+                  placeContent: "center",
+                  border: "2px dashed",
+                  borderBlockEndWidth: "2px 10px",
+                  borderColor: "gray",
+                  padding: 8.5,
+                  borderRadius: 3,
+                  textAlign: "center",
+                  borderSpacing: "5px",
+                  cursor: "pointer",
+                }}
+                // onClick={handleAddTeam}
+                onClick={handleOpenDialog}
+              >
+                <AddCircleOutlinedIcon color="primary" />
+                <Typography variant="body1" color="primary">
+                  Add a Team
+                </Typography>
+              </Box>
+            </Grid>
+          )}
         </Grid>
+
         {/* Awards and Certifications... */}
       </Container>
       <Dialog
@@ -270,6 +285,7 @@ const TeacherDashboard = ({ authToken }) => {
           <Team
             handleCloseDialog={handleCloseDialog}
             onClose={handleCloseDialog}
+            handleSnackbarOpen={handleSnackbarOpen}
           />
         </DialogContent>
       </Dialog>
@@ -283,6 +299,7 @@ const TeacherDashboard = ({ authToken }) => {
         >
           <DialogContent>
             <Team
+              handleSnackbarOpen={handleSnackbarOpen}
               handleCloseEditDialog={handleCloseEditDialog}
               onClose={handleCloseEditDialog}
               team={selectedTeam}
@@ -366,6 +383,20 @@ const TeacherDashboard = ({ authToken }) => {
           </Grid>
         </Grid>
       </Container>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000} // Adjust as needed
+        onClose={handleSnackbarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          severity="success"
+          onClose={handleSnackbarClose}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };

@@ -19,7 +19,7 @@ import TeacherDashboard from "@/pages/teacher/teams";
 import axios from 'axios';
 
 
-const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDialog }) => {
+const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDialog , handleSnackbarOpen=null }) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
@@ -111,6 +111,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
         if (response.data.status === "success") {
           router.push("/teacher/teams");
           handleCloseDialog();
+          handleSnackbarOpen("Team created successfully");
         } else {
           if (response.data.status == "Unique Key Violation") {
             setErrors({
@@ -149,6 +150,8 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
       if (response.data.status === "success") {
         console.log('Edited team data:', response.data);
         handleCloseEditDialog();
+        handleSnackbarOpen("Team updated successfully");
+
       } else {
         console.log('Edit request failed with response:', response.data);
       }
@@ -239,7 +242,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
         error={errors.school}
         value={values.school}
         onChange={(e) => setValues({ ...values, school: e.target.value })}
-        disabled= {true}
+        disabled= {team}
       />
 
       <Grid spacing={5} container>
@@ -255,7 +258,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
               value: state,
             }))}
             sx={{ mb: 1 }}
-            disabled= {true}
+            disabled= {team}
           />
         </Grid>
         <Grid xs={6} item>
@@ -274,7 +277,7 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
                 : []
             }
             sx={{ mb: 1 }}
-            disabled= {true}
+            disabled= {team}
           />
         </Grid>
       </Grid>
