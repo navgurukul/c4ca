@@ -120,22 +120,10 @@ function TeachersList({ filteredTeacher }) {
 
 
   return (
-    <Box sx={{ mx: "110px" }}>
-      <Typography
-        style={{
-          fontFamily: "Amazon Ember Display",
-          fontSize: "24px",
-          fontWeight: "800px",
-        }}
-      >
-        Teacher List
-      </Typography>
-
+    <Box sx={{ mx: "110px" }}> 
       <Box
         style={{
-          overflowX: "hidden",
-          margin: "16px 0",
-          marginTop: "20px",
+          overflowX: "hidden",  
         }}
       >
         <ThemeProvider theme={getMuiTheme}>
