@@ -2,11 +2,12 @@ import {
   Avatar,
   Box,
   Button,
-
+  ButtonGroup,
   Menu,
   MenuItem,
   useMediaQuery,
   Stack,
+  Typography,
   Divider,
 } from "@mui/material";
 import Link from "next/link";
@@ -23,6 +24,8 @@ const Header = () => {
   const [loggedOut, setLoggedOut] = useState("");
   const [isFirstLogin, setIsFirstLogin] = useState("");
   const [authData, setAuthData] = useState({});
+
+  const [reloadCount, setReloadCount] = useState(0);
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
   useEffect(() => {
@@ -57,6 +60,9 @@ const Header = () => {
     };
   }, []);
 
+  const handleReloadHeader = () => {
+    router.reload();
+  };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -93,48 +99,40 @@ const Header = () => {
         )}
 
         {router.pathname === "/" && user == null ? (
-          <>
-            {isMobile && (
-              <Link href={"/"}>
-                <img src="/c4ca.svg" alt="c4ca_logo" />
-              </Link>
-            )}
-            {!isMobile && (
-              <Stack spacing={2} direction="row">
-                {" "}
-            
-                <a
-                  href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}
-                >
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    sx={{
-                      display: "block",
-                      width: 100,
-                      m: "auto",
-                      fontSize: "15px",
-                    }}
-                  >
-                    Teacher and Partners
-                  </Button>{" "}
-                </a>
-                <Link href="/student/login">
-                  <Button
-                    variant="contained"
-                    sx={{
-                      display: "block",
-                      width: 100,
-                      m: "auto",
-                      fontSize: "15px",
-                    }}
-                  >
-                    Student Login
-                  </Button>
-                </Link>
-              </Stack>
-            )}
-          </>
+          <Stack spacing={2} direction="row">
+            {" "}
+            <a
+              href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}
+            >
+              {/* <Link href="/teacher/login"> */}
+              <Button
+                color="secondary"
+                variant="contained"
+                sx={{
+                  display: "block",
+                  width: 100,
+                  m: "auto",
+                  fontSize: "15px",
+                }}
+              >
+                Teacher and Partners
+              </Button>{" "}
+              {/* </Link> */}
+            </a>
+            <Link href="/student/login">
+              <Button
+                variant="contained"
+                sx={{
+                  display: "block",
+                  width: 100,
+                  m: "auto",
+                  fontSize: "15px",
+                }}
+              >
+                Student Login
+              </Button>
+            </Link>
+          </Stack>
         ) : (
           <>
             {isMobile && (
@@ -171,7 +169,7 @@ const Header = () => {
                     onClick={() => {
                       handleClose();
                       router.push(
-                        authData.role == "teacher"
+                        authData?.role == "teacher"
                           ? "/teacher/profile"
                           : "/student/team-profile"
                       );

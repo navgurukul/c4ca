@@ -14,18 +14,6 @@ import { reactLocalStorage } from "reactjs-localstorage";
 import { useRouter } from "next/router";
 
 export default function Home() {
-
-  const [loggedOut, setLoggedOut] = useState("");
-  const [isFirstLogin, setIsFirstLogin] = useState("");
-
-  useEffect(() => {
-    setIsFirstLogin(localStorage.getItem("isFirstLogin"));
-    setLoggedOut(localStorage.getItem("loggeOut"));
-  }, [loggedOut, isFirstLogin]);
-
-
-
-
   const isActive = useMediaQuery("(max-width:600px)");
   const router = useRouter();
   useEffect(() => {
@@ -99,22 +87,17 @@ export default function Home() {
                 </Link>
               </Box>
               <Box sx={{ marginTop: 4 }} alignItems="center">
-                <a
-                  href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}
-                >
+                <Link href="/teacher/login">
                   <Button
+                    sx={{ width: "100%" }}
                     color="secondary"
                     variant="contained"
-                    sx={{
-                      display: "block",
-                      width: "92vw" ,
-                      m: "auto",
-                      fontSize: "15px",
-                    }}
                   >
-                    Teacher and Partners
-                  </Button>{" "}
-                </a>
+                    <Typography variant="ButtonLarge">
+                      Teachers and Partners
+                    </Typography>
+                  </Button>
+                </Link>
               </Box>
               <Box sx={{ marginTop: 4 }} alignItems="center">
                 <Divider />
