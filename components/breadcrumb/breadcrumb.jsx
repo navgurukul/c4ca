@@ -18,7 +18,7 @@ function MyBreadcrumbs({partnerName}) {
       >
         Home
       </Link>
-      <Typography
+      { partnerName &&  (<Typography
         color="textPrimary"
         style={{
           color: "#BDBDBD",
@@ -28,7 +28,7 @@ function MyBreadcrumbs({partnerName}) {
         }}
       >
         {partnerName}
-      </Typography>
+      </Typography>)}
     </Breadcrumbs>
   );
 }

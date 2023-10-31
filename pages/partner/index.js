@@ -7,7 +7,7 @@ import axios from "axios";
 
 const PartnerDashboard = () => {
 
-  const [totalData, setTotalData] = useState()
+  const [totalData, setTotalData] = useState();
 
   useEffect(() => {
     const apiUrl = "https://merd-api.merakilearn.org/c4ca/totalData";
@@ -61,7 +61,7 @@ const PartnerDashboard = () => {
               fontFamily: "Amazon Ember Display",
             }}
           >
-            {totalData?.totalUniqueSchools}
+            {totalData?.totalUniqueSchools || 0}
           </Typography>
           <Typography className="InfoTextStyle">
             Number of Schools Reached
@@ -76,7 +76,7 @@ const PartnerDashboard = () => {
               fontFamily: "Amazon Ember Display",
             }}
           >
-            {totalData?.totalTeachers}
+            {totalData?.totalTeachers || 0}
           </Typography>
           <Typography className="InfoTextStyle">
             Total Number of Teachers
@@ -91,7 +91,7 @@ const PartnerDashboard = () => {
               fontFamily: "Amazon Ember Display",
             }}
           >
-            {totalData?.totalStudents}
+            {totalData?.totalStudents || 0}
           </Typography>
           <Typography className="InfoTextStyle">Number of Students</Typography>
         </Box>

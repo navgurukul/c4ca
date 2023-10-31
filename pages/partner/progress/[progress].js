@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import Link from "@mui/material/Link";
 import { Avatar, Box, Grid } from "@mui/material";
@@ -7,14 +7,15 @@ import girlImage from "../../../public/assets/girlImage.png";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Troubleshoot } from "@mui/icons-material";
 
 function Progress() {
-
-  const router = useRouter(); 
+  const router = useRouter();
   const { progress } = router.query;
-  console.log(progress);  
-  console.log(router.query);  
-  
+  // console.log(progress);
+  // console.log(router.query);
+
   const [data, setData] = useState(null);
   const [partnerName, setPartnerName] = useState(null);
 
@@ -47,12 +48,12 @@ function Progress() {
         });
     }
   }, [progress]);
-  
-const [teamsData, setTeamsData] = useState([])
-   
+
+  //data populating from
+  const [teamsData, setTeamsData] = useState();
+  const [color, bgColor] = useState();
   useEffect(() => {
     if (progress) {
-      console.log(progress);
       const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/teams/${progress}`;
       const token =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
@@ -63,10 +64,16 @@ const [teamsData, setTeamsData] = useState([])
           },
         })
         .then((response) => {
-          console.log(response?.data?.data); 
-          const teamsData = response?.data?.data;  
+          // console.log(
+          //   response?.data?.data?.[0].current_topic[0].course_name === ""
+          //     ? "4545"
+          //     : "aaaa"
+          // );
+
+          const teamsData = response?.data?.data;
           if (teamsData !== undefined) {
             setTeamsData(teamsData);
+            console.log("teamsData:", teamsData);
           } else {
             console.error("Data is undefined.");
           }
@@ -77,11 +84,6 @@ const [teamsData, setTeamsData] = useState([])
     }
   }, [progress]);
 
-  const student = [
-    { Color: "red", lesson: "Intro to Scratch", status: "Submitted" },
-    { Color: "red", lesson: "Intro to Scratch", status: "Submitted" },
-    { Color: "red", lesson: "Intro to Scratch", status: "Submitted" },
-  ];
   return (
     <Box style={{ marginLeft: "7.5%", marginRight: "20%" }}>
       <Box style={{ lineHeight: "5" }}>
@@ -120,9 +122,9 @@ const [teamsData, setTeamsData] = useState([])
             {" "}
             {data?.teacher_name}
           </Typography>
-          <Typography style={{ color: "#2E2E2E", fontSize: "14px" }}>
-             
-          </Typography>
+          <Typography
+            style={{ color: "#2E2E2E", fontSize: "14px" }}
+          ></Typography>
         </Box>
       </Box>
       <Typography
@@ -138,7 +140,7 @@ const [teamsData, setTeamsData] = useState([])
       </Typography>
       <Box style={{ marginTop: "20px" }}>
         <Grid container spacing={3}>
-          {teamsData.map((person, index) => (
+          {teamsData?.map((person, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Box
                 style={{
@@ -152,7 +154,7 @@ const [teamsData, setTeamsData] = useState([])
                   margin: "5px",
                 }}
               >
-                <Typography
+                {/* <Typography
                   style={{
                     fontSize: "15px",
                     fontFamily: "Amazon Ember",
@@ -161,7 +163,37 @@ const [teamsData, setTeamsData] = useState([])
                   }}
                 >
                   {person.team_name}
-                </Typography>
+                </Typography> */}
+                <Box display="flex" gap={5}>
+                  <Typography
+                    style={{
+                      fontSize: "15px",
+                      fontFamily: "Amazon Ember",
+                      lineHeight: "40px",
+                      fontWeight: "700px",
+                    }}
+                  >
+                    {person?.team_name} :
+                  </Typography>
+                  <Box style={{ marginTop: "10px" }}>
+                    <CircularProgress
+                      variant="determinate"
+                      size={17}
+                      value={person?.completed_portion}
+                      style={{ color: "green" }}
+                    />
+                    <span
+                      style={{
+                        fontSize: "16px",
+                        marginLeft: "10px",
+                        fontFamily: "Amazon Ember",
+                        marginBottom: "50px",
+                      }}
+                    >
+                      {person?.completed_portion}%
+                    </span>
+                  </Box>
+                </Box>
                 <hr
                   style={{
                     color: "#DEDEDE",
@@ -173,22 +205,72 @@ const [teamsData, setTeamsData] = useState([])
                   style={{
                     fontSize: "15px",
                     fontFamily: "Amazon Ember",
-                    lineHeight: "70px",
+                    lineHeight: "50px",
                     fontWeight: "700px",
                   }}
                 >
-                  {person.current_topic}
+                  Current Lesson:{" "}
+                  {person?.current_topic?.map((lessonName, index) => (
+                    <span key={index}>
+                      {lessonName.course_name === ""
+                        ? lessonName.module_name
+                        : lessonName.course_name}
+                    </span>
+                  ))}
                 </Typography>
-                <Typography
-                  style={{
-                    fontSize: "15px",
-                    fontFamily: "Amazon Ember",
-                    lineHeight: "35px",
-                    fontWeight: "700px",
-                  }}
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  gap={1}
                 >
-                   {person.current_topic}
-                </Typography>
+                  <Typography
+                    style={{
+                      fontSize: "15px",
+                      fontFamily: "Amazon Ember",
+                      lineHeight: "35px",
+                      fontWeight: "700px",
+                    }}
+                  >
+                    Project Status:
+                  </Typography>
+                  <div
+                    style={{
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      backgroundColor:
+                        person?.Project_solution_submission === null
+                          ? "red"
+                          : person?.Project_solution_submission?.map(
+                              (projectStatus, index) =>
+                                projectStatus.is_submitted === false
+                                  ? "red"
+                                  : "green"
+                            ),
+                    }}
+                  />
+                  <Typography
+                    style={{
+                      fontSize: "15px",
+                      fontFamily: "Amazon Ember",
+                      lineHeight: "35px",
+                      fontWeight: "700px",
+                    }}
+                  >
+                    {person?.Project_solution_submission === null
+                      ? "Yet to Submitted"
+                      : person?.Project_solution_submission?.map(
+                          (projectStatus, index) => (
+                            <span key={index}>
+                              {projectStatus.is_submitted === false
+                                ? "Yet to Submitted"
+                                : "Submitted"}
+                            </span>
+                          )
+                        )}
+                  </Typography>
+                </Box>
               </Box>
             </Grid>
           ))}

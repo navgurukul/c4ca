@@ -122,8 +122,8 @@ function PartnerFilter() {
   ));
 
   return (
-    <Box sx={{ mt: 4, mb: 2 }}>
-      <Box display="flex" justifyContent={"space-between"} mb={3}>
+    <Box sx={{ mt: 4, mb: 1 }} >
+      <Box display="flex" justifyContent={"space-between"} mb={3}  >
         <TextField
           placeholder="Search Partner, Point of Contact"
           size="medium"

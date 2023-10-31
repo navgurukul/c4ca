@@ -35,36 +35,33 @@ const TeacherFilter = () => {
   const [breadCumData, setBreadCumData] = useState();
 
   useEffect(() => {
-  if(id){
-    const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/${id}`;
-    const token = localStorage.getItem("token");
-    axios
-      .get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        console.log(response); 
-        const teacherList = response?.data?.data?.teachersDetails;
-        const breadCrumb = response?.data?.data;
-        console.log(breadCrumb);
-        if (teacherList !== undefined) {
-          setAllTeacherList(teacherList);
-          setFilteredTeacher(teacherList);
-          setBreadCumData(breadCrumb);
-        } else {
-          console.error("Data is undefined.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }
+    if (id) {
+      const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/${id}`;
+      const token = localStorage.getItem("token");
+      axios
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          const teacherList = response?.data?.data?.teachersDetails;
+          const breadCrumb = response?.data?.data;
+          console.log(breadCrumb);
+          if (teacherList !== undefined) {
+            setAllTeacherList(teacherList);
+            setFilteredTeacher(teacherList);
+            setBreadCumData(breadCrumb);
+          } else {
+            console.error("Data is undefined.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
   }, [id]);
-
-  //fetching data for the breadcrumb
- 
 
   const handleDistrictChange = (event) => {
     const selectedDistrict = event.target.value;
@@ -111,8 +108,48 @@ const TeacherFilter = () => {
     return filterData;
   }
 
+  //fetching data for the link
+  const [inviteLink, setInviteLink] = useState(""); 
+  const [isCopied, setIsCopied] = useState(false); 
+  useEffect(() => {
+    if (id) {
+      const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/${id}`;
+      const token = localStorage.getItem("token");
+      axios
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response?.data?.data?.teacher_link);
+          const linkForCopy = response?.data?.data?.teacher_link;
+          if (linkForCopy !== undefined) {
+            setInviteLink(linkForCopy);
+          } else {
+            console.error("Invite link is undefined.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching invite link:", error);
+        });
+    }
+  }, [id]);
+
+  const copyToClipboard = () => { 
+    if(inviteLink){
+      navigator.clipboard.writeText(inviteLink)
+      .then(() => {
+        setIsCopied(true);
+      })
+      .catch((error) => {
+        console.error('Error copying to clipboard:', error);
+      });
+    }
+  };
+
   return (
-    <Box style={{ margin: "40px 0" }}>
+    <Box style={{ margin: "20px 0" }}>
       <Box sx={{ mx: "110px" }}>
         <Box style={{ margin: "20px 0" }}>
           <Typography
@@ -127,7 +164,7 @@ const TeacherFilter = () => {
               Home / {breadCumData?.partner_name}
             </span>{" "}
             <span style={{ color: "#BDBDBD" }}>
-              / {breadCumData?.facilitator_name} 
+              / {breadCumData?.facilitator_name}
             </span>
           </Typography>
           <Typography
@@ -138,7 +175,7 @@ const TeacherFilter = () => {
               fontFamily: "Amazon Ember Display",
             }}
           >
-            {breadCumData?.partner_name}
+            {breadCumData?.facilitator_name}
           </Typography>
           <Typography
             style={{
@@ -155,7 +192,19 @@ const TeacherFilter = () => {
             The invite link can be shared with teachers who will be guiding the
             student teams for C4CA projects
           </Typography>
-          <Button variant="outlined">
+
+         {/* { inviteLink && ( <input
+        type="text"
+        value={inviteLink}
+        readOnly
+        onClick={copyToClipboard}
+        style={{ cursor: 'pointer' }}
+      />) } */}
+
+          <Button variant="outlined"  
+           value={inviteLink}
+           onClick={copyToClipboard}
+          >
             C4CA Teacher Login
             <InsertLinkIcon />
           </Button>
@@ -169,7 +218,7 @@ const TeacherFilter = () => {
         >
           Teacher List
         </Typography>
-        <Box style={{ margin: "40px 0" }}>
+        <Box style={{ marginTop: "20px 0" }}>
           <TextField
             placeholder="Search Partner..."
             size="medium"
@@ -189,7 +238,7 @@ const TeacherFilter = () => {
             }}
             sx={{ width: "360px" }}
           />
-          <Box style={{ display: "flex", margin: "16px 0", gap: "20px" }}>
+          <Box style={{ display: "flex", marginTop: "16px", gap: "20px" }}>
             <FormControl>
               {/* <InputLabel id="district-label">District</InputLabel> */}
               <Select
@@ -262,7 +311,7 @@ const TeacherFilter = () => {
         </Box>
       </Box>
       {searchTerm === "" ? (
-        <TeacherListTable filteredTeacher={filteredTeacher} />
+        <TeacherListTable filteredTeacher={allTeacherList} />
       ) : (
         <TeacherListTable filteredTeacher={filteredTeacher} />
       )}

@@ -9,7 +9,7 @@ import axios from "axios";
 import FacilitatorFilter from "./FacilitatorFilter";
 
 const FacilatorHome = () => {
-  const router = useRouter(); 
+  const router = useRouter();
   const { id } = router.query;
   const [data, setData] = useState([]);
   const [partnerName, setPartnerName] = useState();
@@ -27,7 +27,7 @@ const FacilatorHome = () => {
           },
         })
         .then((response) => {
-          console.log(response); 
+          console.log(response);
           const datae = response?.data?.data?.facilitatorsDetails;
           const partnerName = response?.data?.data?.partner_name;
           setData(datae);
@@ -42,32 +42,32 @@ const FacilatorHome = () => {
           console.error("Error fetching data:", error);
         });
     }
-  }, [id,]);
+  }, [id]);
 
   //fetching the total data
   useEffect(() => {
     if (id) {
-    const apiUrl = `https://merd-api.merakilearn.org/c4ca/totalData?partner_id=${id}`;
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-    axios
-      .get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        const totalData = response?.data?.data;
-        if (totalData !== undefined) {
-          // console.log(totalData);
-          settotalCountData(totalData);
-        } else {
-          console.error("Data is undefined.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+      const apiUrl = `https://merd-api.merakilearn.org/c4ca/totalData?partner_id=${id}`;
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
+      axios
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response?.data?.data);
+          const totalData = response?.data?.data;
+          if (totalData !== undefined) {
+            settotalCountData(totalData);
+          } else {
+            console.error("Data is undefined.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
     }
   }, [id]);
 
@@ -103,22 +103,38 @@ const FacilatorHome = () => {
         style={{ display: "flex", alignItems: "flex-start", gap: "32.161px" }}
       >
         <Box className="InfoBox centerElements">
-          <Typography variant="body1" fontWeight="bold">
-            {totalCountData?.totalNoOfTeams}
+          <Typography
+            variant="body1"
+            fontWeight="bold"
+            style={{
+              fontWeight: "700px",
+              fontSize: "32px",
+              fontFamily: "Amazon Ember Display",
+            }}
+          >
+            {totalCountData?.totalNoOfTeams || 0}
           </Typography>
-          <Typography className="InfoTextStyle">
+          <Typography className="InfoTextStyle" >
             Total Number of Teams
           </Typography>
         </Box>
         <Box className="InfoBox centerElements">
-          <Typography variant="body1" fontWeight="bold">
-            {totalCountData?.totalNoOfStundents}
+          <Typography variant="body1" fontWeight="bold"   style={{
+              fontWeight: "700px",
+              fontSize: "32px",
+              fontFamily: "Amazon Ember Display",
+            }}>
+            {totalCountData?.totalNoOfStundents || 0}
           </Typography>
           <Typography className="InfoTextStyle">Number of Students</Typography>
         </Box>
         <Box className="InfoBox centerElements">
-          <Typography variant="body1" fontWeight="bold">
-            {totalCountData?.totalProjectsSubmitByTeams}
+          <Typography variant="body1" fontWeight="bold"   style={{
+              fontWeight: "700px",
+              fontSize: "32px",
+              fontFamily: "Amazon Ember Display",
+            }}>
+            {totalCountData?.totalProjectsSubmitByTeams || 0}
           </Typography>
           <Typography className="InfoTextStyle">
             Total Projects Submitted
