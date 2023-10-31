@@ -94,10 +94,28 @@ export default function App({ Component, pageProps }) {
             // let roles = res.data.c4ca_roles;
             // console.log(c4ca_roles, "<<<<<<<<<<");
             if (c4ca_roles.includes("superAdmin")) {
+              res.data.role = "superAdmin";
+              setCookie("user", JSON.stringify(resp.data.user), {
+                path: "/",
+                maxAge: 604800, // Expires after 1hr
+                sameSite: true,
+              });
               return router.push(`/partner`);
             } else if (c4ca_roles.includes("facilitator")) {
+              res.data.role = "facilitator";
+              setCookie("user", JSON.stringify(resp.data.user), {
+                path: "/",
+                maxAge: 604800, // Expires after 1hr
+                sameSite: true,
+              });
               return router.push(`/partner/teacherList/${c4ca_facilitator_id}`);
             } else if (c4ca_roles.includes("c4caPartner")) {
+              res.data.role = "c4caPartner";
+              setCookie("user", JSON.stringify(resp.data.user), {
+                path: "/",
+                maxAge: 604800, // Expires after 1hr
+                sameSite: true,
+              });
               return router.push(`/partner/facilitator/${c4ca_partner_id}`);
             }
           })
@@ -179,11 +197,9 @@ export default function App({ Component, pageProps }) {
             }
           })
           .catch((err) => {
-            !c4ca_facilitator_id ||
-            !c4ca_partner_id ||
-            c4ca_roles.length === 0
-            ? setOpen(true)
-            : null;
+            !c4ca_facilitator_id || !c4ca_partner_id || c4ca_roles.length === 0
+              ? setOpen(true)
+              : null;
             console.log("error in google data", err);
             // setLoading(false);
           });
