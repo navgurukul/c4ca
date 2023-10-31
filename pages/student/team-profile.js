@@ -16,13 +16,21 @@ const TeamProfile = () => {
   const [team, setTeam] = useState({});
   const searchParams = useSearchParams();
   const first_login = searchParams.get("first_login");
+
   useEffect(() => {
     const teamData = JSON.parse(localStorage.getItem("AUTH"));
-    console.log(teamData, "teamdata...");
-    customAxios.get(`/c4ca/team/${teamData.data.id}`).then((res) => {
-      console.log(res.data);
-      setTeam(res.data.data);
-    });
+    const authToken = teamData.data.token;
+
+    customAxios
+      .get(`/c4ca/team/${teamData.data.id}`, {
+        headers: {
+          Authorization: authToken,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setTeam(res.data.data);
+      });
   }, []);
 
   return (
@@ -41,12 +49,18 @@ const TeamProfile = () => {
             height: 70,
           }}
         >
-          <span style={{ textTransform: "capitalize", fontWeight: 900, fontSize: 30 }}>
+          <span
+            style={{
+              textTransform: "capitalize",
+              fontWeight: 900,
+              fontSize: 30,
+            }}
+          >
             {team.team_name?.split(" ")[0]?.charAt(0)}
           </span>
         </Avatar>
         <Typography
-          style={{ textAlign: "left", textTransform: 'capitalize' }}
+          style={{ textAlign: "left", textTransform: "capitalize" }}
           variant="body1"
           color="primary"
         >

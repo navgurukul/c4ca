@@ -42,6 +42,7 @@ const TeamDetail = () => {
         },
       })
       .then((response) => {
+        console.log("Success fetching data:", response);
         setData(response.data.data);
       })
       .catch((err) => {
@@ -51,6 +52,8 @@ const TeamDetail = () => {
   }, [params]);
 
   const teamMemberData = data.team_members || [];
+
+  
 
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
@@ -62,7 +65,7 @@ const TeamDetail = () => {
         },
       })
       .then((response) => {
-        // console.log("Success fetching data:", response);
+        console.log("Projct Topic:", response);
       })
       .catch((error) => {
         // console.error("Error fetching data:", error);
