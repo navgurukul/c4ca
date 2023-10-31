@@ -32,7 +32,10 @@ const TeacherFilter = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("All District");
   const [selectedSchool, setSelectedSchool] = useState("All School");
 
+  const [breadCumData, setBreadCumData] = useState();
+
   useEffect(() => {
+  if(id){
     const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/${id}`;
     const token = localStorage.getItem("token");
     axios
@@ -42,11 +45,14 @@ const TeacherFilter = () => {
         },
       })
       .then((response) => {
-        const teacherList = response?.data?.data;
-        // console.log(teacherList);
+        console.log(response); 
+        const teacherList = response?.data?.data?.teachersDetails;
+        const breadCrumb = response?.data?.data;
+        console.log(breadCrumb);
         if (teacherList !== undefined) {
           setAllTeacherList(teacherList);
           setFilteredTeacher(teacherList);
+          setBreadCumData(breadCrumb);
         } else {
           console.error("Data is undefined.");
         }
@@ -54,7 +60,11 @@ const TeacherFilter = () => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+  }
   }, [id]);
+
+  //fetching data for the breadcrumb
+ 
 
   const handleDistrictChange = (event) => {
     const selectedDistrict = event.target.value;
@@ -74,7 +84,6 @@ const TeacherFilter = () => {
   const handleSchoolChange = (event) => {
     const selectedSchool = event.target.value;
     setSelectedSchool(selectedSchool);
-    // console.log(selectedSchool);
     const filterBySchool = filterSchool(selectedSchool, allTeacherList);
     setFilteredTeacher(filterBySchool);
   };
@@ -114,9 +123,11 @@ const TeacherFilter = () => {
             }}
           >
             {" "}
-            <span style={{ color: "#29458C" }}>Home/Aarti Girls/</span>{" "}
+            <span style={{ color: "#29458C" }}>
+              Home / {breadCumData?.partner_name}
+            </span>{" "}
             <span style={{ color: "#BDBDBD" }}>
-              Aarti for Girls First compus
+              / {breadCumData?.facilitator_name} 
             </span>
           </Typography>
           <Typography
@@ -127,7 +138,7 @@ const TeacherFilter = () => {
               fontFamily: "Amazon Ember Display",
             }}
           >
-            Aarti for Girls First Campus
+            {breadCumData?.partner_name}
           </Typography>
           <Typography
             style={{
@@ -178,12 +189,12 @@ const TeacherFilter = () => {
             }}
             sx={{ width: "360px" }}
           />
-          <Box style={{ display: "flex", margin: "16px 0", gap:"20px" }}>
+          <Box style={{ display: "flex", margin: "16px 0", gap: "20px" }}>
             <FormControl>
               {/* <InputLabel id="district-label">District</InputLabel> */}
               <Select
                 sx={{ width: "250px" }}
-                style={{borderRadius:"30px",width:"250px",height:"50px"}}
+                style={{ borderRadius: "30px", width: "250px", height: "50px" }}
                 labelId="district-label"
                 id="district-select"
                 value={selectedDistrict}
@@ -203,7 +214,11 @@ const TeacherFilter = () => {
                 {/* <InputLabel id="school-label">Schoo</InputLabel> */}
                 <Select
                   sx={{ width: "250px" }}
-                  style={{borderRadius:"30px",width:"250px",height:"50px"}}
+                  style={{
+                    borderRadius: "30px",
+                    width: "250px",
+                    height: "50px",
+                  }}
                   labelId="school-label"
                   id="school-select"
                   value={selectedSchool}
@@ -223,7 +238,11 @@ const TeacherFilter = () => {
                 {/* <InputLabel id="school-label">School</InputLabel> */}
                 <Select
                   sx={{ width: "250px" }}
-                  style={{borderRadius:"30px",width:"250px",height:"50px"}}
+                  style={{
+                    borderRadius: "30px",
+                    width: "250px",
+                    height: "50px",
+                  }}
                   labelId="school-label"
                   id="school-select"
                   value={selectedSchool}

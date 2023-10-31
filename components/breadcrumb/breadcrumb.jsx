@@ -3,7 +3,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 
-function MyBreadcrumbs() {
+function MyBreadcrumbs({partnerName}) {
   return (
     <Breadcrumbs aria-label="breadcrumb">
       <Link
@@ -27,7 +27,7 @@ function MyBreadcrumbs() {
           lineHeight: "5px",
         }}
       >
-        Aarti For Girls
+        {partnerName}
       </Typography>
     </Breadcrumbs>
   );

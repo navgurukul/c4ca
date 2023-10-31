@@ -1,8 +1,17 @@
-import { Container, Grid, Typography, Box, Button, Stack,Divider } from "@mui/material";
+import {
+  Container,
+  Grid,
+  Typography,
+  Box,
+  Button,
+  Stack,
+  Divider,
+} from "@mui/material";
 import Link from "next/link";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
-
+import { useEffect, useState } from "react";
+import { reactLocalStorage } from "reactjs-localstorage";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const isActive = useMediaQuery("(max-width:600px)");
@@ -39,37 +48,42 @@ export default function Home() {
           solutions that help reduce carbon footprint, increase renewable energy
           adoption and promote sustainable living
         </Typography>
-        {isActive?
+        {isActive ? (
           <>
-          <Box sx={{ marginTop: 4 }} alignItems="center">
+            <Box sx={{ marginTop: 4 }} alignItems="center">
+              <Link href="/student/login">
+                <Button sx={{ width: "100%" }} className="profileBtn">
+                  <Typography variant="ButtonLarge">Student Login</Typography>
+                </Button>
+              </Link>
+            </Box>
+            <Box sx={{ marginTop: 4 }} alignItems="center">
+              <Link href="/teacher/login">
+                <Button
+                  sx={{ width: "100%" }}
+                  color="secondary"
+                  variant="contained"
+                >
+                  <Typography variant="ButtonLarge">
+                    Teachers and Partners
+                  </Typography>
+                </Button>
+              </Link>
+            </Box>
+            <Box sx={{ marginTop: 4 }} alignItems="center">
+              <Divider />
+            </Box>
+          </>
+        ) : (
+          <Stack sx={{ marginTop: 5 }} alignItems={"center"}>
             <Link href="/student/login">
-              <Button sx={{ width: '100%' }} className="profileBtn">
-                <Typography variant="ButtonLarge">Student Login</Typography>
+              <Button alignItems={"center"} className="profileBtn">
+                <Typography variant="ButtonLarge">Get Started</Typography>
               </Button>
             </Link>
-          </Box>
-          <Box sx={{ marginTop: 4 }} alignItems="center">
-            <Link href="/teacher/login">
-              <Button sx={{ width: '100%' }}  color="secondary" variant="contained">
-                <Typography variant="ButtonLarge">Teachers and Partners</Typography>
-              </Button>
-            </Link>
-          </Box>
-          <Box  sx={{ marginTop: 4 }} alignItems="center">
-            <Divider />
-          </Box>
-            
-          </>:
-        <Stack sx={{ marginTop: 5 }} alignItems={"center"}>
-          <Link href="/student/login">
-          <Button alignItems={"center"} className="profileBtn">
-            <Typography variant="ButtonLarge">Get Started</Typography>
-          </Button>
-          </Link>
-        </Stack>
-        }
-        
-        
+          </Stack>
+        )}
+
         <Container maxWidth="md" sx={{ marginTop: 10, marginBottom: 10 }}>
           <Typography variant="h5" align="center">
             {" "}
@@ -138,7 +152,9 @@ export default function Home() {
                 <img src="/rewards.svg" alt="logo" />
               </Box>
               <Box sx={{ paddingLeft: "5%" }}>
-                <Typography variant="subtitle1">Evaluation and rewards</Typography>
+                <Typography variant="subtitle1">
+                  Evaluation and rewards
+                </Typography>
                 <Typography variant="body1">
                   The best of the solutions with actionable steps will be
                   eligible to exciting rewards
@@ -164,11 +180,14 @@ export default function Home() {
       </Container>
 
       <Box className="footer">
-        <img style={{ width: "100%" ,marginBottom:"-1.23rem"}} src="/footer.svg" alt="logo" />
+        <img
+          style={{ width: "100%", marginBottom: "-1.23rem" }}
+          src="/footer.svg"
+          alt="logo"
+        />
       </Box>
     </Box>
     
     </>
   );
 }
-

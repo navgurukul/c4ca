@@ -23,32 +23,33 @@ function PartnerFilter() {
 
   //add query
   // Function to fetch data from the API
-    //add query
-    useEffect(() => {
-      const apiUrl = "https://merd-api.merakilearn.org/partners";
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQyNDA4IiwiZW1haWwiOiJsb2RoaS5wcmFiaGF0QGdtYWls.lmNvbSIsImlhdCI6MTY5NzY4NjQ0NywiZXhwIjoxNzI5MjQ0MDQ3fQ.Jt9Vrp_399fK9oXhqqtEZn_kWzjFlnScBJsXfcM6dIk";
-      axios
-        .get(apiUrl, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          const partnerList = response.data.partners;
-          if (partnerList !== undefined) {
-            setAllPartner(partnerList);
-            setfilteredPartner(partnerList);
-            // console.log(partnerList);
-          } else {
-            console.error("Data is undefined.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    }, [openModal]);
-  
+  //add query
+  useEffect(() => {
+    const apiUrl = "https://merd-api.merakilearn.org/c4caPartners/admin";
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
+    axios
+      .get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        // console.log(response?.data);
+        const partnerList = response?.data?.results;
+        if (partnerList !== undefined) {
+          setAllPartner(partnerList);
+          setfilteredPartner(partnerList);
+          // console.log(partnerList);
+        } else {
+          console.error("Data is undefined.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [openModal]);
+
   //   const isActive = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
   const filterTerms = [
@@ -147,9 +148,13 @@ function PartnerFilter() {
             startIcon={<Add />}
             onClick={handleModalToggle}
             variant="contained"
-            sx={{}}
+            style={{
+              fontSize: "16px",
+              background:
+                "var(--midnight-blue-gradient, linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%))",
+            }}
           >
-            <Typography variant="subtitle2">Add Partner</Typography>
+            Add Partner
           </Button>
           {openModal && (
             <Box sx={{ position: "absolute", top: "100%", left: 0 }}>
@@ -159,9 +164,8 @@ function PartnerFilter() {
         </Box>
       </Box>
       <Box style={{ display: "flex" }}>{filterButtons}</Box>
-       
-        <PartnerTable data={filteredPartner} />
-      
+
+      <PartnerTable data={filteredPartner} />
     </Box>
   );
 }

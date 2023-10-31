@@ -179,6 +179,11 @@ export default function App({ Component, pageProps }) {
             }
           })
           .catch((err) => {
+            !c4ca_facilitator_id ||
+            !c4ca_partner_id ||
+            c4ca_roles.length === 0
+            ? setOpen(true)
+            : null;
             console.log("error in google data", err);
             // setLoading(false);
           });

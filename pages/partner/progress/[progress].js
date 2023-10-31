@@ -1,10 +1,82 @@
+"use client"
 import React from "react";
 import Link from "@mui/material/Link";
 import { Avatar, Box, Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import girlImage from "../../../public/assets/girlImage.png";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function Progress() {
+
+  const router = useRouter(); 
+  const { progress } = router.query;
+  console.log(progress);  
+  console.log(router.query);  
+  
+  const [data, setData] = useState(null);
+  const [partnerName, setPartnerName] = useState(null);
+
+  useEffect(() => {
+    if (progress) {
+      console.log(progress);
+      const apiUrl = `https://merd-api.merakilearn.org/c4ca/${progress}`;
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
+      axios
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response?.data?.data);
+          const datae = response?.data?.data;
+          const partnerName = response?.data?.data;
+          setData(datae);
+          if (datae !== undefined) {
+            setData(datae);
+            setPartnerName(partnerName);
+          } else {
+            console.error("Data is undefined.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, [progress]);
+  
+const [teamsData, setTeamsData] = useState([])
+   
+  useEffect(() => {
+    if (progress) {
+      console.log(progress);
+      const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/teams/${progress}`;
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
+      axios
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response?.data?.data); 
+          const teamsData = response?.data?.data;  
+          if (teamsData !== undefined) {
+            setTeamsData(teamsData);
+          } else {
+            console.error("Data is undefined.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, [progress]);
+
   const student = [
     { Color: "red", lesson: "Intro to Scratch", status: "Submitted" },
     { Color: "red", lesson: "Intro to Scratch", status: "Submitted" },
@@ -23,8 +95,8 @@ function Progress() {
             fontFamily: "Amazon Ember",
           }}
         >
-          Home / Aarti for Girls / Aarti for Girls First campus /{" "}
-          <span style={{ color: "#BDBDBD" }}>Anand NG</span>
+          Home / {data?.partner_name} / {data?.facilitator_name} /{" "}
+          <span style={{ color: "#BDBDBD" }}>{data?.teacher_name} </span>
         </Link>
       </Box>
       <Box
@@ -46,10 +118,10 @@ function Progress() {
         <Box style={{ marginLeft: "25px", marginTop: "10px" }}>
           <Typography style={{ fontSize: "16px", fontFamily: "Noto Sans" }}>
             {" "}
-            Anand NG
+            {data?.teacher_name}
           </Typography>
           <Typography style={{ color: "#2E2E2E", fontSize: "14px" }}>
-            Anand@gmail.com
+             
           </Typography>
         </Box>
       </Box>
@@ -66,7 +138,7 @@ function Progress() {
       </Typography>
       <Box style={{ marginTop: "20px" }}>
         <Grid container spacing={3}>
-          {student.map((person, index) => (
+          {teamsData.map((person, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Box
                 style={{
@@ -88,7 +160,7 @@ function Progress() {
                     fontWeight: "700px",
                   }}
                 >
-                  Flying Colors:{person.name}
+                  {person.team_name}
                 </Typography>
                 <hr
                   style={{
@@ -105,7 +177,7 @@ function Progress() {
                     fontWeight: "700px",
                   }}
                 >
-                  Current Lesson: {person.lesson}
+                  {person.current_topic}
                 </Typography>
                 <Typography
                   style={{
@@ -115,7 +187,7 @@ function Progress() {
                     fontWeight: "700px",
                   }}
                 >
-                  Project Status: {person.status}
+                   {person.current_topic}
                 </Typography>
               </Box>
             </Grid>

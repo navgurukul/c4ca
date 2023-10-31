@@ -60,7 +60,7 @@ let btnsContainerStyles = {
 };
 
 const FacilatorTable = ({ data }) => {
-  console.log(data);
+  // console.log(data);
 
   const router = useRouter();
   const { id } = router.query;
@@ -104,7 +104,7 @@ const FacilatorTable = ({ data }) => {
       },
     },
     {
-      name: "user",
+      name: "number_of_students",
       label: "Number of Students",
       options: {
         filter: false,
@@ -147,15 +147,7 @@ const FacilatorTable = ({ data }) => {
 
   return (
     <Box>
-      <Typography
-        style={{
-          fontFamily: "Amazon Ember Display",
-          fontSize: "24px",
-          fontWeight: "800px",
-        }}
-      >
-        Facilitator List
-      </Typography>
+      
       <div
         style={{
           overflowX: "hidden",

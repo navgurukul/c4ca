@@ -100,8 +100,11 @@ const Team = ({ handleCloseDialog, setActiveStep = null }) => {
   };
   const validateInputs = () => {
     const newErrors = {};
+
     if (!teamName) {
       newErrors.teamName = "Team Name is required";
+    } else if (teamName.length < 3) {
+      newErrors.teamName = "Team Name must be at least 3 characters long";
     }
     if (!values.school) {
       newErrors.school = "School Name is required";
