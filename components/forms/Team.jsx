@@ -14,9 +14,7 @@ import { useState, useEffect } from "react";
 import stateDistrict from "../../data/state.json";
 import { useRouter } from "next/router";
 import customAxios from "../../api";
-import Link from "next/link";
-import TeacherDashboard from "@/pages/teacher/teams";
-import axios from 'axios';
+
 
 
 const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDialog , handleSnackbarOpen=null }) => {
@@ -137,10 +135,10 @@ const Team = ({ handleCloseDialog, setActiveStep = null, team, handleCloseEditDi
     };
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
       // console.log('Team ID:', team.id);
-    const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
+    // const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
     // console.log('URL:', url);
 
-    customAxios.put(url, updatedTeam, {
+    customAxios.put(`/c4ca/team/update/${team.id}`, updatedTeam, {
       headers: {
         Authorization: `Bearer ${authToken.token}`,
         'Content-Type': 'application/json', 
