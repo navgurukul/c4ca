@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import FacilatorTable from "./FacilatorTable";
 import { useRouter } from "next/router";
 import MyBreadcrumbs from "@/components/breadcrumb/breadcrumb";
-import axios from "axios";
 import FacilitatorFilter from "./FacilitatorFilter";
+import customAxios from "@/api";
 
 const FacilatorHome = () => {
   const router = useRouter(); 
@@ -17,10 +17,10 @@ const FacilatorHome = () => {
 
   useEffect(() => {
     if (id) {
-      const apiUrl = `https://merd-api.merakilearn.org/c4ca/facilitator/getByPartnerId/${id}`;
+      const apiUrl = `/c4ca/facilitator/getByPartnerId/${id}`;
       const token = localStorage.getItem("token");
 
-      axios
+      customAxios
         .get(apiUrl, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,10 +47,9 @@ const FacilatorHome = () => {
   //fetching the total data
   useEffect(() => {
     if (id) {
-    const apiUrl = `https://merd-api.merakilearn.org/c4ca/totalData?partner_id=${id}`;
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-    axios
+    const apiUrl = `/c4ca/totalData?partner_id=${id}`;
+    const token = localStorage.getItem("token");
+    customAxios
       .get(apiUrl, {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -3,17 +3,16 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import styled from "styled-components";
 import PartnerFilter from "./PartnerFilter";
-import axios from "axios";
+import customAxios from "@/api";
 
 const PartnerDashboard = () => {
 
   const [totalData, setTotalData] = useState()
 
   useEffect(() => {
-    const apiUrl = "https://merd-api.merakilearn.org/c4ca/totalData";
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NTAxIiwiZW1haWwiOiJhYWRhcnNoMjFAbmF2Z3VydWt1bC5vcmciLCJpYXQiOjE2ODc3NTg0NjYsImV4cCI6MTcxOTMxNjA2Nn0.UqNyrtf9o3A6UsmIPXXyFxmoy005w8t4n1WQKK8xGQA";
-    axios
+    const apiUrl = "/c4ca/totalData";
+    const token = localStorage.getItem("token");
+    customAxios
       .get(apiUrl, {
         headers: {
           Authorization: `Bearer ${token}`,

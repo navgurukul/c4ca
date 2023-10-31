@@ -38,7 +38,7 @@ export default function App({ Component, pageProps }) {
   const [error, setError] = useState("");
   const [cookie, setCookie] = useCookies(["user"]);
   const { token } = router.query;
-  let c4ca_partner_id, c4ca_facilitator_id, c4ca_roles;
+  let c4ca_partner_id, c4ca_facilitator_id, c4ca_roles, userRoleArray;
   function reverseJwtBody(jwt) {
     const [header, body, signature] = jwt.split(".");
     const reversedBody = body.split("").reverse().join("");
@@ -69,7 +69,7 @@ export default function App({ Component, pageProps }) {
         }
       )
       .then((res) => {
-        // console.log("res from google data", res.data.token);
+        userRoleArray= res.data.user.c4ca_roles;
         const userToken = res.data.token;
         localStorage.setItem("token", userToken);
 
@@ -81,18 +81,11 @@ export default function App({ Component, pageProps }) {
             },
           })
           .then((resp) => {
-            // setLoading(false);
-            // console.log(resp.data.c4ca_partner_id);
-
             localStorage.setItem("AUTH", JSON.stringify(res.data.user));
-            // let { c4ca_partner_id, c4ca_facilitator_id, c4ca_roles } =
-            //   resp.data.user;
             c4ca_facilitator_id = resp.data.user.c4ca_facilitator_id;
             c4ca_partner_id = resp.data.user.c4ca_partner_id;
             c4ca_roles = resp.data.user.c4ca_roles;
             console.log("login.....", c4ca_roles);
-            // let roles = res.data.c4ca_roles;
-            // console.log(c4ca_roles, "<<<<<<<<<<");
             if (c4ca_roles.includes("superAdmin")) {
               resp.data.role = "superAdmin";
               setCookie("user", JSON.stringify(resp.data), {
@@ -148,8 +141,6 @@ export default function App({ Component, pageProps }) {
                   )
 
                   .then((res) => {
-                    // console.log("res from users me put api", res);
-                    // localStorage.setItem("AUTH", JSON.stringify(res.data));
                     partner_id = res.data.user.c4ca_partner_id;
 
                     res.data.role = "teacher";
@@ -160,6 +151,7 @@ export default function App({ Component, pageProps }) {
                       sameSite: true,
                     });
 
+                    // setOpen(false);
                     return router.push(
                       `/teacher/profile?partner_id=${partner_id}`
                     );
@@ -168,10 +160,8 @@ export default function App({ Component, pageProps }) {
                     console.log("error in users me put api", err);
                   });
               } else {
-                console.log(c4ca_roles.length, "<<<<<<<<<< c4ca roles list");
-                return !c4ca_facilitator_id ||
-                  !c4ca_partner_id ||
-                  c4ca_roles.length === 0
+                console.log(userRoleArray.length, "<<<<<<<<<< c4ca roles list");
+                return userRoleArray?.length === 0
                   ? setOpen(true)
                   : null;
               }
@@ -195,13 +185,13 @@ export default function App({ Component, pageProps }) {
               }
               // Only redirect if the request is successful
               router.push("/teacher/profile");
-              // setLoading(false);
             }
           })
           .catch((err) => {
-            !c4ca_facilitator_id || !c4ca_partner_id || c4ca_roles.length === 0
-              ? setOpen(true)
-              : null;
+            console.log(c4ca_roles, "<<<<<<<<<< c4ca roles list");
+            userRoleArray?.length === 0
+            ? setOpen(true)
+            : null;
             console.log("error in google data", err);
             // setLoading(false);
           });
@@ -212,10 +202,8 @@ export default function App({ Component, pageProps }) {
   };
 
   useEffect(() => {
-    // console.log(router.pathname, "router pathname inside useeffect");
 
     const urlParams = new URLSearchParams(window.location.search);
-    // setPartner_id(localStorage.getItem("partner_id"));
     referrer = localStorage.getItem("referrer");
     let tokenVal = urlParams?.get("token");
     if (tokenVal) {
