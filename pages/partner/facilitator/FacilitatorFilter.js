@@ -61,7 +61,7 @@ function FacilitatorFilter({ id }) {
 
   const [totalCountData, settotalCountData] = useState();
  
-  //fetching the total dataa
+  //fetching the total data
   useEffect(() => {
     if (id) {
     const apiUrl = `/c4ca/totalData?partner_id=${id}`;
