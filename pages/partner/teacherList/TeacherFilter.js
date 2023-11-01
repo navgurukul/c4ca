@@ -139,9 +139,9 @@ const TeacherFilter = () => {
   const [isCopied, setIsCopied] = useState(false);
   useEffect(() => {
     if (id) {
-      const apiUrl = `https://merd-api.merakilearn.org/c4ca/teacher/${id}`;
+      const apiUrl = `/c4ca/teacher/${id}`;
       const token = localStorage.getItem("token");
-      axios
+      customAxios
         .get(apiUrl, {
           headers: {
             Authorization: `Bearer ${token}`,
