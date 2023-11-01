@@ -48,9 +48,11 @@ const Header = () => {
   useEffect(() => {
     const handleRouteChange = () => {
       const authToken = JSON.parse(localStorage.getItem("teacherData"));
-      setUser(authToken);
-      const data = JSON.parse(localStorage.getItem("AUTH"));
-      setAuthData(data);
+      if(authToken){
+        setUser(authToken);
+        const data = JSON.parse(localStorage.getItem("AUTH"));
+        setAuthData(data);
+      }
     };
 
     router.events.on("routeChangeComplete", handleRouteChange);
@@ -60,9 +62,6 @@ const Header = () => {
     };
   }, []);
 
-  const handleReloadHeader = () => {
-    router.reload();
-  };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -74,14 +73,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    // localStorage.clear();
-    localStorage.removeItem("AUTH");
-    localStorage.removeItem("user");
-    localStorage.removeItem("teacherData");
-    localStorage.removeItem("partner_id");
-    localStorage.removeItem("referrer");
-    localStorage.removeItem("ally-supports-cache");
-    localStorage.removeItem("token");
+    localStorage.clear();
     localStorage.setItem("loggedOut", true);
     localStorage.setItem("isFirstLogin", false);
     removeCookie("user", { path: "/" });
