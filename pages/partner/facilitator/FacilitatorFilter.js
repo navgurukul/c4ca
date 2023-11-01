@@ -12,15 +12,80 @@ import {
 import { SearchOutlined, Add } from "@mui/icons-material";
 import FacilitatorAddModal from "./FacilitatorAddModal";
 import FacilatorTable from "./FacilatorTable";
+import customAxios from "@/api";
+import MyBreadcrumbs from "@/components/breadcrumb/breadcrumb";
 
-function FacilitatorFilter({ data, id }) {
-  // console.log("filter", id);
+function FacilitatorFilter({ id }) {
+  console.log("filter", id);
 
   const [openModal, setOpenModal] = useState(false);
 
   const [allFacilitator, setAllFacilitator] = useState();
   const [filteredFacilitator, setFilteredFacilitator] = useState();
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [data, setData] = useState([]);
+  const [partnerName, setPartnerName] = useState();
+
+  useEffect(() => {
+    if (id) {
+      const fetchFacilitatorList = () => {
+      const apiUrl = `/c4ca/facilitator/getByPartnerId/${id}`;
+      const token = localStorage.getItem("token");
+      customAxios
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => { 
+          const datae = response?.data?.data?.facilitatorsDetails;
+          const partnerName = response?.data?.data?.partner_name; 
+          if (datae !== undefined) {
+            setData(datae);
+            setPartnerName(partnerName);
+          } else {
+            console.error("Data is undefined.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+      };
+      fetchFacilitatorList();
+      if (!openModal) {
+        fetchFacilitatorList();
+      }
+    }
+  }, [id, openModal]);
+
+  const [totalCountData, settotalCountData] = useState();
+ 
+  //fetching the total dataa
+  useEffect(() => {
+    if (id) {
+    const apiUrl = `/c4ca/totalData?partner_id=${id}`;
+    const token = localStorage.getItem("token");
+    customAxios
+      .get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const totalData = response?.data?.data;
+        if (totalData !== undefined) {
+          // console.log(totalData);
+          settotalCountData(totalData);
+        } else {
+          console.error("Data is undefined.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+    }
+  }, [id]);
 
   useEffect(() => {
     if (data) {
@@ -50,7 +115,6 @@ function FacilitatorFilter({ data, id }) {
   };
 
   function filterFacilitator(searchText, allFacilitator) {
-   
     const filterData = allFacilitator.filter((facilitator) =>
       facilitator?.name?.toLowerCase()?.includes(searchText?.toLowerCase())
     );
@@ -58,6 +122,88 @@ function FacilitatorFilter({ data, id }) {
   }
 
   return (
+    <Box className="dashboardContainer">
+    <MyBreadcrumbs partnerName={partnerName} />
+    <Typography
+      style={{
+        fontSize: "24px",
+        fontWeight: "800px",
+        fontFamily: "Amazon Ember Display",
+        lineHeight: "75px",
+      }}
+    >
+      {partnerName}
+    </Typography>
+
+    <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
+      <Typography variant="h6">{data?.name}</Typography>
+    </Box>
+    <Box
+      sx={{
+        display: "inline",
+        fontSize: "22px",
+        fontWeight: "800px",
+        lineHeight: "28px",
+        fontFamily:"Amazon Ember Display"
+      }}
+    >
+      Overview
+    </Box>
+    <Box
+      style={{ display: "flex", alignItems: "flex-start", gap: "32.161px" }}
+    >
+      <Box className="InfoBox centerElements">
+        <Typography
+          variant="body1"
+          fontWeight="bold"
+          style={{
+            fontWeight: "700px",
+            fontSize: "32px",
+            fontFamily: "Amazon Ember Display",
+          }}
+        >
+          {totalCountData?.totalNoOfTeams || 0}
+        </Typography>
+        <Typography className="InfoTextStyle" >
+          Total Number of Teams
+        </Typography>
+      </Box>
+      <Box className="InfoBox centerElements">
+        <Typography variant="body1" fontWeight="bold"   style={{
+            fontWeight: "700px",
+            fontSize: "32px",
+            fontFamily: "Amazon Ember Display",
+          }}>
+          {totalCountData?.totalNoOfStundents || 0}
+        </Typography>
+        <Typography className="InfoTextStyle">Number of Students</Typography>
+      </Box>
+      <Box className="InfoBox centerElements">
+        <Typography variant="body1" fontWeight="bold"   style={{
+            fontWeight: "700px",
+            fontSize: "32px",
+            fontFamily: "Amazon Ember Display",
+          }}>
+          {totalCountData?.totalProjectsSubmitByTeams || 0}
+        </Typography>
+        <Typography className="InfoTextStyle">
+          Total Projects Submitted
+        </Typography>
+      </Box>
+    </Box>
+    <Typography
+      style={{
+        fontFamily: "Amazon Ember Display",
+        fontSize: "20px",
+        fontWeight: "700px",
+        marginTop: "30px",
+        // lineHeight:"70px"
+      }}
+    >
+      Facilitator List
+    </Typography>
+    
+  
     <Box sx={{ mt: 2, mb: 2 }}>
       <Box display="flex" justifyContent={"space-between"} mb={3}>
         <TextField
@@ -108,6 +254,7 @@ function FacilitatorFilter({ data, id }) {
       ) : (
         <FacilatorTable data={filteredFacilitator} />
       )}
+    </Box>
     </Box>
   );
 }
