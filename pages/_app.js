@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }) {
   const [open, setOpen] = useState(false);
   // const [partner_id, setPartner_id] = useState("");
   let referrer = "";
-  const [error, setError] = useState("");
+  const [error, setError] = useState("Apologies, the entered Gmail ID is not linked with a C4CA partner.");
   const [cookie, setCookie] = useCookies(["user"]);
   const { token } = router.query;
   let c4ca_partner_id, c4ca_facilitator_id, c4ca_roles, userRoleArray;
@@ -197,7 +197,9 @@ export default function App({ Component, pageProps }) {
           });
       })
       .catch((err) => {
-        // setLoading(false);
+        setError("Failed to log you in, Please Try Again");
+        setOpen(true)
+        setLoading(false);
       });
   };
 
@@ -252,7 +254,7 @@ export default function App({ Component, pageProps }) {
         </>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-            Apologies, the entered Gmail ID is not linked with a C4CA partner.
+           {error}
           </Alert>
         </Snackbar>
       </ThemeProvider>
