@@ -24,7 +24,6 @@ import customAxios from "@/api";
 const TeacherFilter = () => {
   const router = useRouter();
   const { id } = router.query;
-  // console.log(router.query);
 
   const [allTeacherList, setAllTeacherList] = useState([]);
   const [filteredTeacher, setFilteredTeacher] = useState([]);
@@ -35,33 +34,59 @@ const TeacherFilter = () => {
 
   const [breadCumData, setBreadCumData] = useState();
 
-  useEffect(() => {
-  if(id){
-    const apiUrl = `/c4ca/teacher/${id}`;
-    const token = localStorage.getItem("token");
-    customAxios
-      .get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        console.log(response); 
-        const teacherList = response?.data?.data?.teachersDetails;
-        const breadCrumb = response?.data?.data;
-        console.log(breadCrumb);
-        if (teacherList !== undefined) {
-          setAllTeacherList(teacherList);
-          setFilteredTeacher(teacherList);
-          setBreadCumData(breadCrumb);
-        } else {
-          console.error("Data is undefined.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+  function getUniqueValues(arr) {
+    return [...new Set(arr)];
   }
+
+  function getUniqueSchoolsValues(arr) {
+    return [...new Set(arr)];
+  }
+
+  const [uniqueDistricts, setUniqueDistricts] = useState([]);
+  const [uniqueSchools, setUniqueSchools] = useState([]);
+
+  useEffect(() => {
+    if (id) {
+      const apiUrl = `/c4ca/teacher/${id}`;
+      const token = localStorage.getItem("token");
+      customAxios
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          const teacherList = response?.data?.data?.teachersDetails;
+          const breadCrumb = response?.data?.data;
+          console.log(breadCrumb);
+          if (teacherList !== undefined) {
+            setAllTeacherList(teacherList);
+            setFilteredTeacher(teacherList);
+            setBreadCumData(breadCrumb);
+
+            const uniqueDistricts = getUniqueValues(
+              teacherList.map((teacher) => teacher.district)
+            );
+            setUniqueDistricts(uniqueDistricts);
+
+            const uniqueSchools = getUniqueSchoolsValues(
+              teacherList.map((teacher) => teacher.school)
+            );
+            setUniqueDistricts(uniqueDistricts);
+            setUniqueSchools(uniqueSchools)
+
+            if (uniqueDistricts) {
+              console.log(uniqueDistricts);
+            }
+          } else {
+            console.error("Data is undefined.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
   }, [id]);
 
   const handleDistrictChange = (event) => {
@@ -110,8 +135,8 @@ const TeacherFilter = () => {
   }
 
   //fetching data for the link
-  const [inviteLink, setInviteLink] = useState(""); 
-  const [isCopied, setIsCopied] = useState(false); 
+  const [inviteLink, setInviteLink] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
   useEffect(() => {
     if (id) {
       const apiUrl = `/c4ca/teacher/${id}`;
@@ -137,15 +162,16 @@ const TeacherFilter = () => {
     }
   }, [id]);
 
-  const copyToClipboard = () => { 
-    if(inviteLink){
-      navigator.clipboard.writeText(inviteLink)
-      .then(() => {
-        setIsCopied(true);
-      })
-      .catch((error) => {
-        console.error('Error copying to clipboard:', error);
-      });
+  const copyToClipboard = () => {
+    if (inviteLink) {
+      navigator.clipboard
+        .writeText(inviteLink)
+        .then(() => {
+          setIsCopied(true);
+        })
+        .catch((error) => {
+          console.error("Error copying to clipboard:", error);
+        });
     }
   };
 
@@ -194,17 +220,10 @@ const TeacherFilter = () => {
             student teams for C4CA projects
           </Typography>
 
-         {/* { inviteLink && ( <input
-        type="text"
-        value={inviteLink}
-        readOnly
-        onClick={copyToClipboard}
-        style={{ cursor: 'pointer' }}
-      />) } */}
-
-          <Button variant="outlined"  
-           value={inviteLink}
-           onClick={copyToClipboard}
+          <Button
+            variant="outlined"
+            value={inviteLink}
+            onClick={copyToClipboard}
           >
             C4CA Teacher Login
             <InsertLinkIcon />
@@ -252,9 +271,9 @@ const TeacherFilter = () => {
                 onChange={handleDistrictChange}
               >
                 <MenuItem value="All District">All District</MenuItem>
-                {allTeacherList?.map((teacher, index) => (
-                  <MenuItem key={index} value={teacher.district}>
-                    {teacher.district}
+                {uniqueDistricts?.map((teacher, index) => (
+                  <MenuItem key={index} value={teacher}>
+                    {teacher}
                   </MenuItem>
                 ))}
               </Select>
@@ -276,9 +295,9 @@ const TeacherFilter = () => {
                   onChange={handleSchoolChange}
                 >
                   <MenuItem value="All School">All School</MenuItem>
-                  {allTeacherList?.map((teacher, index) => (
-                    <MenuItem key={index} value={teacher.school}>
-                      {teacher.school}
+                  {uniqueSchools?.map((school, index) => (
+                    <MenuItem key={index} value={school}>
+                      {school}
                     </MenuItem>
                   ))}
                 </Select>
@@ -311,7 +330,9 @@ const TeacherFilter = () => {
           </Box>
         </Box>
       </Box>
-      {searchTerm === "" ? (
+      {searchTerm === "" &&
+      selectedDistrict === "All District" &&
+      selectedSchool === "All School" ? (
         <TeacherListTable filteredTeacher={allTeacherList} />
       ) : (
         <TeacherListTable filteredTeacher={filteredTeacher} />

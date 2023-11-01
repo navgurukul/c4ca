@@ -90,7 +90,7 @@ function TeachersList({ filteredTeacher }) {
       },
     },
     {
-      name: "Number of Teams",
+      name: "number_of_teams",
       label: "Number of Teams",
       options: {
         filter: false,
@@ -99,7 +99,7 @@ function TeachersList({ filteredTeacher }) {
       },
     },
     {
-      name: "Number of Student",
+      name: "number_of_students",
       label: "Number of Student",
       options: {
         filter: false,

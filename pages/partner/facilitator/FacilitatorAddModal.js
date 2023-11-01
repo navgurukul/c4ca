@@ -8,7 +8,7 @@ import { Dialog, Grid, DialogContent, DialogActions } from "@mui/material";
 import customAxios from "@/api";
 
 function FacilitatorAddModal({ boolean, onOpen, id }) {
-  console.log(typeof id);
+   
   const [values, setValues] = useState({
     name: "",
     point_of_contact: "string",
@@ -98,7 +98,7 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
             </InputLabel>
             <TextField
               margin="dense"
-              label="Name"
+              // label="Name"
               name="name"
               value={values.name}
               onChange={handleChange}
@@ -123,7 +123,7 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
             </InputLabel>
             <TextField
               margin="dense"
-              label="Point of Contact Email"
+              // label="Point of Contact Email"
               name="email"
               value={values.email}
               onChange={handleChange}
@@ -147,7 +147,7 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
             </InputLabel>
             <TextField
               margin="dense"
-              label="Phone Number"
+              // label="Phone Number"
               name="phone_number"
               value={values.phone}
               onChange={handleChange}

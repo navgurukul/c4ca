@@ -103,7 +103,7 @@ const PartnerDashboard = () => {
               fontFamily: "Amazon Ember Display",
             }}
           >
-            {totalData?.totalProjectsSubmission}
+            {totalData?.totalProjectsSubmission || 0}
           </Typography>
           <Typography className="InfoTextStyle">
             Total Projects Submitted

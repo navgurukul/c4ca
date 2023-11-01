@@ -14,9 +14,6 @@ import { reactLocalStorage } from "reactjs-localstorage";
 import { useRouter } from "next/router";
 
 export default function Home() {
-
-
-
   const isActive = useMediaQuery("(max-width:600px)");
   const router = useRouter();
   const [loggedOut, setLoggedOut] = useState("");
@@ -82,9 +79,10 @@ export default function Home() {
             color="text.primary"
             sx={{ marginTop: 4 }}
           >
-            Come together with fellow students to co-create cutting-edge tech
-            solutions that help reduce carbon footprint, increase renewable
-            energy adoption and promote sustainable living
+            Discover Code for Climate Action (C4CA), your gateway to a world
+            where learning and environmental innovation converge. Join us on a
+            journey that combines coding, climate awareness, and
+            problem-solving, all while making a positive impact on the planet.
           </Typography>
           {isActive ? (
             <>
@@ -104,7 +102,7 @@ export default function Home() {
                     variant="contained"
                     sx={{
                       display: "block",
-                      width: "92vw" ,
+                      width: "92vw",
                       m: "auto",
                       fontSize: "15px",
                     }}
@@ -228,9 +226,10 @@ export default function Home() {
             </Typography>
             <Stack alignItems={"center"}>
               <img
-                src="/Group.svg"
+                src="/AFE-logo.svg"
                 alt="logo"
-                width={isActive ? "100px" : "150px"}
+                // style={{ isActive ? "100px" : "150px"}}
+                width={isActive ? "60%" : "46%"}
               />
             </Stack>
           </Container>
