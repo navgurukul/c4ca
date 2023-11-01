@@ -16,6 +16,14 @@ import { useRouter } from "next/router";
 export default function Home() {
   const isActive = useMediaQuery("(max-width:600px)");
   const router = useRouter();
+  const [loggedOut, setLoggedOut] = useState("");
+  const [isFirstLogin, setIsFirstLogin] = useState("");
+
+  useEffect(() => {
+    setIsFirstLogin(localStorage.getItem("isFirstLogin"));
+    setLoggedOut(localStorage.getItem("loggeOut"));
+  }, [loggedOut, isFirstLogin]);
+
   useEffect(() => {
     const user = reactLocalStorage.getObject("user");
     if (Object.keys(user) == 0) return;
@@ -55,7 +63,6 @@ export default function Home() {
             <img
               src="/home.svg"
               alt="logo"
-              // heigh={isActive ? "228px" : "413px"}
               width={isActive ? "330px" : "790px"}
             />
             <Box sx={{ mt: 4 }}>
@@ -71,11 +78,11 @@ export default function Home() {
             align="center"
             color="text.primary"
             sx={{ marginTop: 4 }}
-            // sx={{ backgroundColor: isActive ? "pink" : "red"}}
           >
-            Come together with fellow students to co-create cutting-edge tech
-            solutions that help reduce carbon footprint, increase renewable
-            energy adoption and promote sustainable living
+            Discover Code for Climate Action (C4CA), your gateway to a world
+            where learning and environmental innovation converge. Join us on a
+            journey that combines coding, climate awareness, and
+            problem-solving, all while making a positive impact on the planet.
           </Typography>
           {isActive ? (
             <>
@@ -87,17 +94,22 @@ export default function Home() {
                 </Link>
               </Box>
               <Box sx={{ marginTop: 4 }} alignItems="center">
-                <Link href="/teacher/login">
+                <a
+                  href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}
+                >
                   <Button
-                    sx={{ width: "100%" }}
                     color="secondary"
                     variant="contained"
+                    sx={{
+                      display: "block",
+                      width: "92vw",
+                      m: "auto",
+                      fontSize: "15px",
+                    }}
                   >
-                    <Typography variant="ButtonLarge">
-                      Teachers and Partners
-                    </Typography>
-                  </Button>
-                </Link>
+                    Teacher and Partners
+                  </Button>{" "}
+                </a>
               </Box>
               <Box sx={{ marginTop: 4 }} alignItems="center">
                 <Divider />
@@ -214,9 +226,10 @@ export default function Home() {
             </Typography>
             <Stack alignItems={"center"}>
               <img
-                src="/Group.svg"
+                src="/AFE-logo.svg"
                 alt="logo"
-                width={isActive ? "100px" : "150px"}
+                // style={{ isActive ? "100px" : "150px"}}
+                width={isActive ? "60%" : "46%"}
               />
             </Stack>
           </Container>
