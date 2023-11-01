@@ -166,7 +166,11 @@ function Progress() {
                       fontWeight: "700px",
                     }}
                   >
-                    {person?.team_name} :
+                    {person?.team_name
+                      .split(" ")  
+                      .slice(0, 5)  
+                      .join(" ")} 
+                    {person?.team_name.split(" ").length > 10 ? "..." : ""}
                   </Typography>
                   <Box style={{ marginTop: "10px" }}>
                     <CircularProgress

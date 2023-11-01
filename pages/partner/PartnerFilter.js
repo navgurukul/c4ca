@@ -25,6 +25,7 @@ function PartnerFilter() {
   // Function to fetch data from the API
   //add query
   useEffect(() => {
+    const fetchData = () => {
     const apiUrl = "/c4caPartners/admin";
     const token = localStorage.getItem("token");
     customAxios
@@ -34,12 +35,10 @@ function PartnerFilter() {
         },
       })
       .then((response) => {
-        // console.log(response?.data);
         const partnerList = response?.data?.results;
         if (partnerList !== undefined) {
           setAllPartner(partnerList);
           setfilteredPartner(partnerList);
-          // console.log(partnerList);
         } else {
           console.error("Data is undefined.");
         }
@@ -47,9 +46,12 @@ function PartnerFilter() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+    };
+      fetchData();
+       if (!openModal) {
+      fetchData();
+    }
   }, [openModal]);
-
-  //   const isActive = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
   const filterTerms = [
     "All Partners",
@@ -70,7 +72,7 @@ function PartnerFilter() {
   };
 
   function filterPartner(searchText, allPartner) {
-    console.log(allPartner);
+    // console.log(allPartner);
     const filterData = allPartner.filter(
       (partner) =>
         partner?.name?.toLowerCase()?.includes(searchText?.toLowerCase()) ||
@@ -87,7 +89,7 @@ function PartnerFilter() {
   };
 
   function statusFilter(term, allPartner) {
-    console.log(allPartner);
+    // console.log(allPartner);
     if (term === "All Partners") {
       return allPartner;
     }
@@ -121,8 +123,8 @@ function PartnerFilter() {
   ));
 
   return (
-    <Box sx={{ mt: 4, mb: 1 }} >
-      <Box display="flex" justifyContent={"space-between"} mb={3}  >
+    <Box sx={{ mt: 4, mb: 1 }}>
+      <Box display="flex" justifyContent={"space-between"} mb={3}>
         <TextField
           placeholder="Search Partner, Point of Contact"
           size="medium"
@@ -163,8 +165,11 @@ function PartnerFilter() {
         </Box>
       </Box>
       <Box style={{ display: "flex" }}>{filterButtons}</Box>
-
-      <PartnerTable data={filteredPartner} />
+      {searchTerm === "" && allPartner ? (
+        <PartnerTable data={allPartner} />
+      ) : (
+        <PartnerTable data={filteredPartner} />
+      )}
     </Box>
   );
 }
