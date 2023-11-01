@@ -78,7 +78,9 @@ const Header = () => {
     localStorage.setItem("isFirstLogin", false);
     removeCookie("user", { path: "/" });
     setUser(null);
-    router.push("/");
+    setTimeout(() => {
+      router.push("/");
+    }, 200);
   };
 
   return (

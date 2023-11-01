@@ -9,7 +9,7 @@ import FacilitatorFilter from "./FacilitatorFilter";
 import customAxios from "@/api";
 
 const FacilatorHome = () => {
-  const router = useRouter(); 
+  const router = useRouter();
   const { id } = router.query;
   const [data, setData] = useState([]);
   const [partnerName, setPartnerName] = useState();
@@ -27,7 +27,7 @@ const FacilatorHome = () => {
           },
         })
         .then((response) => {
-          console.log(response); 
+          console.log(response);
           const datae = response?.data?.data?.facilitatorsDetails;
           const partnerName = response?.data?.data?.partner_name;
           setData(datae);
@@ -42,9 +42,9 @@ const FacilatorHome = () => {
           console.error("Error fetching data:", error);
         });
     }
-  }, [id,]);
+  }, [id]);
 
-  //fetching the total data
+  //fetching the total dataa
   useEffect(() => {
     if (id) {
     const apiUrl = `/c4ca/totalData?partner_id=${id}`;
@@ -102,22 +102,38 @@ const FacilatorHome = () => {
         style={{ display: "flex", alignItems: "flex-start", gap: "32.161px" }}
       >
         <Box className="InfoBox centerElements">
-          <Typography variant="body1" fontWeight="bold">
-            {totalCountData?.totalNoOfTeams}
+          <Typography
+            variant="body1"
+            fontWeight="bold"
+            style={{
+              fontWeight: "700px",
+              fontSize: "32px",
+              fontFamily: "Amazon Ember Display",
+            }}
+          >
+            {totalCountData?.totalNoOfTeams || 0}
           </Typography>
-          <Typography className="InfoTextStyle">
+          <Typography className="InfoTextStyle" >
             Total Number of Teams
           </Typography>
         </Box>
         <Box className="InfoBox centerElements">
-          <Typography variant="body1" fontWeight="bold">
-            {totalCountData?.totalNoOfStundents}
+          <Typography variant="body1" fontWeight="bold"   style={{
+              fontWeight: "700px",
+              fontSize: "32px",
+              fontFamily: "Amazon Ember Display",
+            }}>
+            {totalCountData?.totalNoOfStundents || 0}
           </Typography>
           <Typography className="InfoTextStyle">Number of Students</Typography>
         </Box>
         <Box className="InfoBox centerElements">
-          <Typography variant="body1" fontWeight="bold">
-            {totalCountData?.totalProjectsSubmitByTeams}
+          <Typography variant="body1" fontWeight="bold"   style={{
+              fontWeight: "700px",
+              fontSize: "32px",
+              fontFamily: "Amazon Ember Display",
+            }}>
+            {totalCountData?.totalProjectsSubmitByTeams || 0}
           </Typography>
           <Typography className="InfoTextStyle">
             Total Projects Submitted

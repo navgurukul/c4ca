@@ -31,14 +31,14 @@ const TeamDetail = () => {
   const params = useParams();
 
   useEffect(() => {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    const authToken = localStorage.getItem("token");
     if (!params?.team_id) return;
     const apiUrl = `/c4ca/team/${params?.team_id}`;
 
     customAxios
       .get(apiUrl, {
         headers: {
-          Authorization: authToken.token,
+          Authorization: `Bearer ${authToken}`,
         },
       })
       .then((response) => {
@@ -53,15 +53,13 @@ const TeamDetail = () => {
 
   const teamMemberData = data.team_members || [];
 
-  
-
   useEffect(() => {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    const authToken = localStorage.getItem("token");
     console.log("authToken", authToken);
     customAxios
       .get("/c4ca/projectTopic", {
         headers: {
-          Authorization: authToken.token,
+          Authorization: `Bearer ${authToken}`,
         },
       })
       .then((response) => {
