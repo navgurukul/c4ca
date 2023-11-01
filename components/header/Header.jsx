@@ -99,12 +99,17 @@ const Header = () => {
         )}
 
         {router.pathname === "/" && user == null ? (
+          <>
+          {isMobile && (<Link href={"/"}>
+            <img src="/c4ca.svg" alt="c4ca_logo" />
+          </Link>)}
           <Stack spacing={2} direction="row">
             {" "}
+            {!isMobile && (
             <a
               href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}
             >
-              {/* <Link href="/teacher/login"> */}
+              {/* <Link href="/teacher/login"> */}             
               <Button
                 color="secondary"
                 variant="contained"
@@ -118,7 +123,8 @@ const Header = () => {
                 Teacher and Partners
               </Button>{" "}
               {/* </Link> */}
-            </a>
+            </a>)}
+            {!isMobile && (
             <Link href="/student/login">
               <Button
                 variant="contained"
@@ -131,8 +137,9 @@ const Header = () => {
               >
                 Student Login
               </Button>
-            </Link>
+            </Link>)}
           </Stack>
+          </>
         ) : (
           <>
             {isMobile && (
