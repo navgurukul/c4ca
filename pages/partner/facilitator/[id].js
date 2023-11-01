@@ -17,20 +17,18 @@ const FacilatorHome = () => {
 
   useEffect(() => {
     if (id) {
+      const fetchFacilitatorList = () => {
       const apiUrl = `/c4ca/facilitator/getByPartnerId/${id}`;
       const token = localStorage.getItem("token");
-
       customAxios
         .get(apiUrl, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then((response) => {
-          console.log(response);
+        .then((response) => { 
           const datae = response?.data?.data?.facilitatorsDetails;
-          const partnerName = response?.data?.data?.partner_name;
-          setData(datae);
+          const partnerName = response?.data?.data?.partner_name; 
           if (datae !== undefined) {
             setData(datae);
             setPartnerName(partnerName);
@@ -41,8 +39,13 @@ const FacilatorHome = () => {
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
+      };
+      fetchFacilitatorList();
+      if (data) {
+        fetchFacilitatorList();
+      }
     }
-  }, [id]);
+  }, [id, data]);
 
   //fetching the total dataa
   useEffect(() => {

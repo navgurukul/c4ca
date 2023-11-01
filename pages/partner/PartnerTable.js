@@ -99,7 +99,7 @@ const PartnerTable = ({data}) => {
         },
       },
     {
-      name: "salary",
+      name: "no_of_students",
       label: "Number of Students",
       options: {
         filter: false,
@@ -116,37 +116,37 @@ const PartnerTable = ({data}) => {
         customCellClass: "custom-cell",
       },
     },
-    {
-      name: "",
-      label: "",
-      options: {
-        filter: false,
-        sort: false,
-        empty: true,
-        customCellClass: "custom-cell",
-        style: {
-          color: "red",
-        },
-        customBodyRender: (_, tableMeta) => {
-          partnerId = data[tableMeta.rowIndex].id;
-          const partneredit = data[tableMeta.rowIndex];
-          return (
-            <div style={btnsContainerStyles}>
-              <Button
-                size="small"
-                sx={{
-                  color: "#BDBDBD",
-                  "&:hover": { color: "primary.main" },
-                }}
-                onClick={(event) => handleEditButtonClick(partneredit, event)}
-              >
-                <EditIcon />
-              </Button>
-            </div>
-          );
-        },
-      },
-    },
+    // {
+    //   name: "",
+    //   label: "",
+    //   options: {
+    //     filter: false,
+    //     sort: false,
+    //     empty: true,
+    //     customCellClass: "custom-cell",
+    //     style: {
+    //       color: "red",
+    //     },
+    //     customBodyRender: (_, tableMeta) => {
+    //       partnerId = data[tableMeta.rowIndex].id;
+    //       const partneredit = data[tableMeta.rowIndex];
+    //       return (
+    //         <div style={btnsContainerStyles}>
+    //           <Button
+    //             size="small"
+    //             sx={{
+    //               color: "#BDBDBD",
+    //               "&:hover": { color: "primary.main" },
+    //             }}
+    //             onClick={(event) => handleEditButtonClick(partneredit, event)}
+    //           >
+    //             <EditIcon />
+    //           </Button>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
   ];
   const handleDeleteClick = (partnerId) => {
     removePartner(partnerId);

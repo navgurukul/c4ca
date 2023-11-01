@@ -37,7 +37,7 @@ function PartnerAddModal({ boolean, onOpen }) {
       .post(apiUrl, values, { headers })
       .then((response) => {
         console.log("POST request successful:", response.data);
-        alert(response.data.status);
+        alert(response.data.message);
       })
       .catch((error) => {
         console.error("POST request error:", error);
