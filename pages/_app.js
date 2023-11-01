@@ -244,7 +244,7 @@ export default function App({ Component, pageProps }) {
           {loading ? (
             <div class="loading-container">
               <div class="loading"></div>
-              <div id="loading-text">Logging In</div>
+              <div id="loading-text">Loading..</div>
             </div>
           ) : (
             <Component {...pageProps} />
