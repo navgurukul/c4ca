@@ -25,6 +25,8 @@ const Header = () => {
   const [isFirstLogin, setIsFirstLogin] = useState("");
   const [authData, setAuthData] = useState({});
 
+  console.log("authData komal", authData);
+
   const [reloadCount, setReloadCount] = useState(0);
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
@@ -174,12 +176,12 @@ const Header = () => {
                     onClick={() => {
                       handleClose();
                       // router.push(
-                      //   authData?.role == "teacher"
+                      //   authData?.c4ca_roles?.includes("c4caTeacher")
                       //     ? "/teacher/profile"
                       //     : "/student/team-profile"
                       // );
                       router.push(
-                        authData?.c4ca_roles?.includes("c4caTeacher")
+                        authData?.c4ca_roles && authData.c4ca_roles.indexOf("c4caTeacher") !== -1
                           ? "/teacher/profile"
                           : "/student/team-profile"
                       );
