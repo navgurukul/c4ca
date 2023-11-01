@@ -48,7 +48,7 @@ const Header = () => {
   useEffect(() => {
     const handleRouteChange = () => {
       const authToken = JSON.parse(localStorage.getItem("teacherData"));
-      if(authToken){
+      if (authToken) {
         setUser(authToken);
         const data = JSON.parse(localStorage.getItem("AUTH"));
         setAuthData(data);
@@ -61,7 +61,6 @@ const Header = () => {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, []);
-
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -79,7 +78,8 @@ const Header = () => {
     removeCookie("user", { path: "/" });
     setUser(null);
     setTimeout(() => {
-      router.push("/");
+      // router.push("/");
+      window.location.replace("/");
     }, 200);
   };
 
@@ -94,45 +94,49 @@ const Header = () => {
 
         {router.pathname === "/" && user == null ? (
           <>
-          {isMobile && (<Link href={"/"}>
-            <img src="/c4ca.svg" alt="c4ca_logo" />
-          </Link>)}
-          <Stack spacing={2} direction="row">
-            {" "}
-            {!isMobile && (
-            <a
-              href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}
-            >
-              {/* <Link href="/teacher/login"> */}             
-              <Button
-                color="secondary"
-                variant="contained"
-                sx={{
-                  display: "block",
-                  width: 100,
-                  m: "auto",
-                  fontSize: "15px",
-                }}
-              >
-                Teacher and Partners
-              </Button>{" "}
-              {/* </Link> */}
-            </a>)}
-            {!isMobile && (
-            <Link href="/student/login">
-              <Button
-                variant="contained"
-                sx={{
-                  display: "block",
-                  width: 100,
-                  m: "auto",
-                  fontSize: "15px",
-                }}
-              >
-                Student Login
-              </Button>
-            </Link>)}
-          </Stack>
+            {isMobile && (
+              <Link href={"/"}>
+                <img src="/c4ca.svg" alt="c4ca_logo" />
+              </Link>
+            )}
+            <Stack spacing={2} direction="row">
+              {" "}
+              {!isMobile && (
+                <a
+                  href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}
+                >
+                  {/* <Link href="/teacher/login"> */}
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    sx={{
+                      display: "block",
+                      width: 100,
+                      m: "auto",
+                      fontSize: "15px",
+                    }}
+                  >
+                    Teacher and Partners
+                  </Button>{" "}
+                  {/* </Link> */}
+                </a>
+              )}
+              {!isMobile && (
+                <Link href="/student/login">
+                  <Button
+                    variant="contained"
+                    sx={{
+                      display: "block",
+                      width: 100,
+                      m: "auto",
+                      fontSize: "15px",
+                    }}
+                  >
+                    Student Login
+                  </Button>
+                </Link>
+              )}
+            </Stack>
           </>
         ) : (
           <>
@@ -169,8 +173,13 @@ const Header = () => {
                   <MenuItem
                     onClick={() => {
                       handleClose();
+                      // router.push(
+                      //   authData?.role == "teacher"
+                      //     ? "/teacher/profile"
+                      //     : "/student/team-profile"
+                      // );
                       router.push(
-                        authData?.role == "teacher"
+                        authData?.c4ca_roles?.includes("c4caTeacher")
                           ? "/teacher/profile"
                           : "/student/team-profile"
                       );
