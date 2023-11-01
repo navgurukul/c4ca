@@ -54,8 +54,9 @@ const routeValidator = (req) => {
     if (pathname.startsWith("/partner") && role == "superAdmin") {
       return NextResponse.next();
     } else if (
-      pathname.startsWith("/partner/teacherList") &&
-      ["superAdmin", "facilitator", "c4caPartner"].includes(role)
+      pathname.startsWith("/partner/teacherList") ||
+      (pathname.startsWith("/partner/progress") &&
+        ["superAdmin", "facilitator", "c4caPartner"].includes(role))
     ) {
       return NextResponse.next();
     } else if (
