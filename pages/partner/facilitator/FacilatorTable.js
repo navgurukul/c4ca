@@ -59,8 +59,6 @@ let btnsContainerStyles = {
 };
 
 const FacilatorTable = ({ data }) => {
-  // console.log(data);
-
   const router = useRouter();
   const { id } = router.query;
 
