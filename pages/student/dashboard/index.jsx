@@ -10,8 +10,10 @@ import {
   Button,
   CircularProgress,
   CardActions,
+  useMediaQuery,
   Avatar,
 } from "@mui/material";
+import { breakpoints } from "@/theme/constant";
 import OverView from "../../../components/studentDashboard/OverView";
 import Module from "../../../components/studentDashboard/Module";
 import customAxios from "../../../api"; // Import your custom Axios instance
@@ -23,6 +25,7 @@ const images = [
 ];
 
 const Dashboard = () => {
+  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
   const [showAllTeams, setShowAllTeams] = useState(false);
 
@@ -104,7 +107,7 @@ const Dashboard = () => {
             sx={{
               borderRadius: "8px",
               border: "1px solid #ccc",
-              width: "50%",
+              width: isMobile?'100%':'50%',
               padding: "5px",
             }}
           >
@@ -121,7 +124,7 @@ const Dashboard = () => {
           </Box>
 
           <OverView />
-          <Module />
+          {!isMobile&&<Module />}
         </Grid>
         <Grid item xs={12} md={4} lg={4}>
           <Card sx={{ border: 1, borderColor: "gray", borderRadius: "8px" }}>
@@ -251,6 +254,7 @@ const Dashboard = () => {
           </Card>
         </Grid>
       </Grid>
+      {isMobile&&<Module />}
     </Container>
   );
 };

@@ -11,7 +11,7 @@ import customAxios from "@/api";
 const OverView = () => {
   const [attemptedAssessmentCount, setAttemptedAssessmentCount] = useState();
   const [teamCount, setTeamCount] = useState([]);
-
+  
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
     customAxios
@@ -56,7 +56,7 @@ const OverView = () => {
       </Box>
 
       <Grid container sx={{ mt: "32px" }} spacing={3}>
-        <Grid item xs={12} sm={6} md={5}>
+        <Grid item xs={6} sm={6} md={5}>
     
           <Card
             sx={{
@@ -74,7 +74,7 @@ const OverView = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={5}>
+        <Grid item xs={6} sm={6} md={5}>
   
           <Card
             sx={{
