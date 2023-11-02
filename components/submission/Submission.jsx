@@ -146,7 +146,7 @@ const Submission = (props) => {
             {!linkShow&&!projectShow&& 
               <Grid container spacing={2}>
                 <Grid item xs={12} container justifyContent="center" alignItems="center">
-                    <Button size="medium"  sx={{ width:isMobile&&'100%' }}   className="profileBtn">
+                    <Button  sx={{width:!isMobile?"50%":"100%" }}  className="profileBtn">
                     <Link href="#" underline="none" color={'white'} pl='16px' pr="16px">  Return to Dashboard</Link>
                     </Button>
                 </Grid>
