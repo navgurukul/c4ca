@@ -15,6 +15,9 @@ const FacilatorHome = () => {
   const [partnerName, setPartnerName] = useState();
   const [totalCountData, settotalCountData] = useState();
 
+  sessionStorage.setItem("id", id);
+  sessionStorage.setItem("partnerName", partnerName);
+
   useEffect(() => {
     if (id) {
       const fetchFacilitatorList = () => {
@@ -75,7 +78,7 @@ const FacilatorHome = () => {
 
   return (
     <Box className="dashboardContainer">
-      <MyBreadcrumbs partnerName={partnerName} />
+      <MyBreadcrumbs partnerName={partnerName} id={id}/>
       <Typography
         style={{
           fontSize: "24px",

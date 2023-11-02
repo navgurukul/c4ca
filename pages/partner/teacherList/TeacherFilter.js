@@ -20,10 +20,13 @@ import axios from "axios";
 
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import customAxios from "@/api";
+import MyBreadcrumbs from "@/components/breadcrumb/breadcrumb";
 
 const TeacherFilter = () => {
   const router = useRouter();
   const { id } = router.query;
+
+  sessionStorage.setItem("fid", id);
 
   const [allTeacherList, setAllTeacherList] = useState([]);
   const [filteredTeacher, setFilteredTeacher] = useState([]);
@@ -175,45 +178,12 @@ const TeacherFilter = () => {
     }
   };
 
+  let facilitator_name;
+  let fName = sessionStorage.setItem("fName", breadCumData?.facilitator_name);
   return (
     <Box style={{ margin: "20px 0" }}>
       <Box sx={{ mx: "110px" }}>
-        <Box style={{ margin: "20px 0" }}>
-          <Typography
-            style={{
-              lineHeight: "2",
-              fontFamily: "Amazon Ember",
-              fontSize: "14px",
-            }}
-          >
-            {" "}
-            <span style={{ color: "#29458C" }}>
-              Home / {breadCumData?.partner_name}
-            </span>{" "}
-            <span style={{ color: "#BDBDBD" }}>
-              / {breadCumData?.facilitator_name}
-            </span>
-          </Typography>
-          <Typography
-            style={{
-              fontSize: "24px",
-              lineHeight: "3",
-              fontWeight: "800px",
-              fontFamily: "Amazon Ember Display",
-            }}
-          >
-            {breadCumData?.facilitator_name}
-          </Typography>
-          <Typography
-            style={{
-              lineHeight: "2",
-              fontFamily: "Amazon Ember Display",
-              fontWeight: "500px",
-            }}
-          >
-            Invite the Teachers
-          </Typography>
-        </Box>
+        <MyBreadcrumbs facilitator_name={breadCumData?.facilitator_name}/>
         <Box style={{ margin: "25px 0" }}>
           <Typography style={{ fontSize: "14px", lineHeight: "4" }}>
             The invite link can be shared with teachers who will be guiding the
