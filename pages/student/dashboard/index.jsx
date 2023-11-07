@@ -23,12 +23,11 @@ const images = [
 ];
 
 const Dashboard = () => {
-
   const [showAllTeams, setShowAllTeams] = useState(false);
 
   const [Leaderboard, setLeaderboard] = useState([]);
 
-  const initialTeamCount = 4;
+  const initialTeamCount = 3;
   const handleSeeAllTeamsClick = () => {
     setShowAllTeams(true);
   };
@@ -46,14 +45,15 @@ const Dashboard = () => {
     return shuffledImages;
   };
   useEffect(() => {
-      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    const authToken = JSON.parse(localStorage.getItem("AUTH"));
     customAxios
       .get("/c4ca/teams", {
         headers: {
-          Authorization: authToken.data.token
+          Authorization: authToken.data.token,
         },
       })
       .then((res) => {
+        console.log(res.data.data, "leaderboard");
         setLeaderboard(res.data.data);
       })
       .catch((err) => {
@@ -66,17 +66,17 @@ const Dashboard = () => {
     const teamData = JSON.parse(localStorage.getItem("AUTH"));
     const authToken = teamData.data.token;
 
-    customAxios.get(`/c4ca/team/${teamData.data.id}`,
-    {
-      headers: {
-        Authorization: authToken
-      },
-    })
-    .then((res) => {
-      setTeam(res.data.data);
-    });
+    customAxios
+      .get(`/c4ca/team/${teamData.data.id}`, {
+        headers: {
+          Authorization: authToken,
+        },
+      })
+      .then((res) => {
+        console.log(res.data, "team data");
+        setTeam(res.data.data);
+      });
   }, []);
-
 
   return (
     <Container sx={{ marginTop: "3%" }} maxWidth="lg">
@@ -130,26 +130,29 @@ const Dashboard = () => {
               <Typography variant="body2">
                 See how the teams in your district are doing
               </Typography>
-              <Box sx={{maxHeight: 350, overflowY: 'auto'}}>
+              <Box sx={{ maxHeight: 350, overflowY: "auto" }}>
                 {Leaderboard.slice(
                   0,
                   showAllTeams ? Leaderboard.length : initialTeamCount
                 ).map((team, index) => (
-                  // <h1>{team.team_name}</h1>
-
                   <Grid
                     container
                     spacing={3}
                     alignItems="center"
                     sx={{ mt: 1 }}
-                    // key={index}
+                    key={index}
                   >
-                    <Grid item>
-                      <img
-                        src={shuffleImages()[index % 3]}
-                        alt="Medal"
-                        style={{ width: "100%" }}
-                      />
+                    <Grid  item>
+                      {index < 3 && (
+                        <img
+                          src={images[index]}
+                          alt={`Medal ${index + 1}`}
+                          style={{ width: "100%" }}
+                        />
+                      )}
+                      <Typography sx={{marginRight:"25px"}} variant="body2">
+                      {index >= 3 && team.rank}
+                      </Typography>
                     </Grid>
 
                     <Grid item xs={6}>
@@ -157,7 +160,6 @@ const Dashboard = () => {
                         <Typography variant="body1">
                           {team.team_name}
                         </Typography>
-                        {/* <Typography variant="caption">{team.description}</Typography> */}
                       </Box>
                     </Grid>
                     <Grid item>
@@ -166,10 +168,8 @@ const Dashboard = () => {
                         value={team.completed_portion}
                         size={25}
                         thickness={6}
-                        // max={100}
                         color="typhoon"
                       />
-                      {/* <Typography>{team.completed_portion}%</Typography> */}
                     </Grid>
                     <Grid item>
                       <Typography variant="body2">
@@ -179,13 +179,14 @@ const Dashboard = () => {
                   </Grid>
                 ))}
               </Box>
+              {/* <Typography> need to show  </Typography> */}
               {Leaderboard.length > initialTeamCount && (
                 <Button
                   Button
                   variant="text"
                   onClick={() => setShowAllTeams(!showAllTeams)}
                 >
-                  {showAllTeams ? "See top 5 teams" : "See All Teams"}
+                  {showAllTeams ? "See top 3 teams" : "See All Teams"}
                 </Button>
               )}
             </CardContent>

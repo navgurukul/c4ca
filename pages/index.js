@@ -52,7 +52,7 @@ export default function Home() {
         break;
     }
     router.push(req.nextUrl.pathname);
-  });
+  }, []);
 
   return (
     <>
