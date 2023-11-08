@@ -39,7 +39,6 @@ const OverView = () => {
         },
       })
       .then((res) => {
-        // console.log(res.data.data.length, "teamdata");
         setTeamCount(res.data.data.length);
       })
       .catch((err) => {

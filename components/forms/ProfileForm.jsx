@@ -59,7 +59,6 @@ const ProfileForm = () => {
 
   
     const authToken = localStorage.getItem("token");
-    console.log("authToken", authToken);
     customAxios
       .get("/c4ca/teacher_Data", {
         headers: {

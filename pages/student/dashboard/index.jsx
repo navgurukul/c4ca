@@ -273,7 +273,6 @@ const Dashboard = () => {
                     borderRadius: 0,
                   }}
                 >
-                  {/* <span style={{ flex: 1 }}>Scratch Web komal</span> */}
                   <a
                     href="https://scratch.merakilearn.org/login"
                     target="_blank"
