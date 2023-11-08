@@ -77,6 +77,8 @@ const Dashboard = () => {
         setTeam(res.data.data);
       });
   }, []);
+   const highlightedTeamName = team.team_name;
+   const highlightedTeamIndex = Leaderboard.findIndex((item) => item.team_name === highlightedTeamName);
 
   return (
     <Container sx={{ marginTop: "3%" }} maxWidth="lg">
@@ -139,7 +141,12 @@ const Dashboard = () => {
                     container
                     spacing={3}
                     alignItems="center"
-                    sx={{ mt: 1 }}
+                    sx={{ mt: 1,
+                      backgroundColor:
+                      !showAllTeams && index < 3 && team.team_name === highlightedTeamName
+                          ? "#D4DAE8"
+                          : "transparent",
+                    }}
                     key={index}
                   >
                     <Grid  item>
@@ -150,7 +157,7 @@ const Dashboard = () => {
                           style={{ width: "100%" }}
                         />
                       )}
-                      <Typography sx={{marginRight:"25px"}} variant="body2">
+                      <Typography sx={{marginRight:"25px" ,ml:1}} variant="body2">
                       {index >= 3 && team.rank}
                       </Typography>
                     </Grid>
@@ -179,6 +186,50 @@ const Dashboard = () => {
                   </Grid>
                 ))}
               </Box>
+              {!showAllTeams && (<Box sx={{ mt: 2, ml:2 }}> <img src="/assets/separator.svg" alt="Separator" /> </Box>)}
+
+              {!showAllTeams && (
+                <Box >
+                  <Grid
+                    container
+                    spacing={2}
+                    alignItems="center" 
+                    mb={2}
+                    sx={{mt: 1, width:'110%', backgroundColor:  team.team_name === highlightedTeamName? "#D4DAE8": "transparent", }} >
+                    <Grid  item mb={2} ml={1}>
+                      <Typography sx={{marginRight:"25px"}} variant="body2">
+                      {highlightedTeamIndex !== -1 && (
+                        <Typography variant="body1">
+                          {highlightedTeamIndex + 1}
+                        </Typography>
+                      )}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}  mb={2}>
+                      <Box>
+                        <Typography variant="body1">
+                          {team.team_name}
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item  mb={2}>
+                      <CircularProgress
+                        variant="determinate"
+                        value={team.completed_portion}
+                        size={25}
+                        thickness={6}
+                        color="typhoon"
+                      />
+                    </Grid>
+                    <Grid item  mb={2}>
+                      <Typography variant="body2">
+                        {team.completed_portion}%
+                      </Typography>
+                    </Grid>
+                  </Grid>          
+                </Box>
+              )}
+                 
               {/* <Typography> need to show  </Typography> */}
               {Leaderboard.length > initialTeamCount && (
                 <Button
