@@ -77,6 +77,12 @@ const Dashboard = () => {
         setTeam(res.data.data);
       });
   }, []);
+   const highlightedTeamName = team.team_name;
+   const highlightedTeamIndex = Leaderboard.findIndex((item) => item.team_name === highlightedTeamName);
+   const calculateProgress = (team) => {
+    return team.completed_portion || 0;
+  };
+  console.log("highlightedTeamIndex",highlightedTeamIndex<3)
 
   return (
     <Container sx={{ marginTop: "3%" }} maxWidth="lg">
@@ -137,12 +143,18 @@ const Dashboard = () => {
                 ).map((team, index) => (
                   <Grid
                     container
-                    spacing={3}
+                    spacing={2}
                     alignItems="center"
-                    sx={{ mt: 1 }}
+                    sx={{ mt: 1,
+                      
+                      backgroundColor:
+                      !showAllTeams && index < 3 && team.team_name === highlightedTeamName
+                          ? "#D4DAE8"
+                          : "transparent",
+                    }}
                     key={index}
                   >
-                    <Grid  item>
+                    <Grid  item  mb = {!showAllTeams && index < 3 &&2}>
                       {index < 3 && (
                         <img
                           src={images[index]}
@@ -150,28 +162,27 @@ const Dashboard = () => {
                           style={{ width: "100%" }}
                         />
                       )}
-                      <Typography sx={{marginRight:"25px"}} variant="body2">
+                      <Typography sx={{marginRight:"25px" ,ml:1}} variant="body2">
                       {index >= 3 && team.rank}
                       </Typography>
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item xs={6}  mb = {!showAllTeams && index < 3 &&2}>
                       <Box>
                         <Typography variant="body1">
                           {team.team_name}
                         </Typography>
                       </Box>
                     </Grid>
-                    <Grid item>
+                    <Grid item  mb = {!showAllTeams && index < 3 &&2}>
                       <CircularProgress
                         variant="determinate"
                         value={team.completed_portion}
                         size={25}
                         thickness={6}
-                        color="typhoon"
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item  mb = {!showAllTeams && index < 3 &&2}>
                       <Typography variant="body2">
                         {team.completed_portion}%
                       </Typography>
@@ -179,8 +190,52 @@ const Dashboard = () => {
                   </Grid>
                 ))}
               </Box>
+              {highlightedTeamIndex > 3&& !showAllTeams && (<Box sx={{ mt: 2, ml:2 }}> <img src="/assets/separator.svg" alt="Separator" /> </Box>)}
+
+              {highlightedTeamIndex > 3 && !showAllTeams && (
+                  <Grid container spacing={2} alignItems="center" mb={2}
+                    sx={{mt: 1, width:'110%', backgroundColor:  team.team_name === highlightedTeamName? "#D4DAE8": "transparent", }} >
+                    <Grid  item mb={2} ml={1}>
+                      <Typography sx={{marginRight:"25px"}} variant="body2">
+                      {highlightedTeamIndex !== -1 && (
+                        <Typography variant="body1">
+                          {highlightedTeamIndex + 1}
+                        </Typography>
+                      )}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}  mb={2}>
+                      <Box>
+                        <Typography variant="body1">
+                          {team.team_name}
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item  mb={2}>
+                      <CircularProgress
+                        variant="determinate"
+                        value={
+                          highlightedTeamIndex !== -1
+                            ? calculateProgress(Leaderboard[highlightedTeamIndex]) 
+                            : 0
+                        }
+                        size={25}
+                        thickness={6}
+                      />
+                    </Grid>
+                    <Grid item  mb={2}>
+                      <Typography variant="body2">
+                        {highlightedTeamIndex !== -1
+                        ? `${calculateProgress(Leaderboard[highlightedTeamIndex])}%`
+                        : ""}
+                      </Typography>
+                    </Grid>
+                  </Grid>          
+              )}
+                 
               {/* <Typography> need to show  </Typography> */}
               {Leaderboard.length > initialTeamCount && (
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Button
                   Button
                   variant="text"
@@ -188,6 +243,7 @@ const Dashboard = () => {
                 >
                   {showAllTeams ? "See top 3 teams" : "See All Teams"}
                 </Button>
+                </Box>
               )}
             </CardContent>
           </Card>
@@ -244,7 +300,6 @@ const Dashboard = () => {
                   >
                     Download Meraki App{" "}
                   </a>
-
                   <img src="/assets/launch1.svg" alt="" />
                 </Button>
               </Box>
