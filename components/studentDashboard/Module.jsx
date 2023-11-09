@@ -32,7 +32,7 @@ const Module = () => {
         },
       })
       .then((res) => {
-        console.log(res, "data");
+        // console.log(res, "data");
         setData(res.data.data);
         setOpenedCards(
           res.data.data.modules.filter((module) => {

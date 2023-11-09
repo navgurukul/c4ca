@@ -22,7 +22,7 @@ const OverView = () => {
       })
       .then((response) => {
         const { attempted_assessment_count } = response.data.data;
-        console.log(attempted_assessment_count);
+        // console.log(attempted_assessment_count);
         setAttemptedAssessmentCount(attempted_assessment_count);
       })
       .catch((error) => {
@@ -39,7 +39,6 @@ const OverView = () => {
         },
       })
       .then((res) => {
-        console.log(res.data.data.length, "teamdata");
         setTeamCount(res.data.data.length);
       })
       .catch((err) => {
