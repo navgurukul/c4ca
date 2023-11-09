@@ -20,8 +20,10 @@ const Module = () => {
   const [data, setData] = useState({});
   const [unlockedModules, setUnlockedModules] = useState(0);
 
+  const [token, setToken] = useState("");
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    setToken(authToken?.data?.token)
     customAxios
       .get("/pathways/c4ca/modules", {
         headers: {
@@ -116,7 +118,7 @@ const Module = () => {
                       "Share Project Topic"
                     ) : (
                       <>
-                        Learn on Meraki <LaunchIcon />
+                      <a  href={`http://localhost:3001/?studentAuth=${token}`}>Learn on Meraki <LaunchIcon /></a>  
                       </>
                     )
                   ) : (
