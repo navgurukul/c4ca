@@ -82,8 +82,8 @@ const Dashboard = () => {
    const calculateProgress = (team) => {
     return team.completed_portion || 0;
   };
-  console.log("highlightedTeamIndex",highlightedTeamIndex<3)
-
+  
+  
   return (
     <Container sx={{ marginTop: "3%" }} maxWidth="lg">
       <Grid container spacing={2}>
@@ -133,6 +133,13 @@ const Dashboard = () => {
           <Card sx={{ border: 1, borderColor: "gray", borderRadius: "8px" }}>
             <CardContent>
               <Typography variant="subtitle1">Leaderboard</Typography>
+              {team.completed_portion === 0 ? (
+                <Box display="flex" flexDirection="column" alignItems="center" gap ="16px" mt="16px" justifyContent="center" textAlign="center">
+                  <img src='/assets/reshot.svg' alt='reshot.svg' sx={{ width: "64px", height:"64px" }} />
+                <Typography variant="body1">Complete a few lessons to join the leaderboard</Typography>
+              </Box>
+              ):(
+                <>
               <Typography variant="body2">
                 See how the teams in your district are doing
               </Typography>
@@ -190,6 +197,7 @@ const Dashboard = () => {
                   </Grid>
                 ))}
               </Box>
+              
               {highlightedTeamIndex > 3&& !showAllTeams && (<Box sx={{ mt: 2, ml:2 }}> <img src="/assets/separator.svg" alt="Separator" /> </Box>)}
 
               {highlightedTeamIndex > 3 && !showAllTeams && (
@@ -245,6 +253,7 @@ const Dashboard = () => {
                 </Button>
                 </Box>
               )}
+              </>)}
             </CardContent>
           </Card>
 
