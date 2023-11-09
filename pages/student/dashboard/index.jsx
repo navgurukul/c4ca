@@ -27,6 +27,8 @@ const Dashboard = () => {
 
   const [Leaderboard, setLeaderboard] = useState([]);
 
+  const [token, setToken] = useState("");
+
   const initialTeamCount = 3;
   const handleSeeAllTeamsClick = () => {
     setShowAllTeams(true);
@@ -45,7 +47,8 @@ const Dashboard = () => {
     return shuffledImages;
   };
   useEffect(() => {
-    const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      const authToken = JSON.parse(localStorage.getItem("AUTH"));
+      setToken(authToken?.data?.token)
     customAxios
       .get("/c4ca/teams", {
         headers: {
@@ -274,7 +277,7 @@ const Dashboard = () => {
                   }}
                 >
                   <a
-                    href="https://scratch.merakilearn.org/login"
+                    href={`http://localhost:8080/login/?studentAuth=${token}`}
                     target="_blank"
                   >
                     Scratch Web{" "}
