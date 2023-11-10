@@ -47,7 +47,6 @@ const TeacherDashboard = ({ authToken }) => {
 
     console.log("authToken", authToken);
     if (teacherId && authToken) {
-      console.log("teacher id is present", teacherId);
       customAxios
         .get(`/c4ca/teams/${teacherId}`, {
           headers: {
