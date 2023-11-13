@@ -118,7 +118,7 @@ const Module = () => {
                       "Share Project Topic"
                     ) : (
                       <>
-                      <a  href={`https://www.merd-bhanwaridevi.merakilearn.org/?studentAuth=${token}`}  target="_blank">Learn on Meraki <LaunchIcon /></a>  
+                      <a  href={`https://www.merakilearn.org/?studentAuth=${token}`}  target="_blank">Learn on Meraki <LaunchIcon /></a>  
                       </>
                     )
                   ) : (
