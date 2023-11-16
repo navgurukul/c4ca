@@ -244,7 +244,7 @@ const Dashboard = () => {
                   variant="text"
                   onClick={() => setShowAllTeams(!showAllTeams)}
                 >
-                  {showAllTeams ? "See top 3 teams" : "See All Teams"}
+                  {!showAllTeams && "See All Teams"}
                 </Button>
                 </Box>
               )}
