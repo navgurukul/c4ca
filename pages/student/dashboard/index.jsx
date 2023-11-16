@@ -277,7 +277,7 @@ const Dashboard = () => {
                   }}
                 >
                   <a
-                    href={`http://localhost:8080/login/?studentAuth=${token}`}
+                    href={`https://scratch.merakilearn.org/login/?studentAuth=${token}`}
                     target="_blank"
                   >
                     Scratch Web{" "}
