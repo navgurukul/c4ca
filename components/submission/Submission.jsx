@@ -65,7 +65,7 @@ const Submission = (props) => {
               </Typography>
             </Typography>
             <Grid container  spacing={1}>
-                <Grid item xs={12} sm={6} md={6} gap="32px">
+                <Grid item xs={6} sm={6} md={6} gap="32px">
                   <Card sx={{ border: 1, borderColor: 'gray', borderRadius: '8px', width:'90%'}}>
                     <CardContent>
                       <Box display="flex" alignItems="center" gap={1} sx ={{mb:2}} >
@@ -78,7 +78,7 @@ const Submission = (props) => {
                     </CardContent>
                   </Card>
                 </Grid>
-                <Grid item xs={12} sm={6} md={6} gap="32px">
+                <Grid item xs={6} sm={6} md={6} gap="32px">
                   <Card sx={{ border: 1, borderColor: 'gray', borderRadius: '8px', width:'90%'}}>
                     <CardContent>
                       <Box display="flex" alignItems="center"  gap={1} sx ={{mb:2}}>
@@ -146,7 +146,7 @@ const Submission = (props) => {
             {!linkShow&&!projectShow&& 
               <Grid container spacing={2}>
                 <Grid item xs={12} container justifyContent="center" alignItems="center">
-                    <Button size="medium"   className="profileBtn">
+                    <Button  sx={{width:!isMobile?"50%":"100%" }}  className="profileBtn">
                     <Link href="#" underline="none" color={'white'} pl='16px' pr="16px">  Return to Dashboard</Link>
                     </Button>
                 </Grid>
@@ -157,7 +157,7 @@ const Submission = (props) => {
           <Container maxWidth="sm" align="center">
           <Grid container  spacing={1}>
                 <Grid item xs={12} sm={6} md={6}>
-                  <Button variant="outlined" sx={{backgroundColor: (theme) => (isSubmitDisabled ? theme.palette.grey[100] : "transparent"),}}
+                  <Button variant="outlined" sx={{backgroundColor: (theme) => (isSubmitDisabled ? theme.palette.grey[100] : "transparent"),width:isMobile&&'100%'}}
                     disabled={!inputControlValue && dragDropZoneValue.length === 0}>
                     <Typography  variant="ButtonLarge" pl ="35px " pr="35px" pt="8px" pb="8px">Save Draft</Typography>
                   </Button>
@@ -172,6 +172,7 @@ const Submission = (props) => {
                     pt:isSubmitDisabled &&"8px",
                     pb:isSubmitDisabled &&"8px",
                     backgroundColor: (theme) => (isSubmitDisabled ? theme.palette.grey[500] : "transparent"),
+                    width:isMobile&&'100%'
                   }} 
                   >           
                 <Typography  variant="ButtonLarge" onClick={handleSubmit}>Submit Project</Typography>
