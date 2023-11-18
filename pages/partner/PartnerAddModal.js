@@ -30,7 +30,7 @@ function PartnerAddModal({ boolean, onOpen, partnerAddSuccessMessage }) {
     const token = localStorage.getItem("token");
     const apiUrl = "/c4caPartners";
     const headers = {
-      Authorization: token, // Replace with your actual access token
+      Authorization: token, 
       "Content-Type": "application/json",
     };
 
