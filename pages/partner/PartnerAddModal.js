@@ -17,7 +17,8 @@ import {
 import customAxios from "@/api";
 // import useValidEmail from "../../hooks/useValidEmail";
 
-function PartnerAddModal({ boolean, onOpen }) {
+function PartnerAddModal({ boolean, onOpen, partnerAddSuccessMessage }) {
+
   const [values, setValues] = useState({
     name: "",
     point_of_contact: "",
@@ -36,12 +37,13 @@ function PartnerAddModal({ boolean, onOpen }) {
     customAxios
       .post(apiUrl, values, { headers })
       .then((response) => {
-        console.log("POST request successful:", response.data);
-        alert(response.data.message);
+        // console.log("POST request successful:", response.data);
+        // console.log(response?.data);
+        partnerAddSuccessMessage(response?.data) 
       })
       .catch((error) => {
         console.error("POST request error:", error);
-        alert("ERROR: " + error?.response?.data?.message);
+        partnerAddSuccessMessage( error?.response?.data?.message);
       });
   };
 
@@ -60,10 +62,16 @@ function PartnerAddModal({ boolean, onOpen }) {
       !values.email.trim() ||
       !values.phone_number.trim()
     ) {
-      alert("Fill all fields");
+      partnerAddSuccessMessage("Fill all fields");
+      return;
+    } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email) ){
+      partnerAddSuccessMessage("Email must be a valid email address");
+      return;
+    }else if(values.phone_number.length < 10 || values.phone_number.length > 10  ){
+      console.log(values.phone_number.length);
+      partnerAddSuccessMessage("Phone number should be of 10 digits");
       return;
     } else {
-      console.log(values);
       createNewPartner(values);
       onOpen();
     }
