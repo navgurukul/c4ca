@@ -404,7 +404,7 @@ const Team = ({
           className="Button"
           color="primary"
           variant="contained"
-          sx={{ minWidth: 240, display: "block" }}
+          sx={{ minWidth:!isMobile&& 240, display:!isMobile&& "block" }}
           onClick={team ? handleEditTeam : createTeam}
         >
           {team ? "Update Details" : "Add Team"}
