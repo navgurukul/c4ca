@@ -103,7 +103,6 @@ export default function App({ Component, pageProps }) {
               });
               return router.push(`/partner/teacherList/${c4ca_facilitator_id}`);
             } else if (c4ca_roles.includes("c4caPartner")) {
-              console.log("here........................");
               resp.data.role = "c4caPartner";
               setCookie("user", JSON.stringify(resp.data), {
                 path: "/",
@@ -188,7 +187,6 @@ export default function App({ Component, pageProps }) {
             }
           })
           .catch((err) => {
-            console.log(c4ca_roles, "<<<<<<<<<< c4ca roles list");
             userRoleArray?.length === 0
             ? setOpen(true)
             : null;

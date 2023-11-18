@@ -23,8 +23,10 @@ const Module = () => {
   const [unlockedModules, setUnlockedModules] = useState(0);
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
+  const [token, setToken] = useState("");
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
+    setToken(authToken?.data?.token)
     customAxios
       .get("/pathways/c4ca/modules", {
         headers: {
@@ -33,7 +35,7 @@ const Module = () => {
         },
       })
       .then((res) => {
-        console.log(res, "data");
+        // console.log(res, "data");
         setData(res.data.data);
         setOpenedCards(
           res.data.data.modules.filter((module) => {
@@ -119,7 +121,7 @@ const Module = () => {
                       "Share Project Topic"
                     ) : (
                       <>
-                        Learn on Meraki <LaunchIcon />
+                      <a  href={`https://www.merakilearn.org/?studentAuth=${token}`}  target="_blank">Learn on Meraki <LaunchIcon /></a>  
                       </>
                     )
                   ) : (
