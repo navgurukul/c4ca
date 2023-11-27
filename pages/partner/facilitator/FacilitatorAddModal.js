@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Dialog, Grid, DialogContent, DialogActions } from "@mui/material";
 import customAxios from "@/api";
 
-function FacilitatorAddModal({ boolean, onOpen, id }) {
+function FacilitatorAddModal({ boolean, onOpen, id,facilitatorAddSuccessMessage }) {
    
   const [values, setValues] = useState({
     name: "",
@@ -29,11 +29,12 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
       .post(apiUrl, values, { headers })
       .then((response) => {
         console.log("POST request successful:", response.data);
-        alert(response?.data.status);
+        facilitatorAddSuccessMessage(response?.data);
       })
       .catch((error) => {
         console.error("POST request error:", error);
-        alert("ERROR: " + error?.response?.data?.message);
+        // alert("ERROR: " + error?.response?.data?.message);
+        facilitatorAddSuccessMessage(error?.response?.data?.message);
       });
   };
 
@@ -49,10 +50,16 @@ function FacilitatorAddModal({ boolean, onOpen, id }) {
       !values.email.trim() ||
       !values.phone_number.trim()
     ) {
-      alert("Fill all fields");
+      facilitatorAddSuccessMessage("Fill all fields");
+      return;
+    } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email) ){
+      facilitatorAddSuccessMessage("Email must be a valid email address");
+      return;
+    } else if(values.phone_number.length < 10 || values.phone_number.length > 10  ){
+      // console.log(values.phone_number.length);
+      facilitatorAddSuccessMessage("Phone number should be of 10 digits");
       return;
     } else {
-      console.log(values);
       createNewFacilitator(values);
       onOpen();
     }
