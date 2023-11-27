@@ -280,7 +280,7 @@ const Dashboard = () => {
                   }}
                 >
                   <a
-                    href={`${process.env.NEXT_PUBLIC_MERAKI_URL}?studentAuth=${token}`}
+                    href={`${process.env.NEXT_PUBLIC_SCRATCH_URL}/?studentAuth=${token}`}
                     target="_blank"
                   >
                     Scratch Web{" "}
