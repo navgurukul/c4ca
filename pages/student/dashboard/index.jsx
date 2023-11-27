@@ -277,7 +277,7 @@ const Dashboard = () => {
                   }}
                 >
                   <a
-                    href={`http://localhost:8080/login/?studentAuth=${token}`}
+                    href={`${process.env.NEXT_PUBLIC_MERAKI_URL}?studentAuth=${token}`}
                     target="_blank"
                   >
                     Scratch Web{" "}
