@@ -6,16 +6,19 @@ const {
   Table,
   Button,
   Grid,
+  useMediaQuery,
 } = require("@mui/material");
 import customAxios from "@/api";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { breakpoints } from "@/theme/constant";
 
 const TeamProfile = () => {
   const [team, setTeam] = useState({});
   const searchParams = useSearchParams();
   const first_login = searchParams.get("first_login");
+  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px");
 
   useEffect(() => {
     const teamData = JSON.parse(localStorage.getItem("AUTH"));
@@ -202,7 +205,7 @@ const TeamProfile = () => {
       <Link href={"/student/dashboard"}>
         <Button
           variant="contained"
-          sx={{ marginX: "auto", marginY: 5 }}
+          sx={{ marginX: "auto", marginY: 5, width:isMobile&&"100%" }}
           color="primary"
         >
           {first_login ? "Verify Details & Proceed" : "Go to Dashboard"}

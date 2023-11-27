@@ -8,17 +8,20 @@ import {
   Card,
   CardContent,
   CardMedia,
+  useMediaQuery,
 } from "@mui/material";
 import jsonData from "../../data/data.json";
 import LockIcon from "@mui/icons-material/Lock"; // Import the Lock icon
 import LaunchIcon from "@mui/icons-material/Launch"; // Import the Launch icon
 // import customAxios from "../../../api"; // Import your custom Axios instance
 import customAxios from "@/api";
+import { breakpoints } from "@/theme/constant";
 
 const Module = () => {
   const [openedCards, setOpenedCards] = useState(0);
   const [data, setData] = useState({});
   const [unlockedModules, setUnlockedModules] = useState(0);
+  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
   const [token, setToken] = useState("");
   useEffect(() => {
@@ -32,7 +35,6 @@ const Module = () => {
         },
       })
       .then((res) => {
-        // console.log(res, "data");
         setData(res.data.data);
         setOpenedCards(
           res.data.data.modules.filter((module) => {
@@ -64,7 +66,7 @@ const Module = () => {
               backgroundColor: module.color,
               borderRadius: "8px",
               mb: "32px",
-              width: "96%",
+              width: isMobile?"100%":"96%",
               filter: openedCards >= index ? "none" : "grayscale(100%)",
             }}
           >
@@ -74,11 +76,11 @@ const Module = () => {
                   <CardMedia
                     component="img"
                     alt="Image"
-                    height="100"
+                    height={!isMobile?"100":"50"}
                     image={module.logo}
                   />
                 </Grid>
-                <Grid item xs={12} sm={8} sx={{ mb: 2 }}>
+                <Grid item xs={9} sm={8} sx={{ mb: 2 }}>
                   <Typography variant="subtitle1">{module.name}</Typography>
                   <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
                     {module.description}
@@ -101,7 +103,7 @@ const Module = () => {
                 </Grid>
               </Grid>
 
-              <Box
+              {!isMobile? <Box
                 sx={{
                   display: "flex",
                   justifyContent: "flex-end",
@@ -153,7 +155,29 @@ const Module = () => {
                     </>
                   )}
                 </Button> */}
-              </Box>
+              </Box>: <Button variant="outlined" sx={{ width:isMobile&&'100%' }}  disabled={openedCards < index}>
+                  {openedCards >= index ? (
+                    module.button_type === "project_solution" ? (
+                      "Submit Project Topic"
+                    ) : module.button_type === "project_topic" ? (
+                      "Share Project Topic"
+                    ) : (
+                      <>
+                        Learn on Meraki <LaunchIcon />
+                      </>
+                    )
+                  ) : (
+                    <>
+                      <LockIcon />
+                      &nbsp;
+                      {module.button_type === "project_solution"
+                        ? "Submit Project Topic"
+                        : module.button_type === "project_topic"
+                        ? "Share Project Topic"
+                        : "Learn on Meraki"}
+                    </>
+                  )}
+                </Button>}
             </CardContent>
           </Card>
         ))}
