@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <>
       <Box maxWidth="false">
-        <Container maxWidth="md" sx={{ marginTop: 10, marginBottom: 10 }}>
+        <Container maxWidth="md" sx={{ marginTop:!isActive? 10 :"48px", marginBottom: !isActive? 10 :"32px" }}>
           <Stack alignItems={"center"}>
             {" "}
             <img
@@ -93,7 +93,7 @@ export default function Home() {
                   </Button>
                 </Link>
               </Box>
-              <Box sx={{ marginTop: 4 }} alignItems="center">
+              <Box sx={{ marginTop: 3 }} alignItems="center">
                 <a
                   href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}
                 >
@@ -111,7 +111,7 @@ export default function Home() {
                   </Button>{" "}
                 </a>
               </Box>
-              <Box sx={{ marginTop: 4 }} alignItems="center">
+              <Box sx={{ marginTop:"48px" }} alignItems="center">
                 <Divider />
               </Box>
             </>
@@ -129,13 +129,13 @@ export default function Home() {
             </Stack>
           )}
 
-          <Container maxWidth="md" sx={{ marginTop: 10, marginBottom: 10 }}>
-            <Typography variant="h5" align="center">
+          <Container maxWidth="md" sx={{ marginTop:!isActive? 10 :"48px", marginBottom:!isActive? 10 :"48px" }}>
+            <Typography variant="h5" align="center"  sx={{marginBottom:!isActive? 5 :"32px"}}>
               {" "}
               How it Works?{" "}
             </Typography>
 
-            <Grid container spacing={2} sx={{ marginTop: 5 }}>
+            <Grid container spacing={2}>
               <Grid sx={{ display: "flex", marginTop: 1 }} item xs={12} sm={12}>
                 <Box>
                   <img src="/Gather.svg" alt="logo" />
@@ -210,7 +210,12 @@ export default function Home() {
               </Grid>
             </Grid>
           </Container>
-          <Container sx={{ marginTop: 5 }}>
+          {isActive&&
+            <Box sx={{ marginTop:"48px" }} alignItems="center">
+              <Divider />
+            </Box>
+            }
+          <Container sx={{ marginTop: !isActive? 5 :"48px",  }}>
             <Stack alignItems={"center"}>
               {" "}
               <img
@@ -220,7 +225,7 @@ export default function Home() {
                 width={isActive ? "220px" : "350px"}
               />
             </Stack>
-            <Typography variant="body1" align="center" sx={{ mt: 3, mb: 3 }}>
+            <Typography variant="body1" align="center" sx={{ mt: !isActive? 3 :"16px" , mb: !isActive? 3 :"16px" }}>
               Brought by Amazon in partnership with NavGurukul and Quest
               alliance
             </Typography>
