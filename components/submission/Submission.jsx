@@ -53,7 +53,7 @@ const Submission = (props) => {
         >
           <Container
             maxWidth="sm"
-            sx={{ display: "grid", gap: isMobile ? 2 : 4 }}
+            sx={{ display: "grid", gap: isMobile ? "32px" : 4 }}
           >
            <Typography
               variant="body1"
