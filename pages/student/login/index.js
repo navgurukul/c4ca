@@ -111,7 +111,7 @@ const LoginForm = () => {
         display: "grid",
         placeItems: "center",
         gap: "20px",
-        marginTop: "7%",
+        marginTop:!isMobile ?"7%": "32px",
       }}
     >
       <Card
@@ -124,11 +124,11 @@ const LoginForm = () => {
       >
         <Container maxWidth="sm" sx={{ mt: 5 }}>
           <form onSubmit={handleSubmit}>
-            <Grid container justifyContent="center" sx={{ mb: 4 }}>
+            <Grid container justifyContent="center" sx={{ mb: !isMobile ?4:"32px" }}>
               <img src="/c4ca.svg" alt="c4ca_logo" />
             </Grid>
 
-            <Box sx={{ marginBottom: "20px" }}>
+            <Box sx={{ marginBottom: !isMobile ?"20px":"32px" }}>
               <InputLabel htmlFor="name" variant="Body2">
                 User ID
               </InputLabel>
@@ -152,7 +152,7 @@ const LoginForm = () => {
                 <Typography color="error">{errors.login_id}</Typography>
               )}
             </Box>
-            <Box sx={{ marginBottom: "20px" }}>
+            <Box sx={{ marginBottom: !isMobile ?"20px":"32px"}}>
               <InputLabel htmlFor="password" variant="Body2">
                 Password
               </InputLabel>
@@ -177,12 +177,13 @@ const LoginForm = () => {
                 <Typography color="error">{errors.password}</Typography>
               )}
             </Box>
-            <Grid container justifyContent="center" sx={{ mb: 3 }}>
+            <Grid container justifyContent="center" sx={{ mb:!isMobile ?3:"32px" }}>
               <Button
                 disabled={loading}
                 onClick={handleSubmit}
                 type="submit"
                 className="profileBtn"
+                sx={{ width:!isMobile?"50%": "100%" ,color:"white"}}
               >
                 Login
               </Button>
@@ -191,10 +192,12 @@ const LoginForm = () => {
               <Typography variant="subtitle1">
                 Forgot password / Don’t have login details?
               </Typography>
-              <Typography variant="body1">
-                Please ask your teacher to provide you the team login
+              {!isMobile? (<><Typography variant="body1">
+                Please ask your teacher to provide you the team login 
               </Typography>
-              <Typography variant="body1">user id and password</Typography>
+              <Typography variant="body1">user id and password</Typography></>):<Typography variant="body1">
+                Please ask your teacher to provide you the team login user id and password
+              </Typography>}
             </Grid>
           </form>
         </Container>
