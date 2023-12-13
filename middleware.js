@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
+import { useEffect } from "react";
 
 const openRoutes = ["/login"];
 const partnerRoles = ["superAdmin", "facilitator", "c4caPartner"];
+
+
 
 const redirectHandler = (req) => {
   const user = JSON.parse(req.cookies.get("user").value);
