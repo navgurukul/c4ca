@@ -35,9 +35,27 @@ const Header = () => {
   useEffect(() => {
     setLoggedOut(localStorage.getItem("loggedOut"));
   });
+
   useEffect(() => {
     setInterval(() => {
-     
+      const token = JSON.parse(localStorage.getItem("loggedOutToken"));
+        if (token) {
+          customAxios
+          .get(
+                `users/checkSessionToken?token=${token}`
+                )
+                .then((res) => {
+                    if (res.data ===false){
+                        console.log("session expired");
+                        // handleLogout()
+                    }
+                    console.log(res.data, "response from checking api");
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    
     }, 1000);
     },[]);
 
@@ -102,14 +120,13 @@ const Header = () => {
   const handleLogout = () => {
 
     const token = localStorage.getItem("loggedOut");
-    if (token) {
-      customAxios
-      .get(
-        `/users/removeSessionToken?token=${token}`
-            )
-            .then((res) => {
+    // if (token) {
+    //   customAxios
+    //   .get(
+    //     `/users/removeSessionToken?token=${token}`
+    //         )
+    //         .then((res) => {
               localStorage.clear();
-              console.log("logout api is called", res.data);
               localStorage.setItem("loggedOut", true);
               removeCookie("user", { path: "/" });
               setUser(null);
@@ -117,11 +134,11 @@ const Header = () => {
                 // router.push("/");
                 window.location.replace("/");
               }, 200);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }
+    //         })
+    //         .catch((err) => {
+    //             console.error(err);
+    //         });
+    // }
 
 
     localStorage.clear();
@@ -154,7 +171,7 @@ const Header = () => {
               {" "}
               {!isMobile && (
                 <a
-                  href={`http://localhost:3001/?loggedOut=${loggedOut}`}
+                  href={`https://dev.dcckrjm3h0sxm.amplifyapp.com/?loggedOut=${loggedOut}`}
                 >
                   {/* <Link href="/teacher/login"> */}
                   <Button

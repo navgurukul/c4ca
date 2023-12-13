@@ -182,8 +182,10 @@ export default function App({ Component, pageProps }) {
     const urlParams = new URLSearchParams(window.location.search);
     referrer = localStorage.getItem("referrer");
     let tokenVal = urlParams?.get("token");
+    let loggedOutToken = urlParams?.get("loggedOutToken");
     if (tokenVal) {
       setLoading(true);
+      localStorage.setItem("loggedOutToken", JSON.stringify(loggedOutToken));
       localStorage.setItem("token", reverseJwtBody(tokenVal));
       sendGoogleUserData(reverseJwtBody(tokenVal));
     } else {
