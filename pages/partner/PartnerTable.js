@@ -164,6 +164,10 @@ const PartnerTable = ({data}) => {
     partnerId = data[dataIndex.dataIndex].id;
     router.push(`partner/facilitator/${partnerId}`);
   };
+
+  sessionStorage.removeItem("id");
+  sessionStorage.removeItem("partnerName");
+
   return (
     <Box>
       <div
