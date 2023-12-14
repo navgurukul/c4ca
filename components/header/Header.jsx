@@ -47,7 +47,14 @@ const Header = () => {
                 .then((res) => {
                     if (res.data ===false){
                         console.log("session expired");
-                        handleLogout()
+                        localStorage.clear();
+                        localStorage.setItem("loggedOut", false);
+                        removeCookie("user", { path: "/" });
+                        setUser(null);
+                        setTimeout(() => {
+                          // router.push("/");
+                          window.location.replace("/");
+                        }, 200);
                     }
                     console.log(res.data, "response from checking api");
                 })
