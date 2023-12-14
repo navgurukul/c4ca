@@ -43,7 +43,7 @@ const FacilatorHome = () => {
 
   return (
     <>
-      <MyBreadcrumbs partnerName={partnerName} id={id}/>
+      {/* <MyBreadcrumbs partnerName={partnerName} id={id}/> */}
       <FacilitatorFilter id={id} />
     </>
   );
