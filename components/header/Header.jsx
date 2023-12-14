@@ -47,7 +47,7 @@ const Header = () => {
                 .then((res) => {
                     if (res.data ===false){
                         console.log("session expired");
-                        // handleLogout()
+                        handleLogout()
                     }
                     console.log(res.data, "response from checking api");
                 })
