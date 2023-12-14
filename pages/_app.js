@@ -85,7 +85,7 @@ export default function App({ Component, pageProps }) {
             c4ca_facilitator_id = resp.data.user.c4ca_facilitator_id;
             c4ca_partner_id = resp.data.user.c4ca_partner_id;
             c4ca_roles = resp.data.user.c4ca_roles;
-            console.log("login.....", c4ca_roles);
+           
             if (c4ca_roles.includes("superAdmin")) {
               resp.data.role = "superAdmin";
               setCookie("user", JSON.stringify(resp.data), {

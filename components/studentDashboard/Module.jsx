@@ -35,7 +35,6 @@ const Module = () => {
         },
       })
       .then((res) => {
-        // console.log(res, "data");
         setData(res.data.data);
         setOpenedCards(
           res.data.data.modules.filter((module) => {
@@ -121,7 +120,7 @@ const Module = () => {
                       "Share Project Topic"
                     ) : (
                       <>
-                      <a  href={`https://www.merakilearn.org/?studentAuth=${token}`}  target="_blank">Learn on Meraki <LaunchIcon /></a>  
+                      <a  href={`${process.env.NEXT_PUBLIC_MERAKI_URL}/?studentAuth=${token}`}  target="_blank">Learn on Meraki <LaunchIcon /></a>  
                       </>
                     )
                   ) : (
