@@ -145,6 +145,9 @@ const FacilatorTable = ({ data }) => {
     // },
   ];
 
+  sessionStorage.removeItem("fid");
+  sessionStorage.removeItem("fName");
+
   return (
     <Box>
       
