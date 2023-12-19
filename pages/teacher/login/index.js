@@ -22,6 +22,8 @@ const LoginPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+
   const searchParams = useSearchParams();
   const partner_id = searchParams.get("partner_id");
 

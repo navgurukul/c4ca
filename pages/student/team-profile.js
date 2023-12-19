@@ -71,7 +71,7 @@ const TeamProfile = () => {
         </Typography>
       </Box>
       <Typography style={{ textAlign: "left" }} variant="body1" color="#212121">
-        Note: If any details are incorrect, please reach out to your teacher to
+        Note: If any details are incorrect, please reach out to your to
         have them corrected
       </Typography>
       <Grid sx={{ paddingY: 4 }} spacing={5} container>
