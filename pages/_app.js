@@ -35,7 +35,9 @@ export default function App({ Component, pageProps }) {
   const [open, setOpen] = useState(false);
   // const [partner_id, setPartner_id] = useState("");
   let referrer = "";
-  const [error, setError] = useState("Apologies, the entered Gmail ID is not linked with a C4CA partner.");
+  const [error, setError] = useState(
+    "Apologies, the entered Gmail ID is not linked with a C4CA partner."
+  );
   const [cookie, setCookie] = useCookies(["user"]);
   const { token } = router.query;
   let c4ca_partner_id, c4ca_facilitator_id, c4ca_roles, userRoleArray;
@@ -69,7 +71,7 @@ export default function App({ Component, pageProps }) {
         }
       )
       .then((res) => {
-        userRoleArray= res.data.user.c4ca_roles;
+        userRoleArray = res.data.user.c4ca_roles;
         const userToken = res.data.token;
         localStorage.setItem("token", userToken);
 
@@ -156,13 +158,19 @@ export default function App({ Component, pageProps }) {
                     );
                   })
                   .catch((err) => {
+
                     console.log("error in users me put api", err);
+                    return setError(
+                      "Apologies, We are having some issues logging you in please contact the admin."
+                    );
                   });
+              } else if (!referrer) {
+                setOpen(true);
+                return setError(
+                  "Apologies, the entered Gmail ID is not linked with a C4CA partner. Please use referral link to sign up."
+                );
               } else {
-                console.log(userRoleArray.length, "<<<<<<<<<< c4ca roles list");
-                return userRoleArray?.length === 0
-                  ? setOpen(true)
-                  : null;
+                return userRoleArray?.length === 0 ? setOpen(true) : null;
               }
               return setError(resp.data.status);
             } else {
@@ -187,22 +195,19 @@ export default function App({ Component, pageProps }) {
             }
           })
           .catch((err) => {
-            userRoleArray?.length === 0
-            ? setOpen(true)
-            : null;
+            userRoleArray?.length === 0 ? setOpen(true) : null;
             console.log("error in google data", err);
             // setLoading(false);
           });
       })
       .catch((err) => {
         setError("Failed to log you in, Please Try Again");
-        setOpen(true)
+        setOpen(true);
         setLoading(false);
       });
   };
 
   useEffect(() => {
-
     const urlParams = new URLSearchParams(window.location.search);
     referrer = localStorage.getItem("referrer");
     let tokenVal = urlParams?.get("token");
@@ -252,7 +257,7 @@ export default function App({ Component, pageProps }) {
         </>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-           {error}
+            {error}
           </Alert>
         </Snackbar>
       </ThemeProvider>
