@@ -18,7 +18,6 @@ import { useCookies } from "react-cookie";
 import { breakpoints } from "@/theme/constant";
 import { reactLocalStorage } from "reactjs-localstorage";
 
-import customAxios from "@/api";
 const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
@@ -33,41 +32,16 @@ const Header = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
   useEffect(() => {
-    setLoggedOut(localStorage.getItem("loggedOut"));
-  });
+    setIsFirstLogin(localStorage.getItem("isFirstLogin"));
+    setLoggedOut(localStorage.getItem("loggeOut"));
+  }, [loggedOut, isFirstLogin]);
 
-  useEffect(() => {
-    setInterval(() => {
-      const token = JSON.parse(localStorage.getItem("loggedOutToken"));
-        if (token) {
-          customAxios
-          .get(
-                `users/checkSessionToken?token=${token}`
-                )
-                .then((res) => {
-                    if (res.data ===false){
-                        console.log("session expired");
-                        localStorage.clear();
-                        localStorage.setItem("loggedOut", false);
-                        removeCookie("user", { path: "/" });
-                        setUser(null);
-                        setTimeout(() => {
-                          // router.push("/");
-                          window.location.replace("/");
-                        }, 200);
-                    }
-                    console.log(res.data, "response from checking api");
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-    
-    }, 1000);
-    },[]);
+
 
   let hasRoles;
   useEffect(() => {
+    
+  
     const authData = reactLocalStorage.getObject("AUTH");
     if (authData && authData.rolesList) {
       const rolesList = authData.c4ca_roles;
@@ -81,6 +55,8 @@ const Header = () => {
       if(hasRoles){
         setRole(hasRoles);
       }
+      // console.log("Roles List:", rolesList);
+      // console.log("Roles List:", role);
     } else {
       console.error("Roles List not found in AUTH data.");
     }
@@ -125,33 +101,16 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-
-    const token = localStorage.getItem("loggedOut");
-    // if (token) {
-    //   customAxios
-    //   .get(
-    //     `/users/removeSessionToken?token=${token}`
-    //         )
-    //         .then((res) => {
-              localStorage.clear();
-              localStorage.setItem("loggedOut", true);
-              removeCookie("user", { path: "/" });
-              setUser(null);
-              setTimeout(() => {
-                // router.push("/");
-                window.location.replace("/");
-              }, 200);
-    //         })
-    //         .catch((err) => {
-    //             console.error(err);
-    //         });
-    // }
-
-
     localStorage.clear();
     localStorage.setItem("loggedOut", true);
     removeCookie("user", { path: "/" });
     setUser(null);
+
+    let url = window.location.href;
+    !url.includes("student")
+      ? (window.location.href = "https://dev.dcckrjm3h0sxm.amplifyapp.com/?loggedOut=true")
+      : console.log("URL contains 'student'");
+    
     setTimeout(() => {
       // router.push("/");
       window.location.replace("/");
@@ -178,7 +137,7 @@ const Header = () => {
               {" "}
               {!isMobile && (
                 <a
-                  href={`https://dev.dcckrjm3h0sxm.amplifyapp.com/?loggedOut=${loggedOut}`}
+                  href={`https://dev.dcckrjm3h0sxm.amplifyapp.com/?loggeOut=${loggedOut}`}
                 >
                   {/* <Link href="/teacher/login"> */}
                   <Button
