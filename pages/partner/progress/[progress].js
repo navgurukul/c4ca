@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Troubleshoot } from "@mui/icons-material";
 import customAxios from "@/api";
+import MyBreadcrumbs from "@/components/breadcrumb/breadcrumb";
 
 function Progress() {
   const router = useRouter();
@@ -77,23 +78,11 @@ function Progress() {
     }
   }, [progress]);
 
+  let teacher_name;
+
   return (
     <Box style={{ marginLeft: "7.5%", marginRight: "20%" }}>
-      <Box style={{ lineHeight: "5" }}>
-        <Link
-          color="inherit"
-          href="/"
-          style={{
-            color: "#29458C",
-            fontSize: "16px",
-            fontWeight: "500px",
-            fontFamily: "Amazon Ember",
-          }}
-        >
-          Home / {data?.partner_name} / {data?.facilitator_name} /{" "}
-          <span style={{ color: "#BDBDBD" }}>{data?.teacher_name} </span>
-        </Link>
-      </Box>
+      <MyBreadcrumbs teacher_name={data?.teacher_name}/>
       <Box
         style={{
           display: "flex",

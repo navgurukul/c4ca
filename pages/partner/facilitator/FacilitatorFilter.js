@@ -167,7 +167,7 @@ function FacilitatorFilter({ id }) {
   return (
     <Container maxWidth="xl" sx={{ mt: 4, mb: 1 }} >
       {/* <Box className="dashboardContainer"> */}
-      <MyBreadcrumbs partnerName={partnerName} />
+      <MyBreadcrumbs partnerName={partnerName} id={id}/>
       <Typography
         style={{
           fontSize: "24px",
