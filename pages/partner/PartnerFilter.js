@@ -13,6 +13,8 @@ import { SearchOutlined, Add } from "@mui/icons-material";
 import PartnerAddModal from "./PartnerAddModal";
 import PartnerTable from "./PartnerTable";
 import customAxios from "@/api";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from '@mui/material/Alert';
 // import { breakpoints } from "../../theme/constant";
 
 function PartnerFilter() {
@@ -21,34 +23,70 @@ function PartnerFilter() {
   const [filteredPartner, setfilteredPartner] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  //add query
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState("");
+  const [partnerCreatedMessage, setPartnerCreatedMessage] = useState("");
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+
+  const partnerAddSuccessMessage = (message) => {
+    console.log(message); 
+    if (message === "Fill all fields") {
+      setSeverity("info")
+      setPartnerCreatedMessage("Please fill all fields");
+      setOpen(true);
+    } else if(message === "Email must be a valid email address"){
+      setSeverity("error")
+      setPartnerCreatedMessage("Email must be a valid email address");
+      setOpen(true);
+    }else if(message?.message){
+      setSeverity("success")
+      setPartnerCreatedMessage(message?.message);
+      setOpen(true);
+    } else if("Phone number should be of 10 digits"){
+      setSeverity("error")
+      setPartnerCreatedMessage("Phone number should be of 10 digits");
+      setOpen(true);
+    }else {
+      setSeverity("error")
+      setPartnerCreatedMessage("Email must be a valid email, Phone number must be a 10 digit");
+      setOpen(true);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   // Function to fetch data from the API
-  //add query
   useEffect(() => {
     const fetchData = () => {
-    const apiUrl = "/c4caPartners/admin";
-    const token = localStorage.getItem("token");
-    customAxios
-      .get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        const partnerList = response?.data?.results;
-        if (partnerList !== undefined) {
-          setAllPartner(partnerList);
-          setfilteredPartner(partnerList);
-        } else {
-          console.error("Data is undefined.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+      const apiUrl = "/c4caPartners/admin";
+      const token = localStorage.getItem("token");
+      customAxios
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const partnerList = response?.data?.results;
+          if (partnerList !== undefined) {
+            setAllPartner(partnerList);
+            setfilteredPartner(partnerList);
+          } else {
+            console.error("Data is undefined.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
     };
-      fetchData();
-       if (!openModal) {
+    fetchData();
+    if (!openModal) {
       fetchData();
     }
   }, [openModal]);
@@ -159,10 +197,28 @@ function PartnerFilter() {
           </Button>
           {openModal && (
             <Box sx={{ position: "absolute", top: "100%", left: 0 }}>
-              <PartnerAddModal onOpen={handleModalToggle} boolean={openModal} />
+              <PartnerAddModal
+                onOpen={handleModalToggle}
+                boolean={openModal}
+                partnerAddSuccessMessage={partnerAddSuccessMessage}
+              />
             </Box>
           )}
         </Box>
+        <Snackbar
+          open={open}
+          autoHideDuration={3200}
+          onClose={handleClose} 
+          // action={action}
+        >
+          <Alert
+            onClose={handleClose}
+            severity={severity}
+            sx={{ width: "100%" }}
+          >
+            {partnerCreatedMessage}
+          </Alert>
+        </Snackbar>
       </Box>
       <Box style={{ display: "flex" }}>{filterButtons}</Box>
       {searchTerm === "" && allPartner ? (
