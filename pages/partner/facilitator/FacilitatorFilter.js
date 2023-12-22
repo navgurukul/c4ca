@@ -296,7 +296,6 @@ function FacilitatorFilter({ id }) {
           fontSize: "14px",
         },
       }}
-      sx={{ width: "100%" }}
     />
   </Grid>
   <Grid item xs={12} sm={12} md={6} sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
