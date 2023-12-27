@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
 import styled from "styled-components";
 import PartnerFilter from "./PartnerFilter";
 import customAxios from "@/api";
+import {Typography,Grid,Box,Card,CardContent, Container,} from "@mui/material";
 
 const PartnerDashboard = () => {
 
@@ -31,100 +31,69 @@ const PartnerDashboard = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
-
-   
-  
-
   return (
-    <Box className="dashboardContainer">
-      <Box
-        sx={{
-          display: "inline",
-          fontSize: "22px",
-          fontWeight: "800px",
-          lineHeight: "28px",
-          fontFamily:"Amazon Ember Display"
-        }}
-      >
+    <Container maxWidth="xl" >
+      <Box sx={{ display: "flex", mb: "32px" }}>
+        <Typography variant="h6" sx={{ mt: 4 }}>
         Overview
+        </Typography>
       </Box>
-      <Box
-        style={{ display: "flex", alignItems: "flex-start", gap: "32.161px" }}
-      >
-        <Box className="InfoBox">
-          <Typography
-            className="TextAlignment"
-            style={{
-              fontWeight: "700px",
-              fontSize: "32px",
-              fontFamily: "Amazon Ember Display",
-            }}
-          >
-            {totalData?.totalUniqueSchools || 0}
-          </Typography>
-          <Typography className="InfoTextStyle">
-            Number of Schools Reached
-          </Typography>
-        </Box>
-        <Box className="InfoBox">
-          <Typography
-            className="TextAlignment"
-            style={{
-              fontWeight: "700px",
-              fontSize: "32px",
-              fontFamily: "Amazon Ember Display",
-            }}
-          >
-            {totalData?.totalTeachers || 0}
-          </Typography>
-          <Typography className="InfoTextStyle">
-            Total Number of Teachers
-          </Typography>
-        </Box>
-        <Box className="InfoBox">
-          <Typography
-            className="TextAlignment"
-            style={{
-              fontWeight: "700px",
-              fontSize: "32px",
-              fontFamily: "Amazon Ember Display",
-            }}
-          >
-            {totalData?.totalStudents || 0}
-          </Typography>
-          <Typography className="InfoTextStyle">Number of Students</Typography>
-        </Box>
-        <Box className="InfoBox">
-          <Typography
-            className="TextAlignment"
-            style={{
-              fontWeight: "700px",
-              fontSize: "32px",
-              fontFamily: "Amazon Ember Display",
-            }}
-          >
-            {totalData?.totalProjectsSubmission || 0}
-          </Typography>
-          <Typography className="InfoTextStyle">
-            Total Projects Submitted
-          </Typography>
-        </Box>
-      </Box>
-      <div style={{ marginTop: "30px" }}>
-        <Box
-          sx={{
-            display: "inline",
-            fontSize: "25px",
-            fontWeight: "700",
-            fontFamily: "Amazon Ember Display",
-          }}
-        >
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={12} md={3}> 
+          <Card sx={{ border: 1,borderColor: "gray",borderRadius: "8px", p:"24px" }} >
+            <CardContent>
+              <Typography variant="h5" align="left" mb={"16px"}>
+                {totalData?.totalUniqueSchools || 0}
+              </Typography>
+              <Typography variant="body1">Number of Schools Reached</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={12} md={3}>
+          <Card sx={{ border: 1, borderColor: "gray", borderRadius: "8px",p:"24px"}}>
+            <CardContent>
+            <Typography variant="h5" align="left" mb={"16px"}>
+              {totalData?.totalTeachers || 0}
+            </Typography>
+            <Typography variant="body1">Total Number of Teachers</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={12} md={3}>
+          <Card sx={{ border: 1, borderColor: "gray", borderRadius: "8px",p:"24px"}}>
+            <CardContent>
+              <Typography variant="h5" align="left" mb={"16px"}>
+                {totalData?.totalStudents || 0}
+              </Typography>
+              <Typography variant="body1">Number of Students</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={12} md={3}>
+          <Card sx={{ border: 1, borderColor: "gray", borderRadius: "8px",p:"24px"}}>
+            <CardContent>
+              <Typography variant="h5" align="left" mb={"16px"}>
+                {totalData?.totalProjectsSubmission || 0}
+              </Typography>
+              <Typography variant="body1">Total Projects Submitted</Typography>
+            </CardContent>
+          </Card>
+        </Grid> 
+      </Grid>
+      <Box sx={{ marginTop: "30px", display: "flex" }}>
+        <Typography variant="h6" mb={"16px"}>
           Partner List
-        </Box>
-      </div>
+        </Typography>
+      </Box>
       <PartnerFilter />
-    </Box>
+    </Container>
   );
 };
 
 export default PartnerDashboard;
+
+
+
+
+
+

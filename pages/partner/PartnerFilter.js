@@ -1,13 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  TextField,
-  Box,
-  Button,
-  Typography,
-  InputAdornment,
-  useMediaQuery,
-  styled,
+TextField,
+Box,
+Button,
+Typography,
+InputAdornment,
+useMediaQuery,
+styled,
+Grid,
+Container,
 } from "@mui/material";
 import { SearchOutlined, Add } from "@mui/icons-material";
 import PartnerAddModal from "./PartnerAddModal";
@@ -17,11 +19,13 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from '@mui/material/Alert';
 // import { breakpoints } from "../../theme/constant";
 
+
 function PartnerFilter() {
   const [openModal, setOpenModal] = useState(false);
   const [allPartner, setAllPartner] = useState([]);
   const [filteredPartner, setfilteredPartner] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const isActive = useMediaQuery("(max-width:600px)");
 
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState("");
@@ -116,7 +120,7 @@ function PartnerFilter() {
         partner?.name?.toLowerCase()?.includes(searchText?.toLowerCase()) ||
         partner?.point_of_contact_name
           ?.toLowerCase()
-          ?.includes(searchText?.toLowerCase())
+          ?.includes(searchText?.toLowerCase()) 
     );
     return filterData;
   }
@@ -138,73 +142,60 @@ function PartnerFilter() {
   }
 
   const filterButtons = filterTerms.map((term) => (
-    <Button
+    <Grid key={term} item xs={12} sm={6} md={4}>
+      <Button
       onClick={() => handleStatus(term, allPartner)}
+      variant="outlined"
       key={term}
-      //   variant={term === filterBy ? "contained" : "outlined"}
-      sx={{
-        mr: 2,
-        borderRadius: "30px",
-        borderColor: "#29458C",
-        p: "12px",
-        border: "1px solid  #29458C",
-        color: "#BDBDBD",
-      }}
-    >
-      <Typography
-        variant="body2"
-        //   color={term !== filterBy && "text.primary"}
+      // variant={term === filterBy ? "contained" : "outlined"}
+      sx ={{width:isActive&&"100%", marginBottom:isActive&& 2, border :"1px solid ",mr:2, color: "#BDBDBD", }}
       >
+        <Typography
+        variant="body2"
+        // color={term !== filterBy && "text.primary"}
+        >
         {term}
-      </Typography>
-    </Button>
+        </Typography>
+      </Button>
+    </Grid>
+    
+   
   ));
 
   return (
-    <Box sx={{ mt: 4, mb: 1 }}>
-      <Box display="flex" justifyContent={"space-between"} mb={3}>
-        <TextField
+    <Container maxWidth="xl" sx={{ mt: 4, mb: 1 }} >
+      <Grid container spacing={3} justifyContent="space-between" mb ={3}>
+        <Grid xs={12} sm ={12} md={5}>
+          <TextField
           placeholder="Search Partner, Point of Contact"
           size="medium"
           value={searchTerm}
           onChange={handleSearch}
           InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchOutlined sx={{ color: "#2E2E2E" }} />
-              </InputAdornment>
-            ),
-            style: {
-              height: "48px",
-              borderRadius: "35px",
-              fontSize: "14px",
-            },
+          startAdornment: (
+          <InputAdornment position="start">
+          <SearchOutlined sx={{ color: "#2E2E2E" }} />
+          </InputAdornment>
+          ),
+          style: {
+          height: "48px",
+          borderRadius: "35px",
+          fontSize: "14px",
+          },
           }}
-          sx={{ width: "360px" }}
-        />
-        <Box sx={{ position: "relative" }}>
-          <Button
-            startIcon={<Add />}
-            onClick={handleModalToggle}
-            variant="contained"
-            style={{
-              fontSize: "16px",
-              background:
-                "var(--midnight-blue-gradient, linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%))",
-            }}
-          >
-            Add Partner
+          sx={{ width: "100%" }}
+          />
+        </Grid>
+        <Grid xs={12} sm ={12} md={1.5} mt ={isActive&& 3}>
+          <Button startIcon={<Add />} className="profileBtn" sx={{ width: "100%" }} onClick={handleModalToggle}>
+            <Typography variant="ButtonLarge" >Add Partner</Typography>
           </Button>
           {openModal && (
             <Box sx={{ position: "absolute", top: "100%", left: 0 }}>
-              <PartnerAddModal
-                onOpen={handleModalToggle}
-                boolean={openModal}
-                partnerAddSuccessMessage={partnerAddSuccessMessage}
-              />
+              <PartnerAddModal onOpen={handleModalToggle} boolean={openModal} partnerAddSuccessMessage={partnerAddSuccessMessage} />
             </Box>
           )}
-        </Box>
+        </Grid>
         <Snackbar
           open={open}
           autoHideDuration={3200}
@@ -219,15 +210,22 @@ function PartnerFilter() {
             {partnerCreatedMessage}
           </Alert>
         </Snackbar>
-      </Box>
-      <Box style={{ display: "flex" }}>{filterButtons}</Box>
+      </Grid>
+      {!isActive? <Grid container spacing={3} justifyContent="space-between" mt ={3} mb={2}>
+        <Grid style={{ display: "flex", alignItems: "flex-start"}}>
+          {filterButtons} 
+        </Grid>
+        </Grid>:
+        <Grid container spacing={1} justifyContent="center">
+          {filterButtons}
+        </Grid> 
+      }
       {searchTerm === "" && allPartner ? (
         <PartnerTable data={allPartner} />
       ) : (
         <PartnerTable data={filteredPartner} />
       )}
-    </Box>
-  );
+    </Container>
+);
 }
-
 export default PartnerFilter;

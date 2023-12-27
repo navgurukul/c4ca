@@ -3,7 +3,7 @@ import MUIDataTable from "mui-datatables";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box,Grid, } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 // import showToast from "../showToast";
@@ -29,7 +29,8 @@ const getMuiTheme = () =>
         styleOverrides: {
           root: {
             "&:hover": {
-              backgroundColor: "rgba(233, 245, 233, 1) !important",
+              backgroundColor: "#D4DAE8",
+              // backgroundColor:"hsla(222, 30%, 87%, 1)",
               cursor: "pointer",
             },
           },
@@ -169,22 +170,18 @@ const PartnerTable = ({data}) => {
   sessionStorage.removeItem("partnerName");
 
   return (
-    <Box>
-      <div
-        style={{
-          overflowX: "hidden",
-          width: "1120px",
-        }}
-      >
+    <Grid container spacing={2} width="100%" justifyContent="space-between" mb ={3}>
+      <Box style={{ overflowX: "hidden", width:"100%"}}> 
         <ThemeProvider theme={getMuiTheme}>
           <MUIDataTable
-            data={data}
-            columns={columns}
-            options={{ ...options, onRowClick: handleRowClick }}
+          data={data}
+          columns={columns}
+          options={{ ...options, onRowClick: handleRowClick }}
           />
         </ThemeProvider>
-      </div>
-    </Box>
+      </Box>
+    </Grid>
+   
   );
 };
 export default PartnerTable;
