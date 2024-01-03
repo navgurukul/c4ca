@@ -145,14 +145,23 @@ export default function App({ Component, pageProps }) {
                 // setOpen(false);
                 return router.push(`/teacher/profile?partner_id=${partner_id}`);
               })
+
               .catch((err) => {
+
                 console.log("error in users me put api", err);
+                return setError(
+                  "Apologies, We are having some issues logging you in please contact the admin."
+                );
               });
+          } else if (!referrer) {
+            setOpen(true);
+            return setError(
+              "Apologies, the entered Gmail ID is not linked with a C4CA partner. Please use referral link to sign up."
+            );
           } else {
-            console.log(userRoleArray?.length, "<<<<<<<<<< c4ca roles list");
             return userRoleArray?.length === 0 ? setOpen(true) : null;
           }
-          return setError(resp?.data?.status);
+          return setError(resp.data.status);
         } else {
           resp.data.role = "teacher";
           localStorage.setItem("AUTH", JSON.stringify(resp.data));
