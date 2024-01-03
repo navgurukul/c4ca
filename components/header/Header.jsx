@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -11,9 +12,8 @@ import {
   Divider,
 } from "@mui/material";
 import Link from "next/link";
+import customAxios from "@/api";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import * as React from "react";
 import { useCookies } from "react-cookie";
 import { breakpoints } from "@/theme/constant";
 import { reactLocalStorage } from "reactjs-localstorage";
@@ -25,38 +25,28 @@ const Header = () => {
   const [loggedOut, setLoggedOut] = useState("");
   const [isFirstLogin, setIsFirstLogin] = useState("");
   const [authData, setAuthData] = useState({});
-
   const [role, setRole] = useState(false);
-
   const [reloadCount, setReloadCount] = useState(0);
-  const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
+  const isMobile = useMediaQuery(`(max-width: ${breakpoints.values.sm}px)`);
 
   useEffect(() => {
     setIsFirstLogin(localStorage.getItem("isFirstLogin"));
-    setLoggedOut(localStorage.getItem("loggeOut"));
+    setLoggedOut(localStorage.getItem("loggedOut"));
   }, [loggedOut, isFirstLogin]);
 
-
-
-  let hasRoles;
   useEffect(() => {
-    
-  
     const authData = reactLocalStorage.getObject("AUTH");
     if (authData && authData.rolesList) {
       const rolesList = authData.c4ca_roles;
-      const isAdmin = rolesList?.includes("admin");
-      const isSuperAdmin = rolesList?.includes("superAdmin");
-      const isPartner = rolesList?.includes("c4caPartner");
-      const isFacilitator = rolesList?.includes("facilitator");
+      const hasRoles =
+        rolesList?.includes("admin") ||
+        rolesList?.includes("superAdmin") ||
+        rolesList?.includes("c4caPartner") ||
+        rolesList?.includes("facilitator");
 
-       hasRoles = isAdmin || isSuperAdmin || isPartner || isFacilitator;
-      
-      if(hasRoles){
+      if (hasRoles) {
         setRole(hasRoles);
       }
-      // console.log("Roles List:", rolesList);
-      // console.log("Roles List:", role);
     } else {
       console.error("Roles List not found in AUTH data.");
     }
@@ -84,6 +74,29 @@ const Header = () => {
       }
     };
 
+    setInterval(() => {
+      const token = JSON.parse(localStorage?.getItem("loggedOutToken")) ?? null;
+
+      if (token) {
+        customAxios
+          .get(`/users/checkSessionToken?token=${token}`)
+          .then((res) => {
+            console.log(res.data, "response from checking api");
+            if (res.data === false) {
+              console.log("session expired");
+              localStorage.clear();
+              localStorage.setItem("loggedOut", false);
+              removeCookie("user", { path: "/" });
+              setUser(null);
+              setTimeout(() => window.location.replace("/"), 200);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    }, 1000); // Call the API every 60 seconds
+
     router.events.on("routeChangeComplete", handleRouteChange);
 
     return () => {
@@ -91,7 +104,7 @@ const Header = () => {
     };
   }, []);
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -108,11 +121,11 @@ const Header = () => {
 
     let url = window.location.href;
     !url.includes("student")
-      ? (window.location.href = "https://dev.dcckrjm3h0sxm.amplifyapp.com/?loggedOut=true")
+      ? (window.location.href =
+          "https://dev.dcckrjm3h0sxm.amplifyapp.com/?loggedOut=true")
       : console.log("URL contains 'student'");
-    
+
     setTimeout(() => {
-      // router.push("/");
       window.location.replace("/");
     }, 200);
   };
@@ -126,7 +139,7 @@ const Header = () => {
           </Link>
         )}
 
-        {router.pathname === "/" && user == null ? (
+        {(router.pathname === "/" && user == null) || isMobile ? (
           <>
             {isMobile && (
               <Link href={"/"}>
@@ -134,12 +147,10 @@ const Header = () => {
               </Link>
             )}
             <Stack spacing={2} direction="row">
-              {" "}
               {!isMobile && (
                 <a
-                  href={`https://dev.dcckrjm3h0sxm.amplifyapp.com/?loggeOut=${loggedOut}`}
+                  href={`https://dev.dcckrjm3h0sxm.amplifyapp.com/?loggedOut=${loggedOut}`}
                 >
-                  {/* <Link href="/teacher/login"> */}
                   <Button
                     color="secondary"
                     variant="contained"
@@ -151,8 +162,7 @@ const Header = () => {
                     }}
                   >
                     Teacher and Partners
-                  </Button>{" "}
-                  {/* </Link> */}
+                  </Button>
                 </a>
               )}
               {!isMobile && (
@@ -185,7 +195,7 @@ const Header = () => {
                 Logout
               </Button>
             ) : (
-              <Box >
+              <Box>
                 <Button
                   id="basic-button"
                   aria-controls={open ? "basic-menu" : undefined}
@@ -212,11 +222,6 @@ const Header = () => {
                   <MenuItem
                     onClick={() => {
                       handleClose();
-                      // router.push(
-                      //   authData?.c4ca_roles?.includes("c4caTeacher")
-                      //     ? "/teacher/profile"
-                      //     : "/student/team-profile"
-                      // );
                       router.push(
                         authData?.c4ca_roles &&
                           authData.c4ca_roles.indexOf("c4caTeacher") !== -1
