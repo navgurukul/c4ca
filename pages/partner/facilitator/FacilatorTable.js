@@ -15,6 +15,7 @@ const getMuiTheme = () =>
         styleOverrides: {
           root: {
             backgroundColor: "none",
+            
             fontFamily: "Noto Sans !important",
             textAlign: "left",
             "&.custom-cell": {
@@ -27,7 +28,7 @@ const getMuiTheme = () =>
         styleOverrides: {
           root: {
             "&:hover": {
-              backgroundColor: "rgba(233, 245, 233, 1) !important",
+              backgroundColor: "#D4DAE8",
               cursor: "pointer",
             },
           },
@@ -89,7 +90,7 @@ const FacilatorTable = ({ data }) => {
       label: "Email",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         customCellClass: "custom-cell",
       },
     },
@@ -98,7 +99,7 @@ const FacilatorTable = ({ data }) => {
       label: "Phone Number",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         customCellClass: "custom-cell",
       },
     },
@@ -107,7 +108,7 @@ const FacilatorTable = ({ data }) => {
       label: "Number of Students",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         customCellClass: "custom-cell",
       },
     },
@@ -144,13 +145,16 @@ const FacilatorTable = ({ data }) => {
     // },
   ];
 
+  sessionStorage.removeItem("fid");
+  sessionStorage.removeItem("fName");
+
   return (
     <Box>
       
-      <div
+      <Box
         style={{
           overflowX: "hidden",
-          width: "1120px",
+          width: "100%",
         }}
       >
         <ThemeProvider theme={getMuiTheme}>
@@ -160,7 +164,7 @@ const FacilatorTable = ({ data }) => {
             options={{ ...options, onRowClick: handleRowClick }}
           />
         </ThemeProvider>
-      </div>
+      </Box>
     </Box>
   );
 };

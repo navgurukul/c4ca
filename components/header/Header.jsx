@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import * as React from "react";
 import { useCookies } from "react-cookie";
 import { breakpoints } from "@/theme/constant";
+import { reactLocalStorage } from "reactjs-localstorage";
 
 const Header = () => {
   const router = useRouter();
@@ -25,6 +26,8 @@ const Header = () => {
   const [isFirstLogin, setIsFirstLogin] = useState("");
   const [authData, setAuthData] = useState({});
 
+  const [role, setRole] = useState(false);
+
   const [reloadCount, setReloadCount] = useState(0);
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
@@ -32,6 +35,26 @@ const Header = () => {
     setIsFirstLogin(localStorage.getItem("isFirstLogin"));
     setLoggedOut(localStorage.getItem("loggeOut"));
   }, [loggedOut, isFirstLogin]);
+
+  let hasRoles;
+  useEffect(() => {
+    const authData = reactLocalStorage.getObject("AUTH");
+    if (authData && authData.rolesList) {
+      const rolesList = authData.c4ca_roles;
+      const isAdmin = rolesList?.includes("admin");
+      const isSuperAdmin = rolesList?.includes("superAdmin");
+      const isPartner = rolesList?.includes("c4caPartner");
+      const isFacilitator = rolesList?.includes("facilitator");
+
+       hasRoles = isAdmin || isSuperAdmin || isPartner || isFacilitator;
+      
+      if(hasRoles){
+        setRole(hasRoles);
+      }
+    } else {
+      console.error("Roles List not found in AUTH data.");
+    }
+  }, [router.pathname]);
 
   useEffect(() => {
     const partnerId = new URLSearchParams(window.location.search)?.get(
@@ -87,9 +110,9 @@ const Header = () => {
     <>
       <header className="header">
         {!isMobile && (
-          <Link href={"/"}>
+          <a href={"/"}>
             <img src="/c4ca.svg" alt="c4ca_logo" />
-          </Link>
+          </a>
         )}
 
         {router.pathname === "/" && user == null ? (
@@ -145,8 +168,13 @@ const Header = () => {
                 <img src="/CCA_Logo.svg" alt="CCA_Logo" />
               </Link>
             )}
-            <Box>
-              <div>
+
+            {role ? (
+              <Button variant="contained" onClick={handleLogout}>
+                Logout
+              </Button>
+            ) : (
+              <Box >
                 <Button
                   id="basic-button"
                   aria-controls={open ? "basic-menu" : undefined}
@@ -190,8 +218,8 @@ const Header = () => {
                   </MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
-              </div>
-            </Box>
+              </Box>
+            )}
           </>
         )}
       </header>
