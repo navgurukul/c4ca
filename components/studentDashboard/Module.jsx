@@ -11,6 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import jsonData from "../../data/data.json";
+import Link from 'next/link';
 import LockIcon from "@mui/icons-material/Lock"; // Import the Lock icon
 import LaunchIcon from "@mui/icons-material/Launch"; // Import the Launch icon
 // import customAxios from "../../../api"; // Import your custom Axios instance
@@ -121,7 +122,16 @@ const Module = () => {
                       "Share Project Topic"
                     ) : (
                       <>
-                      <a  href={`https://www.merakilearn.org/?studentAuth=${token}`}  target="_blank">Learn on Meraki <LaunchIcon /></a>  
+                   
+                        <Link
+                          href={`https://www.merakilearn.org/?studentAuth=${token}`}
+                          passHref
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Learn on Meraki <LaunchIcon />
+                        </Link>
+                  
                       </>
                     )
                   ) : (
