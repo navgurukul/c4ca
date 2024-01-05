@@ -173,7 +173,15 @@ const Module = () => {
                       "Share Project Topic"
                     ) : (
                       <>
-                        Learn on Meraki <LaunchIcon />
+                     
+                        <Link
+                          href={`https://www.merakilearn.org/?studentAuth=${token}`}
+                          passHref
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Learn on Meraki <LaunchIcon />
+                        </Link>
                       </>
                     )
                   ) : (
