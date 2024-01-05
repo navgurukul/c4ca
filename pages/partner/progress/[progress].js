@@ -127,7 +127,7 @@ function Progress() {
               <Box
                 style={{
                   width: "90%",
-                  height: "170px",
+                  height: "200px",
                   border: "1px solid #DEDEDE",
                   borderRadius: "5px",
                   padding: "10px",
@@ -155,10 +155,7 @@ function Progress() {
                       fontWeight: "700px",
                     }}
                   >
-                    {person?.team_name
-                      .split(" ")  
-                      .slice(0, 5)  
-                      .join(" ")} 
+                    {person?.team_name.split(" ").slice(0, 5).join(" ")}
                     {person?.team_name.split(" ").length > 10 ? "..." : ""}
                   </Typography>
                   <Box style={{ marginTop: "10px" }}>
@@ -191,8 +188,9 @@ function Progress() {
                   style={{
                     fontSize: "15px",
                     fontFamily: "Amazon Ember",
-                    lineHeight: "50px",
+                    margin: "15px 0px",
                     fontWeight: "700px",
+                    // border: "1px solid red",
                   }}
                 >
                   Current Lesson:{" "}
@@ -214,8 +212,9 @@ function Progress() {
                     style={{
                       fontSize: "15px",
                       fontFamily: "Amazon Ember",
-                      lineHeight: "35px",
+                      margin: "10px 0px",
                       fontWeight: "700px",
+                      // border: "1px solid red",
                     }}
                   >
                     Project Status:

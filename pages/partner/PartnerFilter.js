@@ -26,6 +26,9 @@ function PartnerFilter() {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState("");
   const [partnerCreatedMessage, setPartnerCreatedMessage] = useState("");
+  //usestate for status handling
+  const [currentStatusFilter, setCurrentStatusFilter] =
+    useState("All Partners");
 
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -52,7 +55,9 @@ function PartnerFilter() {
       setOpen(true);
     }else {
       setSeverity("error")
-      setPartnerCreatedMessage("Email must be a valid email, Phone number must be a 10 digit");
+      setPartnerCreatedMessage(
+        "Email must be a valid email, Phone number must be a 10 digit"
+      );
       setOpen(true);
     }
   };
@@ -109,19 +114,30 @@ function PartnerFilter() {
     setfilteredPartner(data);
   };
 
-  function filterPartner(searchText, allPartner) {
-    // console.log(allPartner);
-    const filterData = allPartner.filter(
+  function filterPartner(searchText, data) {
+    return data.filter(
       (partner) =>
         partner?.name?.toLowerCase()?.includes(searchText?.toLowerCase()) ||
         partner?.point_of_contact_name
           ?.toLowerCase()
           ?.includes(searchText?.toLowerCase())
     );
-    return filterData;
   }
 
+  // function filterPartner(searchText, allPartner) {
+  //   // console.log(allPartner);
+  //   const filterData = allPartner.filter(
+  //     (partner) =>
+  //       partner?.name?.toLowerCase()?.includes(searchText?.toLowerCase()) ||
+  //       partner?.point_of_contact_name
+  //         ?.toLowerCase()
+  //         ?.includes(searchText?.toLowerCase())
+  //   );
+  //   return filterData;
+  // }
+
   const handleStatus = (term, allPartner) => {
+    setCurrentStatusFilter(term);
     const filterByStatus = statusFilter(term, allPartner);
     setfilteredPartner(filterByStatus);
   };
@@ -141,24 +157,30 @@ function PartnerFilter() {
     <Button
       onClick={() => handleStatus(term, allPartner)}
       key={term}
-      //   variant={term === filterBy ? "contained" : "outlined"}
+      variant={term === currentStatusFilter ? "contained" : "outlined"}
       sx={{
         mr: 2,
         borderRadius: "30px",
         borderColor: "#29458C",
         p: "12px",
         border: "1px solid  #29458C",
-        color: "#BDBDBD",
+        color: "#white",
       }}
     >
       <Typography
         variant="body2"
-        //   color={term !== filterBy && "text.primary"}
+          color={term !== currentStatusFilter && "text.primary"}
       >
         {term}
       </Typography>
     </Button>
   ));
+
+  let tableData =
+    currentStatusFilter === "All Partners" ? allPartner : filteredPartner;
+  if (searchTerm !== "") {
+    tableData = filterPartner(searchTerm, tableData);
+  }
 
   return (
     <Box sx={{ mt: 4, mb: 1 }}>
@@ -189,8 +211,6 @@ function PartnerFilter() {
             variant="contained"
             style={{
               fontSize: "16px",
-              background:
-                "var(--midnight-blue-gradient, linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%))",
             }}
           >
             Add Partner
@@ -221,10 +241,16 @@ function PartnerFilter() {
         </Snackbar>
       </Box>
       <Box style={{ display: "flex" }}>{filterButtons}</Box>
-      {searchTerm === "" && allPartner ? (
+      {/* {searchTerm === "" && allPartner ? (
         <PartnerTable data={allPartner} />
       ) : (
         <PartnerTable data={filteredPartner} />
+
+      )} */}
+      {searchTerm === "" && currentStatusFilter === "All Partners" ? (
+        <PartnerTable data={allPartner} />
+      ) : (
+        <PartnerTable data={tableData} />
       )}
     </Box>
   );
