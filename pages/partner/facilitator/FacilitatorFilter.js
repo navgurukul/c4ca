@@ -337,7 +337,7 @@ function FacilitatorFilter({ id }) {
       </Snackbar>
 
       {searchTerm === "" ? (
-        <FacilatorTable data={filteredFacilitator} />
+        <FacilatorTable data={allFacilitator} />
       ) : (
         <FacilatorTable data={filteredFacilitator} />
       )}

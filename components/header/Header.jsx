@@ -51,8 +51,6 @@ const Header = () => {
       if(hasRoles){
         setRole(hasRoles);
       }
-      // console.log("Roles List:", rolesList);
-      // console.log("Roles List:", role);
     } else {
       console.error("Roles List not found in AUTH data.");
     }
@@ -112,9 +110,9 @@ const Header = () => {
     <>
       <header className="header">
         {!isMobile && (
-          <Link href={"/"}>
+          <a href={"/"}>
             <img src="/c4ca.svg" alt="c4ca_logo" />
-          </Link>
+          </a>
         )}
 
         {router.pathname === "/" && user == null ? (
