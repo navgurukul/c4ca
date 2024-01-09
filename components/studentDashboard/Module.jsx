@@ -24,6 +24,8 @@ const Module = () => {
   const [unlockedModules, setUnlockedModules] = useState(0);
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
+  const BASE_URL = process.env.NEXT_PUBLIC_MERAKI_URL;
+
   const [token, setToken] = useState("");
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
@@ -123,7 +125,7 @@ const Module = () => {
                       <>
                    
                         <Link
-                          href={`https://www.merakilearn.org/?studentAuth=${token}`}
+                          href={`${BASE_URL}/?studentAuth=${token}`}
                           passHref
                           target="_blank"
                           rel="noopener noreferrer"
@@ -174,8 +176,8 @@ const Module = () => {
                     ) : (
                       <>
                      
-                        <Link
-                          href={`https://www.merakilearn.org/?studentAuth=${token}`}
+                     <Link
+                          href={`${BASE_URL}/?studentAuth=${token}`}
                           passHref
                           target="_blank"
                           rel="noopener noreferrer"
