@@ -213,10 +213,7 @@ function PartnerAddModal({ boolean, onOpen, partnerAddSuccessMessage }) {
               // disabled={!isValidEmail || values.email.trim() === ""}
               variant="contained"
               onClick={handleSubmit}
-              style={{
-                background:
-                  "var(--midnight-blue-gradient, linear-gradient(90deg, rgba(41, 69, 140, 0.72) 0%, #192954 100%))",
-              }}
+              style={{}}
             >
               Add Partner
             </Button>

@@ -29,7 +29,7 @@ const getMuiTheme = () =>
         styleOverrides: {
           root: {
             "&:hover": {
-              backgroundColor: "rgba(233, 245, 233, 1) !important",
+              backgroundColor: "#D4DAE8 !important",
               cursor: "pointer",
             },
           },
