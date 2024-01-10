@@ -129,12 +129,14 @@ export default function App({ Component, pageProps }) {
               })
               .catch((err) => {
                 console.log("error in users me put api", err);
+                localStorage.setItem("loggedOut", "true");
                 return setError(
                   "Apologies, We are having some issues logging you in please contact the admin."
                 );
               });
           } else if (!referrer) {
             setOpen(true);
+            localStorage.setItem("loggedOut", "true");
             return setError(
               "Apologies, the entered Gmail ID is not linked with a C4CA partner. Please use referral link to sign up."
             );
