@@ -125,7 +125,7 @@ const Module = () => {
                       <>
                    
                         <Link
-                          href={`${BASE_URL}/?studentAuth=${token}`}
+                          href={` https://www.merakilearn.org/?studentAuth=${token}`}
                           passHref
                           target="_blank"
                           rel="noopener noreferrer"
