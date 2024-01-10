@@ -21,6 +21,9 @@ import axios from "axios";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import customAxios from "@/api";
 import MyBreadcrumbs from "@/components/breadcrumb/breadcrumb";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from '@mui/material/Alert';
+
 
 const TeacherFilter = () => {
   const router = useRouter();
@@ -36,7 +39,11 @@ const TeacherFilter = () => {
   const [selectedSchool, setSelectedSchool] = useState("All School");
 
   const [breadCumData, setBreadCumData] = useState();
+  const [open, setOpen] = useState(false);
 
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
   function getUniqueValues(arr) {
     return [...new Set(arr)];
   }
@@ -171,6 +178,7 @@ const TeacherFilter = () => {
         .writeText(inviteLink)
         .then(() => {
           setIsCopied(true);
+          setOpen(true)
         })
         .catch((error) => {
           console.error("Error copying to clipboard:", error);
@@ -178,13 +186,17 @@ const TeacherFilter = () => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   let facilitator_name;
   let fName = sessionStorage.setItem("fName", breadCumData?.facilitator_name);
 
   return (
     <Box style={{ margin: "20px 0" }}>
-      <Box sx={{ mx: "110px" }}>
-      <MyBreadcrumbs facilitator_name={breadCumData?.facilitator_name}/>
+      <Box sx={{ mx: "170px" }}>
+      <MyBreadcrumbs facilitator_name={breadCumData?.facilitator_name} />
         <Box style={{ margin: "25px 0" }}>
           <Typography style={{ fontSize: "14px", lineHeight: "4" }}>
             The invite link can be shared with teachers who will be guiding the
@@ -301,6 +313,16 @@ const TeacherFilter = () => {
           </Box>
         </Box>
       </Box>
+      <Snackbar
+        open={open}
+        autoHideDuration={3200}
+        onClose={handleClose}
+        // action={action}
+      >
+        <Alert onClose={handleClose} severity={"success"} sx={{ width: "100%" }}>
+          {"Link Copied Successfully"}
+        </Alert>
+      </Snackbar>
       {searchTerm === "" &&
       selectedDistrict === "All District" &&
       selectedSchool === "All School" ? (

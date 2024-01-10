@@ -134,9 +134,9 @@ const Header = () => {
     <>
       <header className="header">
         {!isMobile && (
-          <Link href={"/"}>
+          <a href={"/"}>
             <img src="/c4ca.svg" alt="c4ca_logo" />
-          </Link>
+          </a>
         )}
 
         {(router.pathname === "/" && user == null) || isMobile ? (

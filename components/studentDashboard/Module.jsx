@@ -11,6 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import jsonData from "../../data/data.json";
+import Link from 'next/link';
 import LockIcon from "@mui/icons-material/Lock"; // Import the Lock icon
 import LaunchIcon from "@mui/icons-material/Launch"; // Import the Launch icon
 // import customAxios from "../../../api"; // Import your custom Axios instance
@@ -22,6 +23,8 @@ const Module = () => {
   const [data, setData] = useState({});
   const [unlockedModules, setUnlockedModules] = useState(0);
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
+
+  const BASE_URL = process.env.NEXT_PUBLIC_MERAKI_URL;
 
   const [token, setToken] = useState("");
   useEffect(() => {
@@ -120,7 +123,16 @@ const Module = () => {
                       "Share Project Topic"
                     ) : (
                       <>
-                      <a  href={`${process.env.NEXT_PUBLIC_MERAKI_URL}/?studentAuth=${token}`}  target="_blank">Learn on Meraki <LaunchIcon /></a>  
+                   
+                        <Link
+                          href={`${BASE_URL}/?studentAuth=${token}`}
+                          passHref
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Learn on Meraki <LaunchIcon />
+                        </Link>
+                  
                       </>
                     )
                   ) : (
@@ -163,7 +175,15 @@ const Module = () => {
                       "Share Project Topic"
                     ) : (
                       <>
-                        Learn on Meraki <LaunchIcon />
+                     
+                     <Link
+                          href={`${BASE_URL}/?studentAuth=${token}`}
+                          passHref
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Learn on Meraki <LaunchIcon />
+                        </Link>
                       </>
                     )
                   ) : (
