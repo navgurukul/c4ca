@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import jsonData from "../../data/data.json";
-import Link from 'next/link';
+import Link from "next/link";
 import LockIcon from "@mui/icons-material/Lock"; // Import the Lock icon
 import LaunchIcon from "@mui/icons-material/Launch"; // Import the Launch icon
 // import customAxios from "../../../api"; // Import your custom Axios instance
@@ -24,12 +24,20 @@ const Module = () => {
   const [unlockedModules, setUnlockedModules] = useState(0);
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
 
-  const BASE_URL = process.env.NEXT_PUBLIC_MERAKI_URL;
+  const [BASE_URL, setBASE_URL] = useState("https://www.merd-bhanwaridevi.merakilearn.org");
 
   const [token, setToken] = useState("");
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
-    setToken(authToken?.data?.token)
+    if (
+      window.location.origin === "http://localhost:3000" ||
+      window.location.origin === "https://dev-c4ca.c4ca.in" || window.location.origin === "http://localhost:3001"
+    ) {
+      setBASE_URL("https://www.merd-bhanwaridevi.merakilearn.org");
+    } else {
+      setBASE_URL("https://www.merakilearn.org");
+    }
+    setToken(authToken?.data?.token);
     customAxios
       .get("/pathways/c4ca/modules", {
         headers: {
@@ -69,7 +77,7 @@ const Module = () => {
               backgroundColor: module.color,
               borderRadius: "8px",
               mb: "32px",
-              width: isMobile?"100%":"96%",
+              width: isMobile ? "100%" : "96%",
               filter: openedCards >= index ? "none" : "grayscale(100%)",
             }}
           >
@@ -79,7 +87,7 @@ const Module = () => {
                   <CardMedia
                     component="img"
                     alt="Image"
-                    height={!isMobile?"100":"50"}
+                    height={!isMobile ? "100" : "50"}
                     image={module.logo}
                   />
                 </Grid>
@@ -106,49 +114,48 @@ const Module = () => {
                 </Grid>
               </Grid>
 
-              {!isMobile? <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  pr: 2,
-                  pb: 2,
-                  mt: "16px",
-                }}
-              >
-                <Button variant="outlined" disabled={openedCards < index}>
-                  {openedCards >= index ? (
-                    module.button_type === "project_solution" ? (
-                      "Submit Project Topic"
-                    ) : module.button_type === "project_topic" ? (
-                      "Share Project Topic"
+              {!isMobile ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    pr: 2,
+                    pb: 2,
+                    mt: "16px",
+                  }}
+                >
+                  <Button variant="outlined" disabled={openedCards < index}>
+                    {openedCards >= index ? (
+                      module.button_type === "project_solution" ? (
+                        "Submit Project Topic"
+                      ) : module.button_type === "project_topic" ? (
+                        "Share Project Topic"
+                      ) : (
+                        <>
+                          <Link
+                            href={`${BASE_URL}/?studentAuth=${token}`}
+                            passHref
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Learn on Meraki <LaunchIcon />
+                          </Link>
+                        </>
+                      )
                     ) : (
                       <>
-                   
-                        <Link
-                          href={` https://www.merakilearn.org/?studentAuth=${token}`}
-                          passHref
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Learn on Meraki <LaunchIcon />
-                        </Link>
-                  
+                        <LockIcon />
+                        &nbsp;
+                        {module.button_type === "project_solution"
+                          ? "Submit Project Topic"
+                          : module.button_type === "project_topic"
+                          ? "Share Project Topic"
+                          : "Learn on Meraki"}
                       </>
-                    )
-                  ) : (
-                    <>
-                      <LockIcon />
-                      &nbsp;
-                      {module.button_type === "project_solution"
-                        ? "Submit Project Topic"
-                        : module.button_type === "project_topic"
-                        ? "Share Project Topic"
-                        : "Learn on Meraki"}
-                    </>
-                  )}
-                </Button>
+                    )}
+                  </Button>
 
-                {/* <Button
+                  {/* <Button
                   variant="outlined"
                   disabled={openedCards < index}
                   endIcon={
@@ -167,7 +174,13 @@ const Module = () => {
                     </>
                   )}
                 </Button> */}
-              </Box>: <Button variant="outlined" sx={{ width:isMobile&&'100%' }}  disabled={openedCards < index}>
+                </Box>
+              ) : (
+                <Button
+                  variant="outlined"
+                  sx={{ width: isMobile && "100%" }}
+                  disabled={openedCards < index}
+                >
                   {openedCards >= index ? (
                     module.button_type === "project_solution" ? (
                       "Submit Project Topic"
@@ -175,8 +188,7 @@ const Module = () => {
                       "Share Project Topic"
                     ) : (
                       <>
-                     
-                     <Link
+                        <Link
                           href={`${BASE_URL}/?studentAuth=${token}`}
                           passHref
                           target="_blank"
@@ -197,7 +209,8 @@ const Module = () => {
                         : "Learn on Meraki"}
                     </>
                   )}
-                </Button>}
+                </Button>
+              )}
             </CardContent>
           </Card>
         ))}
