@@ -135,7 +135,7 @@ const Team = ({
         class: member.class,
       })),
     };
-    const authToken = localStorage.getItem("token");    // console.log('Team ID:', team.id);
+    const authToken = localStorage.getItem("token");
     // const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
     // console.log('URL:', url);
 
