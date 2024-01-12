@@ -188,6 +188,7 @@ theme.components = {
         alignItems: 'center',
         justifyContent: 'center',
         gap: '8px',
+        
       },
     },
   },
