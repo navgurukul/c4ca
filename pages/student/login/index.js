@@ -179,10 +179,12 @@ const LoginForm = () => {
             </Box>
             <Grid container justifyContent="center" sx={{ mb: 3 }}>
               <Button
+              sx={{ width: "50%",backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)", }}
                 disabled={loading}
                 onClick={handleSubmit}
                 type="submit"
-                className="profileBtn"
+                variant="contained"
+                // className="profileBtn"
               >
                 Login
               </Button>

@@ -46,9 +46,9 @@ const Header = () => {
       const isPartner = rolesList?.includes("c4caPartner");
       const isFacilitator = rolesList?.includes("facilitator");
 
-       hasRoles = isAdmin || isSuperAdmin || isPartner || isFacilitator;
-      
-      if(hasRoles){
+      hasRoles = isAdmin || isSuperAdmin || isPartner || isFacilitator;
+
+      if (hasRoles) {
         setRole(hasRoles);
       }
     } else {
@@ -152,6 +152,7 @@ const Header = () => {
                       display: "block",
                       width: 100,
                       m: "auto",
+                      backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",
                       fontSize: "15px",
                     }}
                   >
@@ -174,7 +175,7 @@ const Header = () => {
                 Logout
               </Button>
             ) : (
-              <Box >
+              <Box>
                 <Button
                   id="basic-button"
                   aria-controls={open ? "basic-menu" : undefined}
@@ -207,10 +208,9 @@ const Header = () => {
                       //     : "/student/team-profile"
                       // );
                       router.push(
-                        authData?.c4ca_roles &&
-                          authData.c4ca_roles.indexOf("c4caTeacher") !== -1
-                          ? "/teacher/profile"
-                          : "/student/team-profile"
+                        authData && authData?.role == "student"
+                          ? "/student/team-profile"
+                          : "/teacher/profile"
                       );
                     }}
                   >

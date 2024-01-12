@@ -44,7 +44,7 @@ const ProfileUpdateBox = () => {
             Please add your personal and team details to complete registration
           </Typography>
           <Button
-            sx={{ minWidth: isMobileActive ? "100%" : 240 }}
+            sx={{ minWidth: isMobileActive ? "100%" : 240, backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)", }}
             // className="Button"
             variant="contained"
             color="primary">
