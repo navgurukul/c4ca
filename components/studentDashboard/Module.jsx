@@ -30,7 +30,7 @@ const Module = () => {
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("AUTH"));
     if (
-      window.location.origin === "http://localhost:3001" ||
+      window.location.origin === "http://localhost:3000" ||
       window.location.origin === "https://dev-c4ca.c4ca.in" || window.location.origin === "http://localhost:3001"
     ) {
       setBASE_URL("https://www.merd-bhanwaridevi.merakilearn.org");
