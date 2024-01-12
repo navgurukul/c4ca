@@ -404,7 +404,7 @@ const Team = ({
           className="Button"
           color="primary"
           variant="contained"
-          sx={{ minWidth:!isMobile&& 240, display:!isMobile&& "block" }}
+          sx={{ backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",minWidth:!isMobile&& 240, display:!isMobile&& "block" }}
           onClick={team ? handleEditTeam : createTeam}
         >
           {team ? "Update Details" : "Add Team"}

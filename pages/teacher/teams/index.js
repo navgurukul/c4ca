@@ -25,6 +25,7 @@ import Link from "next/link";
 
 const TeacherDashboard = ({ authToken }) => {
   const router = useRouter();
+  const BASE_URL = process.env.NEXT_PUBLIC_MERAKI_URL;
 
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teams, setTeams] = useState([]);
@@ -64,8 +65,6 @@ const TeacherDashboard = ({ authToken }) => {
         });
     }
   };
-
-
 
   useEffect(() => {
     refreshTeams();
@@ -378,8 +377,18 @@ const TeacherDashboard = ({ authToken }) => {
             <Typography variant="body1" color="dark">
               Code for Climate Action Lessons with Scratch
             </Typography>
-            <Button size="large" sx={{ marginTop: 2 }} variant="outlined">
+            {/* <Button size="large" sx={{ marginTop: 2 }} variant="outlined">
               Go To Meraki <OpenInNewOutlined />
+            </Button> */}
+            <Button size="large" sx={{ marginTop: 2 }} variant="outlined">
+            <Link style={{display: 'flex', alignItems: 'center', gap: '8px'}}
+              href={`${BASE_URL}`}
+              passHref
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+             Go To Meraki <OpenInNewOutlined />
+            </Link>
             </Button>
           </Grid>
         </Grid>

@@ -395,6 +395,7 @@ const ProfileForm = () => {
               </Button>
             ) : (
               <Button
+              variant="contained"
                 className="profileBtn"
                 onClick={() => {
                   if (validateInputs()) {

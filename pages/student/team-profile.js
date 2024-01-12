@@ -205,7 +205,7 @@ const TeamProfile = () => {
       <Link href={"/student/dashboard"}>
         <Button
           variant="contained"
-          sx={{ marginX: "auto", marginY: 5, width:isMobile&&"100%" }}
+          sx={{backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)", marginX: "auto", marginY: 5, width:isMobile&&"100%" }}
           color="primary"
         >
           {first_login ? "Verify Details & Proceed" : "Go to Dashboard"}
