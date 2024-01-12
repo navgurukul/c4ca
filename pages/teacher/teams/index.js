@@ -26,6 +26,7 @@ import Link from "next/link";
 const TeacherDashboard = ({ authToken }) => {
   const router = useRouter();
   const BASE_URL = process.env.NEXT_PUBLIC_MERAKI_URL;
+  console.log("BASE_URL", process.env, BASE_URL)
 
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teams, setTeams] = useState([]);
@@ -67,6 +68,7 @@ const TeacherDashboard = ({ authToken }) => {
   };
 
   useEffect(() => {
+    console.log(BASE_URL, process.env, "BASE_URL")
     refreshTeams();
   }, []);
 
