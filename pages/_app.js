@@ -62,6 +62,8 @@ export default function App({ Component, pageProps }) {
 
   const sendGoogleUserData = (token) => {
     setLoading(true);
+    let flag =  false;
+
     customAxios
       .post(
         "/users/auth/google",
@@ -95,6 +97,7 @@ export default function App({ Component, pageProps }) {
                 maxAge: 604800, // Expires after 1hr
                 sameSite: true,
               });
+              flag = true
               return router.push(`/partner`);
             } else if (c4ca_roles.includes("facilitator")) {
               resp.data.role = "facilitator";
@@ -103,6 +106,7 @@ export default function App({ Component, pageProps }) {
                 maxAge: 604800, // Expires after 1hr
                 sameSite: true,
               });
+              flag = true
               return router.push(`/partner/teacherList/${c4ca_facilitator_id}`);
             } else if (c4ca_roles.includes("c4caPartner")) {
               resp.data.role = "c4caPartner";
@@ -111,6 +115,7 @@ export default function App({ Component, pageProps }) {
                 maxAge: 604800, // Expires after 1hr
                 sameSite: true,
               });
+              flag = true
               return router.push(`/partner/facilitator/${c4ca_partner_id}`);
             }
           })
@@ -118,6 +123,7 @@ export default function App({ Component, pageProps }) {
             console.log(err);
           });
 
+         if(flag == false){
         customAxios
           .get("/c4ca/teacher_Data", {
             headers: {
@@ -187,7 +193,6 @@ export default function App({ Component, pageProps }) {
                   "teacherData",
                   JSON.stringify(resp.data.data)
                 );
-
                 return router.push("/teacher/teams");
               }
               // Only redirect if the request is successful
@@ -199,7 +204,9 @@ export default function App({ Component, pageProps }) {
             console.log("error in google data", err);
             // setLoading(false);
           });
+        }
       })
+    
       .catch((err) => {
         setError("Failed to log you in, Please Try Again");
         setOpen(true);
