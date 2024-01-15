@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -15,6 +15,7 @@ import DragDropZone from "./DragDropZone";
 import ProjectSubmitted from "./Completed";
 import Divider from '@mui/material/Divider';
 import Link from "@mui/material/Link";
+import customAxios from "../../api";
 
 
 const Submission = (props) => {
@@ -22,28 +23,119 @@ const Submission = (props) => {
   const [dragDropZoneValue, setDragDropZoneValue] = useState([]);
   const [linkShow , setLinkShow ] = useState(true);
   const [projectShow , setprojectShow ] = useState(true);
+  const [projectData, setProjectData] = useState(null);
+  const [projectLink, setProjectLink] = useState(""); 
+  const [isDraft, setIsDraft] = useState(true);
 
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px");
-  const handleSubmit = () => {
-    setLinkShow(false);
-    setprojectShow(false);
+  const authToken = localStorage.getItem("token");
+
+  useEffect(() => {
+    const savedDraft = localStorage.getItem("submissionDraft");
+    if (savedDraft) {
+      const draftData = JSON.parse(savedDraft);
+      setInputControlValue(draftData.inputControlValue);
+      console.log(draftData)
+      setDragDropZoneValue(draftData)
+      setIsDraft(true);
+    }  
+  }, []);
+
+  useEffect(() => {
+    const draftData = {
+      inputControlValue,
+      dragDropZoneValue,
+    };
+
+   
+    localStorage.setItem("submissionDraft", JSON.stringify(draftData));
+  }, [inputControlValue, dragDropZoneValue]);
+ 
+  useEffect(() => {
+    if (isDraft && projectData) {
+      setInputControlValue(projectData.project_link);
+      setIsDraft(false)
+      setDragDropZoneValue(projectData.project_file_url);
+    }
+  }, [isDraft, projectData]);
+
+  const handleSaveDraft = () => {
+    setIsDraft(false);
   };
 
+  const handleGetRequest = async () => {
+    try {
+      const response = await customAxios.get("/c4ca/projectSubmit/4", {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
 
-  const isSubmitDisabled = !inputControlValue && dragDropZoneValue.length === 0;
+      const projectData = response.data.data.project;
+      // const projectData = response.data;
+      setProjectData(projectData);
+      console.log("project", projectData);
+    } catch (error) {
+      console.error("Error fetching project data:", error);
+      console.log("Error response:", error.response);
+    }
+  };
 
-  const handleInputControlChange = (value) => {
+  const handleSubmit = async () => {
+    const requestData = {
+      project_link: inputControlValue,
+      is_submitted: isDraft,
+      project_file_url: dragDropZoneValue[0]?.name,
+    };
+    // console.log("requestData",requestData)
+
+    try {
+      const response = await customAxios.post(
+        "/c4ca/projectSubmit/4",
+        requestData,
+        {
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setLinkShow(false);
+        setprojectShow(false);
+        localStorage.removeItem("submissionDraft");
+        await handleGetRequest();
+
+      } else {
+        console.error(
+          "Failed to submit data:",
+          response.status,
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("POST request error:", error);
+    }
+  };
+
+  const isSubmitDisabled =
+    !inputControlValue && dragDropZoneValue.length === 0;
+
+  const handleInputControlChange = (event) => {
+    const value = event.target.value;
     setInputControlValue(value);
-    console.log(inputControlValue)
-    // value is not showing on conosle  
+    console.log("inputControlValue:", value);
   };
 
   const handleDragDropZoneChange = (files) => {
     setDragDropZoneValue(files);
-   
-    // file data is not showing. 
+    console.log("dragDropZoneValue:", files);
+    
   };
 
+  
   return (
     <>
         <Container
@@ -123,23 +215,25 @@ const Submission = (props) => {
              }
              {linkShow?
               <>
-                <InputControl label="Share Scratch Project Link" type="text" onChange={handleInputControlChange} />
+                <InputControl label="Share Scratch Project Link" type="text"  onChange={handleInputControlChange}  value={inputControlValue} />
               </>:
               <>
                 <Typography variant="subtitle1">Scratch Project Link</Typography>
-                <Link href="https://Aliqua id fugiat nostrud irure ex duis ea qui" variant="body1"> https://Aliqua id fugiat nostrud irure ex duis ea quis</Link>             
+                <Link href="https://Aliqua id fugiat nostrud irure ex duis ea qui" variant="body1"> https://Aliqua id fugiat nostrud irure ex duis ea quis</Link> 
+                {/* <Link href={projectData.project_link} variant="body1"> {projectData.project_link}</Link>              */}
               </>
              }
             {projectShow?
               <Box sx={{ display: "grid", }}>
                 <Typography variant="body2">Or, Upload project file</Typography>
-                <DragDropZone onChange={handleDragDropZoneChange} />
+                <DragDropZone onChange={handleDragDropZoneChange}  value={dragDropZoneValue} />
               </Box>:dragDropZoneValue !==""&&(
               <>
                 <Typography variant="subtitle1">Scratch Project File</Typography>
                 <Box className="drop-file-preview__item__info">
                   <img src="/project.svg" alt="" />
-                  <Typography variant="body1" color='text.primary' >{dragDropZoneValue}Hello world.sb3</Typography>
+                  <Typography variant="body1" color='text.primary' >{dragDropZoneValue.map((file) => ( <span key={file.name}>{file.name}</span>))}</Typography>
+                  {/* <Link href={'#'} variant="body1" color='text.primary' style={{ textDecoration: 'none' }} >{dragDropZoneValue.map((file) => ( <span key={file.name}>{file.name}</span>))}</Link>                 */}
                 </Box>            
               </>)
             }
@@ -158,7 +252,7 @@ const Submission = (props) => {
           <Grid container  spacing={1}>
                 <Grid item xs={12} sm={6} md={6}>
                   <Button variant="outlined" sx={{backgroundColor: (theme) => (isSubmitDisabled ? theme.palette.grey[100] : "transparent"),width:isMobile&&'100%'}}
-                    disabled={!inputControlValue && dragDropZoneValue.length === 0}>
+                    disabled={!inputControlValue && dragDropZoneValue.length === 0} onClick={handleSaveDraft} >
                     <Typography  variant="ButtonLarge" pl ="35px " pr="35px" pt="8px" pb="8px">Save Draft</Typography>
                   </Button>
                 </Grid>

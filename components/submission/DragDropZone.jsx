@@ -37,6 +37,7 @@ const DragDropZone = (props) => {
       newFileList.push(files[i]);
     }
     setFileList(newFileList);
+    props.onChange(newFileList); 
   };
 
   const removeFile = (file) => {
