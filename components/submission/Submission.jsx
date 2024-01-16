@@ -28,7 +28,9 @@ const Submission = (props) => {
   const [isDraft, setIsDraft] = useState(true);
 
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px");
-  const authToken = localStorage.getItem("token");
+  const jsonData  =localStorage.getItem("AUTH");
+  const parsedData = JSON.parse(jsonData);
+  const authToken = parsedData.data.token;
 
   useEffect(() => {
     const savedDraft = localStorage.getItem("submissionDraft");
@@ -72,9 +74,8 @@ const Submission = (props) => {
       });
 
       const projectData = response.data.data.project;
-      // const projectData = response.data;
+      setProjectLink(projectData.project_link)
       setProjectData(projectData);
-      console.log("project", projectData);
     } catch (error) {
       console.error("Error fetching project data:", error);
       console.log("Error response:", error.response);
@@ -87,7 +88,6 @@ const Submission = (props) => {
       is_submitted: isDraft,
       project_file_url: dragDropZoneValue[0]?.name,
     };
-    // console.log("requestData",requestData)
 
     try {
       const response = await customAxios.post(
@@ -107,7 +107,6 @@ const Submission = (props) => {
         setprojectShow(false);
         localStorage.removeItem("submissionDraft");
         await handleGetRequest();
-
       } else {
         console.error(
           "Failed to submit data:",
@@ -219,8 +218,7 @@ const Submission = (props) => {
               </>:
               <>
                 <Typography variant="subtitle1">Scratch Project Link</Typography>
-                <Link href="https://Aliqua id fugiat nostrud irure ex duis ea qui" variant="body1"> https://Aliqua id fugiat nostrud irure ex duis ea quis</Link> 
-                {/* <Link href={projectData.project_link} variant="body1"> {projectData.project_link}</Link>              */}
+                <Link href={projectLink} variant="body1"> {projectLink}</Link>              
               </>
              }
             {projectShow?
@@ -232,8 +230,7 @@ const Submission = (props) => {
                 <Typography variant="subtitle1">Scratch Project File</Typography>
                 <Box className="drop-file-preview__item__info">
                   <img src="/project.svg" alt="" />
-                  <Typography variant="body1" color='text.primary' >{dragDropZoneValue.map((file) => ( <span key={file.name}>{file.name}</span>))}</Typography>
-                  {/* <Link href={'#'} variant="body1" color='text.primary' style={{ textDecoration: 'none' }} >{dragDropZoneValue.map((file) => ( <span key={file.name}>{file.name}</span>))}</Link>                 */}
+                  <Link href={'#'} variant="body1" color='text.primary' style={{ textDecoration: 'none' }} >{dragDropZoneValue.map((file) => ( <span key={file.name}>{file.name}</span>))}</Link>                
                 </Box>            
               </>)
             }
@@ -241,7 +238,7 @@ const Submission = (props) => {
               <Grid container spacing={2}>
                 <Grid item xs={12} container justifyContent="center" alignItems="center">
                     <Button  sx={{width:!isMobile?"50%":"100%" }}  className="profileBtn">
-                    <Link href="#" underline="none" color={'white'} pl='16px' pr="16px">  Return to Dashboard</Link>
+                    <Link href="/student/dashboard" underline="none" color={'white'} pl='16px' pr="16px">  Return to Dashboard</Link>
                     </Button>
                 </Grid>
               </Grid> 
