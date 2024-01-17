@@ -277,6 +277,7 @@ const Dashboard = () => {
                   className="btn-lg"
                   sx={{
                     borderRadius: 0,
+                    color:'#049796',
                   }}
                 >
                   <a
