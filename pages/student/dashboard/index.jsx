@@ -86,7 +86,8 @@ const Dashboard = () => {
    const highlightedTeamName = team.team_name;
    const highlightedTeamIndex = Leaderboard.findIndex((item) => item.team_name === highlightedTeamName);
    const calculateProgress = (team) => {
-    return team.completed_portion || 0;
+    const teamData = Leaderboard.find((item) => item.team_name === team.team_name);
+    return teamData ? teamData.completed_portion : 0;
   };
   console.log("highlightedTeamIndex",highlightedTeamIndex<3)
 
@@ -109,7 +110,7 @@ const Dashboard = () => {
           </Box>
           <Box sx={{ display: "flex", mt: 2, mb: "32px" }}>
             <Typography variant="h6">
-              Overall Progress: {team.completed_portion}%
+              Overall Progress: {calculateProgress(team)}%
             </Typography>
           </Box>
           <Box
@@ -123,7 +124,7 @@ const Dashboard = () => {
             <LinearProgress
               variant="determinate"
               // value={30}
-              value={team.completed_portion || 0}
+              value={calculateProgress(team) || 0}
               sx={{
                 borderRadius: "6px",
                 backgroundColor: "white",

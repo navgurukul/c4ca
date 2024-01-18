@@ -157,8 +157,7 @@ export default function App({ Component, pageProps }) {
                       maxAge: 604800, // Expires after 1hr
                       sameSite: true,
                     });
-
-                    // setOpen(false);
+                      // setOpen(false);
                     return router.push(
                       `/teacher/profile?partner_id=${partner_id}`
                     );
