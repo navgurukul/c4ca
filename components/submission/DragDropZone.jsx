@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 
@@ -7,6 +7,13 @@ const DragDropZone = (props) => {
   const inputRef = useRef(null);
 
   const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    if (props.value && Array.isArray(props.value)) {
+      setFileList(props.value);
+    }
+  }, [props.value]);
+
   const [isDragOver, setIsDragOver] = useState(false);
 
   const onDragEnter = (e) => {
@@ -43,6 +50,7 @@ const DragDropZone = (props) => {
   const removeFile = (file) => {
     const updatedList = fileList.filter((item) => item !== file);
     setFileList(updatedList);
+    props.onChange(updatedList);
   };
 
   return (
@@ -72,16 +80,16 @@ const DragDropZone = (props) => {
           ))}
         </Box>
       ) : (
-        
+
         <Box className="drop-file-input__label" >
-        <input
-        ref={inputRef}
-        type="file"
-        multiple
-        onChange={onFileDrop}
-        accept=".sb3"
-        style={{ display: "none" }}
-      />
+          <input
+            ref={inputRef}
+            type="file"
+            multiple
+            onChange={onFileDrop}
+            accept=".sb3"
+            style={{ display: "none" }}
+          />
           <img src="/file_upload.svg" alt=""  onClick={() => inputRef.current.click()}/>
           <Box sx={{ display: "grid", gap: 1 }}>
             <Typography variant="body1" color="primary"  onClick={() => inputRef.current.click()}>
