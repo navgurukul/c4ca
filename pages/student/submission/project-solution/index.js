@@ -83,6 +83,7 @@ const Submission = (props) => {
       project_link: inputControlValue,
       is_submitted: isDraft,
       project_file_url: dragDropZoneValue[0]?.name,
+      project_file_name:dragDropZoneValue[0]?.name,
     };
 
     try {
@@ -227,9 +228,7 @@ return (
             <Box className="drop-file-preview__item__info">
             <img src="/project.svg" alt="" />
             <Link href={projectData.project_file_url} variant="body1" color='text.primary' style={{ textDecoration: 'none' }}>
-                {Array.isArray(dragDropZoneValue) && dragDropZoneValue.map((file) => (
-                  <span key={file.name}>{file.name}</span>
-                ))}
+              {projectData.project_file_name}
             </Link>
           </Box> 
           </>)
