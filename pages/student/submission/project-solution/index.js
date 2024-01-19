@@ -222,7 +222,7 @@ return (
           <Box sx={{ display: "grid", }}>
             <Typography variant="body2">Or, Upload project file</Typography>
             <DragDropZone onChange={handleDragDropZoneChange} value={dragDropZoneValue} />
-          </Box>:dragDropZoneValue !==""&&(
+          </Box>:dragDropZoneValue ===""&&(
           <>
             <Typography variant="subtitle1">Scratch Project File</Typography>
             <Box className="drop-file-preview__item__info">
