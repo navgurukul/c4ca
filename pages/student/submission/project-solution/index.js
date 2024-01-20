@@ -27,20 +27,51 @@ const Submission = (props) => {
   const [topicData, setTopicData] = useState(null);
   const [totalTopic, setTotalTopic] = useState(null);
   const capitalizeFirstLetter = (str) => str?.charAt(0)?.toUpperCase() + str?.slice(1);
+  const [saveDraft, setSaveDraft] = useState(true);
 
   const isMobile = useMediaQuery(`(max-width: ${breakpoints.values.sm}px)`);
   const jsonData = localStorage.getItem("AUTH");
   const parsedData = JSON.parse(jsonData);
   const authToken = parsedData.data.token;
 
-  const handleSaveDraft = () => {
+  const handleSaveDraft = async () => {
     const draftData = {
       project_link: inputControlValue,
       project_file_url: dragDropZoneValue[0]?.name,
+      project_file_name:dragDropZoneValue[0]?.name,
       is_submitted:!isDraft,
     };
-    localStorage.setItem("submissionDraft", JSON.stringify(draftData));
+    try {
+      const response = await customAxios.post(
+        "/c4ca/projectSubmit/4",
+        draftData,
+        {
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setSaveDraft(false)
+        setLinkShow(true);
+        setProjectShow(true);
+        localStorage.setItem("submissionDraft", JSON.stringify(draftData));
+        await handleGetRequest();
+      } else {
+        console.error(
+          "Failed to submit data:",
+          response.status,
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("POST request error:", error);
+    }
   };
+
 
   useEffect(() => {
     handleGetRequest();
@@ -55,8 +86,16 @@ const Submission = (props) => {
   }, []);
   useEffect(() => {
     if (projectData) {
-      setLinkShow(false);
-      setProjectShow(false); 
+      if(projectData.is_submitted === true){
+        setLinkShow(false);
+        setProjectShow(false); 
+
+      }else{
+        setLinkShow(true);
+        setProjectShow(true); 
+      }
+
+      
     }
   }, [projectData]);
 
@@ -136,11 +175,11 @@ return (
   >
     <Container
     maxWidth="sm"
-    sx={{ display: "grid", gap: isMobile ? 2 : 4 }}
+    sx={{ display: "grid", gap: isMobile ? 2 : "16px" }}
     >
     <Typography
     variant="body1"
-    sx={{ display: "flex", alignItems: "center", gap: 1 }}
+    sx={{ display: "flex", alignItems: "center", mb:"16px"}}
     >
       Dashboard /{" "}
       <Typography variant="body1" component="span" color="#29458C">
@@ -148,7 +187,7 @@ return (
       </Typography>
     </Typography>
     <Grid container spacing={1}>
-      <Grid item xs={12} sm={12} md={12} gap="32px">
+      <Grid item xs={12} sm={12} md={12} >
         <Card
           sx={{
             border: 1,
@@ -171,7 +210,7 @@ return (
               display="flex"
               alignItems="center"
               gap={1}
-              sx={{ mb: 2 }}
+              sx={{ mb: "16px" }}
             >
               <img src="/idea.svg" alt="projects" />
               <Typography variant="h6">{totalTopic} Projects</Typography>
@@ -185,23 +224,23 @@ return (
     </Grid>
     <Typography
     variant="h6"
-    sx={{ display: "flex", alignItems: "center", gap: 1 }}
+    sx={{ display: "flex", alignItems: "center", gap:1, mt:"16px", mb:"16px"}}
     >
-      Team{" "}
+      Team
       <Typography variant="h6" component="span" color="#F55C38">
-        {topicData?.team_name}
+      {capitalizeFirstLetter(topicData?.team_name)}
       </Typography>
     </Typography>
     <Typography variant="subtitle1">{capitalizeFirstLetter(topicData?.project_title)}</Typography>
 
-    <Box sx={{ display: "grid", gap: 1 }}>
+    <Box sx={{ display: "grid",mb:"16px"}}>
       <Typography variant="body1">
         {capitalizeFirstLetter(topicData?.project_summary)}
       </Typography> 
     </Box>
       {linkShow&&
       <> 
-        {!isSubmitDisabled&&
+        {!saveDraft&&
         <>
           <Divider />
           <Typography variant="body1">Draft saved on 23 Sep 2023</Typography>
@@ -219,7 +258,7 @@ return (
         </>
         }
         {projectShow?
-          <Box sx={{ display: "grid", }}>
+          <Box sx={{ display: "grid",mt:"32px" ,gap:2 }}>
             <Typography variant="body2">Or, Upload project file</Typography>
             <DragDropZone onChange={handleDragDropZoneChange} value={dragDropZoneValue} />
           </Box>:dragDropZoneValue ===""&&(
@@ -236,7 +275,7 @@ return (
         {!linkShow&&!projectShow&& 
           <Grid container spacing={2}>
             <Grid item xs={12} container justifyContent="center" alignItems="center">
-              <Button sx={{width:!isMobile?"50%":"100%" }} className="profileBtn">
+              <Button sx={{width:!isMobile?"50%":"100%",mt:"16px" }} className="profileBtn">
                 <Link href="/student/dashboard" underline="none" color={'white'} pl='16px' pr="16px"> Return to Dashboard</Link>
               </Button>
             </Grid>
