@@ -171,7 +171,8 @@ function FacilitatorAddModal({ boolean, onOpen, id,facilitatorAddSuccessMessage 
         <Box sx={{ pb: 2, px: 2 }}>
           <DialogActions>
             <Button variant="contained" onClick={handleSubmit}
-            style={{}}>
+            style={{              backgroundImage: "linear-gradient(to right, rgba(135, 162, 231, 0.72), #192954)",
+          }}>
               Add Facilitator
             </Button>
           </DialogActions>
