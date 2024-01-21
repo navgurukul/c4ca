@@ -37,7 +37,7 @@ const DragDropZone = (props) => {
     const files = e.target.files;
     handleFileDrop(files);
   };
-  
+
   const handleFileDrop = (files) => {
     const newFileList = [...fileList];
     for (let i = 0; i < files.length; i++) {
@@ -62,7 +62,7 @@ const DragDropZone = (props) => {
       onDrop={onDrop}
       className={`drop-file-input ${isDragOver ? "dragover" : ""}`}
     >
-      {fileList.length > 0 ? (
+      {fileList.length > 0 && fileList[0] && (
         <Box sx={{ backgroundColor: "pink" }} className="drop-file-preview">
           {fileList.map((item, index) => (
             <Box key={index} className="drop-file-preview__item">
@@ -79,9 +79,10 @@ const DragDropZone = (props) => {
             </Box>
           ))}
         </Box>
-      ) : (
+      )}
 
-        <Box className="drop-file-input__label" >
+      {fileList.length === 0 && (
+        <Box className="drop-file-input__label">
           <input
             ref={inputRef}
             type="file"
@@ -90,9 +91,9 @@ const DragDropZone = (props) => {
             accept=".sb3"
             style={{ display: "none" }}
           />
-          <img src="/file_upload.svg" alt=""  onClick={() => inputRef.current.click()}/>
+          <img src="/file_upload.svg" alt="" onClick={() => inputRef.current.click()} />
           <Box sx={{ display: "grid", gap: 1 }}>
-            <Typography variant="body1" color="primary"  onClick={() => inputRef.current.click()}>
+            <Typography variant="body1" color="primary" onClick={() => inputRef.current.click()}>
               Upload or Drag File
             </Typography>
             <Typography variant="caption" color="text.secondary">
