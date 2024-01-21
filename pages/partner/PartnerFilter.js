@@ -211,6 +211,8 @@ function PartnerFilter() {
             variant="contained"
             style={{
               fontSize: "16px",
+              backgroundImage: "linear-gradient(to right, rgba(135, 162, 231, 0.9), #192954)", // Change gradient on hover if desired
+
             }}
           >
             Add Partner

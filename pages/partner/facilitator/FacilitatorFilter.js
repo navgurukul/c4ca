@@ -1,6 +1,3 @@
-
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -19,7 +16,7 @@ import FacilatorTable from "./FacilatorTable";
 import customAxios from "@/api";
 import MyBreadcrumbs from "@/components/breadcrumb/breadcrumb";
 import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from '@mui/material/Alert';
+import MuiAlert from "@mui/material/Alert";
 // import { Container } from "react-bootstrap";
 import { Container, CardContent, Card } from "@mui/material";
 
@@ -45,21 +42,21 @@ function FacilitatorFilter({ id }) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
-  const facilitatorAddSuccessMessage = (message) => { 
-    if(message === "Fill all fields"){
-      setSeverity("info")
+  const facilitatorAddSuccessMessage = (message) => {
+    if (message === "Fill all fields") {
+      setSeverity("info");
       setFacilitatorCreatedMessage("Please fill all fields");
-      setOpen(true); 
-    } else if(message === `"Email" must be a valid email`){
-      setSeverity("info")
+      setOpen(true);
+    } else if (message === `"Email" must be a valid email`) {
+      setSeverity("info");
       setFacilitatorCreatedMessage("Email must be a valid email");
       setOpen(true);
-    }else if(message?.status){
-      setSeverity("success")
+    } else if (message?.status) {
+      setSeverity("success");
       setFacilitatorCreatedMessage(message?.status);
       setOpen(true);
     } else {
-      setSeverity("error")
+      setSeverity("error");
       setFacilitatorCreatedMessage(message);
       setOpen(true);
     }
@@ -166,7 +163,7 @@ function FacilitatorFilter({ id }) {
   return (
     <Container sx={{ mt: 4, mb: 1 }}>
       {/* <Box className="dashboardContainer"> */}
-      <MyBreadcrumbs partnerName={partnerName} id={id}/>
+      <MyBreadcrumbs partnerName={partnerName} id={id} />
       <Typography
         style={{
           fontSize: "24px",
@@ -181,7 +178,7 @@ function FacilitatorFilter({ id }) {
       <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
         <Typography variant="h6">{data?.name}</Typography>
       </Box>
-      <Box sx={{ display: "flex", mb: "32px"  }}>
+      <Box sx={{ display: "flex", mb: "32px" }}>
         <Typography variant="h6">Overview</Typography>
       </Box>
 
@@ -268,7 +265,7 @@ function FacilitatorFilter({ id }) {
           </Card>
         </Grid>
       </Grid>
-      <Box sx={{ display: "flex", mb: "32px",mt:"32px" }}>
+      <Box sx={{ display: "flex", mb: "32px", mt: "32px" }}>
         <Typography variant="h6">Facilitator List</Typography>
       </Box>
       <Grid item container spacing={3} justifyContent="space-between">
@@ -308,8 +305,15 @@ function FacilitatorFilter({ id }) {
             startIcon={<Add />}
             className=""
             variant="contained"
-            sx={{ width: "fit-content" }}
+            sx={{
+              width: "fit-content",
+              backgroundColor: "rgba(135, 162, 231, 0.9)",
+            }}
             onClick={handleModalToggle}
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, rgba(135, 162, 231, 0.9), #192954)", // Change gradient on hover if desired
+            }}
           >
             <Typography>Add Facilitator</Typography>
           </Button>

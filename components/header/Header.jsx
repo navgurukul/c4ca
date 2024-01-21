@@ -152,7 +152,8 @@ const Header = () => {
                       display: "block",
                       width: 100,
                       m: "auto",
-                      backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",
+                      backgroundImage:
+                        "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",
                       fontSize: "15px",
                     }}
                   >
@@ -171,7 +172,14 @@ const Header = () => {
             )}
 
             {role ? (
-              <Button variant="contained" onClick={handleLogout}>
+              <Button
+                variant="contained"
+                onClick={handleLogout}
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, rgba(135, 162, 231, 0.9), #192954)", // Change gradient on hover if desired
+                }}
+              >
                 Logout
               </Button>
             ) : (

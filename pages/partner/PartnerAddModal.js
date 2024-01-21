@@ -213,7 +213,8 @@ function PartnerAddModal({ boolean, onOpen, partnerAddSuccessMessage }) {
               // disabled={!isValidEmail || values.email.trim() === ""}
               variant="contained"
               onClick={handleSubmit}
-              style={{}}
+              style={{      backgroundImage: "linear-gradient(to right, rgba(135, 162, 231, 0.9), #192954)", // Change gradient on hover if desired
+            }}
             >
               Add Partner
             </Button>

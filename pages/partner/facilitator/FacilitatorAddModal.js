@@ -2,17 +2,21 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { TextField,InputLabel } from "@mui/material";
+import { TextField, InputLabel } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Dialog, Grid, DialogContent, DialogActions } from "@mui/material";
 import customAxios from "@/api";
 
-function FacilitatorAddModal({ boolean, onOpen, id,facilitatorAddSuccessMessage }) {
-   
+function FacilitatorAddModal({
+  boolean,
+  onOpen,
+  id,
+  facilitatorAddSuccessMessage,
+}) {
   const [values, setValues] = useState({
     name: "",
     point_of_contact: "string",
-    email: "", 
+    email: "",
     c4ca_partner_id: Number(id),
     phone_number: "",
   });
@@ -22,7 +26,7 @@ function FacilitatorAddModal({ boolean, onOpen, id,facilitatorAddSuccessMessage 
     console.log(values);
     const apiUrl = "/c4ca/facilitator/create";
     const headers = {
-      Authorization: token
+      Authorization: token,
     };
 
     customAxios
@@ -52,10 +56,13 @@ function FacilitatorAddModal({ boolean, onOpen, id,facilitatorAddSuccessMessage 
     ) {
       facilitatorAddSuccessMessage("Fill all fields");
       return;
-    } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email) ){
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
       facilitatorAddSuccessMessage("Email must be a valid email address");
       return;
-    } else if(values.phone_number.length < 10 || values.phone_number.length > 10  ){
+    } else if (
+      values.phone_number.length < 10 ||
+      values.phone_number.length > 10
+    ) {
       // console.log(values.phone_number.length);
       facilitatorAddSuccessMessage("Phone number should be of 10 digits");
       return;
@@ -67,7 +74,7 @@ function FacilitatorAddModal({ boolean, onOpen, id,facilitatorAddSuccessMessage 
 
   return (
     <div>
-     <Dialog open={boolean} onClose={onOpen} fullWidth>
+      <Dialog open={boolean} onClose={onOpen} fullWidth>
         <DialogContent>
           <Box
             style={{
@@ -150,7 +157,8 @@ function FacilitatorAddModal({ boolean, onOpen, id,facilitatorAddSuccessMessage 
                 color: "#2E2E2E",
                 fontFamily: "Amazon Ember",
               }}
-            >Phone Number
+            >
+              Phone Number
             </InputLabel>
             <TextField
               margin="dense"
@@ -170,8 +178,14 @@ function FacilitatorAddModal({ boolean, onOpen, id,facilitatorAddSuccessMessage 
         </DialogContent>
         <Box sx={{ pb: 2, px: 2 }}>
           <DialogActions>
-            <Button variant="contained" onClick={handleSubmit}
-            style={{}}>
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, rgba(135, 162, 231, 0.9), #192954)", // Change gradient on hover if desired
+              }}
+            >
               Add Facilitator
             </Button>
           </DialogActions>
