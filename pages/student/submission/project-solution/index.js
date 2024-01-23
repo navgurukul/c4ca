@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   useMediaQuery,
+  Snackbar,
 } from "@mui/material";
 import InputControl from "../../../../components/forms/InputControl";
 import { breakpoints } from "@/theme/constant";
@@ -15,6 +16,7 @@ import DragDropZone from "../../../../components/submission/DragDropZone";
 import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import customAxios from "@/api";
+import MuiAlert from "@mui/material/Alert";
 
 const Submission = (props) => {
   const [inputControlValue, setInputControlValue] = useState("");
@@ -25,6 +27,17 @@ const Submission = (props) => {
   const [topicData, setTopicData] = useState(null);
   const [totalTopic, setTotalTopic] = useState(null);
   const [saveDraft, setSaveDraft] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const handleSnackbarOpen = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
 
   const isMobile = useMediaQuery(`(max-width: ${breakpoints.values.sm}px)`);
   const jsonData = localStorage.getItem("AUTH");
@@ -40,27 +53,37 @@ const Submission = (props) => {
     };
 
     try {
-      const response = await customAxios.post("/c4ca/projectSubmit/4", requestData, {
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await customAxios.post(
+        "/c4ca/projectSubmit/4",
+        requestData,
+        {
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.status === 200) {
         if (isDraft) {
           setLinkShow(false);
           setProjectShow(false);
           localStorage.setItem("submissionDraft", JSON.stringify(requestData));
+          handleSnackbarOpen("Draft saved successfully");
         } else {
           setLinkShow(true);
           setProjectShow(true);
           localStorage.removeItem("submissionDraft");
+          handleSnackbarOpen("Project submitted successfully");
         }
         await handleGetRequest();
       } else {
-        console.error("Failed to submit data:", response.status, response.statusText);
+        console.error(
+          "Failed to submit data:",
+          response.status,
+          response.statusText
+        );
       }
     } catch (error) {
       console.error("POST request error:", error);
@@ -73,7 +96,11 @@ const Submission = (props) => {
     if (savedDraftData) {
       const parsedDraftData = JSON.parse(savedDraftData);
       setInputControlValue(parsedDraftData.project_link);
-      setDragDropZoneValue(parsedDraftData.project_file_url ? [{ name: parsedDraftData.project_file_url }] : []);
+      setDragDropZoneValue(
+        parsedDraftData.project_file_url
+          ? [{ name: parsedDraftData.project_file_url }]
+          : []
+      );
       setSaveDraft(true);
     }
   }, []);
@@ -115,8 +142,15 @@ const Submission = (props) => {
 
   return (
     <>
-      <Container maxWidth="lg" disableGutters sx={{ display: "grid", placeItems: "center", gap: 4, paddingY: 5 }}>
-        <Container maxWidth="sm" sx={{ display: "grid", gap: isMobile ? 2 : "16px" }}>
+      <Container
+        maxWidth="lg"
+        disableGutters
+        sx={{ display: "grid", placeItems: "center", gap: 4, paddingY: 5 }}
+      >
+        <Container
+          maxWidth="sm"
+          sx={{ display: "grid", gap: isMobile ? 2 : "16px" }}
+        >
           <Typography
             variant="body1"
             sx={{ display: "flex", alignItems: "center", mb: "16px" }}
@@ -146,7 +180,12 @@ const Submission = (props) => {
                     alignItems: "center",
                   }}
                 >
-                  <Box display="flex" alignItems="center" gap={1} sx={{ mb: "16px" }}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap={1}
+                    sx={{ mb: "16px" }}
+                  >
                     <img src="/idea.svg" alt="projects" />
                     <Typography variant="h6">{totalTopic} Projects</Typography>
                   </Box>
@@ -159,19 +198,28 @@ const Submission = (props) => {
           </Grid>
           <Typography
             variant="h6"
-            sx={{ display: "flex", alignItems: "center", gap: 1, mt: "16px", mb: "16px" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              mt: "16px",
+              mb: "16px",
+            }}
           >
             Team
             <Typography variant="h6" component="span" color="#F55C38">
-              {topicData?.team_name?.charAt(0)?.toUpperCase() + topicData?.team_name?.slice(1)}
+              {topicData?.team_name?.charAt(0)?.toUpperCase() +
+                topicData?.team_name?.slice(1)}
             </Typography>
           </Typography>
           <Typography variant="subtitle1">
-            {topicData?.project_title?.charAt(0)?.toUpperCase() + topicData?.project_title?.slice(1)}
+            {topicData?.project_title?.charAt(0)?.toUpperCase() +
+              topicData?.project_title?.slice(1)}
           </Typography>
           <Box sx={{ display: "grid", mb: "16px" }}>
             <Typography variant="body1">
-              {topicData?.project_summary?.charAt(0)?.toUpperCase() + topicData?.project_summary?.slice(1)}
+              {topicData?.project_summary?.charAt(0)?.toUpperCase() +
+                topicData?.project_summary?.slice(1)}
             </Typography>
           </Box>
           {linkShow && (
@@ -179,7 +227,9 @@ const Submission = (props) => {
               {saveDraft === true && (
                 <>
                   <Divider />
-                  <Typography variant="body1">Draft saved on 23 Sep 2023</Typography>
+                  <Typography variant="body1">
+                    Draft saved on 23 Sep 2023
+                  </Typography>
                 </>
               )}
             </>
@@ -203,30 +253,57 @@ const Submission = (props) => {
           )}
           {projectShow ? (
             <Box sx={{ display: "grid", mt: "32px", gap: 2 }}>
-              <Typography variant="body2">Or, Upload project file</Typography>            
-              <DragDropZone onChange={handleDragDropZoneChange} value={dragDropZoneValue.length > 0 ? dragDropZoneValue : undefined} />
+              <Typography variant="body2">Or, Upload project file</Typography>
+              <DragDropZone
+                onChange={handleDragDropZoneChange}
+                value={
+                  dragDropZoneValue.length > 0 ? dragDropZoneValue : undefined
+                }
+              />
             </Box>
           ) : (
             <>
-            {projectData?.project_file_name != null && projectData?.project_file_name !== "" && (
-                <>
-                  <Typography variant="subtitle1" mt={"16px"}>Scratch Project File</Typography>
-                  <Box className="drop-file-preview__item__info">
-                    <img src="/project.svg" alt="" />
-                    <Link href={projectData?.project_file_url} variant="body1" color="text.primary" style={{ textDecoration: 'none' }}>
-                      {projectData?.project_file_name}
-                    </Link>
-                  </Box>
-                </>
-              )}
+              {projectData?.project_file_name != null &&
+                projectData?.project_file_name !== "" && (
+                  <>
+                    <Typography variant="subtitle1" mt={"16px"}>
+                      Scratch Project File
+                    </Typography>
+                    <Box className="drop-file-preview__item__info">
+                      <img src="/project.svg" alt="" />
+                      <Link
+                        href={projectData?.project_file_url}
+                        variant="body1"
+                        color="text.primary"
+                        style={{ textDecoration: "none" }}
+                      >
+                        {projectData?.project_file_name}
+                      </Link>
+                    </Box>
+                  </>
+                )}
             </>
-            )
-          }
+          )}
           {!linkShow && !projectShow && (
             <Grid container spacing={2}>
-              <Grid item xs={12} container justifyContent="center" alignItems="center">
-                <Button sx={{ width: !isMobile ? "50%" : "100%", mt: "16px" }} className="profileBtn">
-                  <Link href="/student/dashboard" underline="none" color="white" pl="16px" pr="16px">
+              <Grid
+                item
+                xs={12}
+                container
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Button
+                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px" }}
+                  className="profileBtn"
+                >
+                  <Link
+                    href="/student/dashboard"
+                    underline="none"
+                    color="white"
+                    pl="16px"
+                    pr="16px"
+                  >
                     Return to Dashboard
                   </Link>
                 </Button>
@@ -238,15 +315,27 @@ const Submission = (props) => {
           <Container maxWidth="sm" align="center">
             <Grid container spacing={1}>
               <Grid item xs={12} sm={6} md={6}>
-                <Button variant="outlined"
+                <Button
+                  variant="outlined"
                   sx={{
-                    backgroundColor: (theme) => (isSubmitDisabled ? theme.palette.grey[100] : "transparent"),
+                    backgroundColor: (theme) =>
+                      isSubmitDisabled
+                        ? theme.palette.grey[100]
+                        : "transparent",
                     width: isMobile && "100%",
                   }}
-                  disabled={!inputControlValue && dragDropZoneValue.length === 0}
+                  disabled={
+                    !inputControlValue && dragDropZoneValue.length === 0
+                  }
                   onClick={() => handleSaveDraftOrSubmit(true)}
                 >
-                  <Typography variant="ButtonLarge" pl="35px" pr="35px" pt="8px" pb="8px">
+                  <Typography
+                    variant="ButtonLarge"
+                    pl="35px"
+                    pr="35px"
+                    pt="8px"
+                    pb="8px"
+                  >
                     Save Draft
                   </Typography>
                 </Button>
@@ -262,7 +351,9 @@ const Submission = (props) => {
                     pt: isSubmitDisabled && "8px",
                     pb: isSubmitDisabled && "8px",
                     backgroundColor: (theme) =>
-                      isSubmitDisabled ? theme.palette.grey[500] : "transparent",
+                      isSubmitDisabled
+                        ? theme.palette.grey[500]
+                        : "transparent",
                     width: isMobile && "100%",
                   }}
                 >
@@ -273,6 +364,20 @@ const Submission = (props) => {
           </Container>
         )}
       </Container>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000} // Adjust as needed
+        onClose={handleSnackbarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          severity="success"
+          onClose={handleSnackbarClose}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };
