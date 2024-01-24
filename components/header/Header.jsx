@@ -52,7 +52,7 @@ const Header = () => {
         setRole(hasRoles);
       }
     } else {
-      console.error("Roles List not found in AUTH data.");
+
     }
   }, [router.pathname]);
 
