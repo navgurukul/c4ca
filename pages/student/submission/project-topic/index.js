@@ -127,7 +127,7 @@ const Submission = (props) => {
       console.log("Error response:", error.response);
     }
   };
-  const isSubmitDisabled = !(projectTopic && projectSummary && dragDropZoneValue.length > 0);
+  const isSubmitDisabled = !(projectTopic && projectSummary );
 
   const handleProjectTopicChange = (event) => {
     const value = event.target.value;
@@ -251,7 +251,6 @@ const Submission = (props) => {
                   rows={5}
                   onChange={handleProjectSummaryChange}
                   value={projectSummary}
-                 
                 />
               </Box>
               <Box sx={{ display: "grid", mt: "16px", gap: 2 }}>
