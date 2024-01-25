@@ -8,6 +8,8 @@ import {
   Card,
   CardContent,
   useMediaQuery,
+  Snackbar,
+  TextField,
 } from "@mui/material";
 import InputControl from "../../../../components/forms/InputControl";
 import { breakpoints } from "@/theme/constant";
@@ -15,9 +17,9 @@ import DragDropZone from "../../../../components/submission/DragDropZone";
 import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import customAxios from "@/api";
+import MuiAlert from "@mui/material/Alert";
 
 const Submission = (props) => {
-  const [inputControlValue, setInputControlValue] = useState("");
   const [projectTopic, setProjectTopic] = useState("");
   const [projectSummary, setProjectSummary] = useState("");
   const [dragDropZoneValue, setDragDropZoneValue] = useState([]);
@@ -27,7 +29,17 @@ const Submission = (props) => {
   const [teamName, setTeamName] = useState(null);
   const [totalTopic, setTotalTopic] = useState(null);
   const [saveDraft, setSaveDraft] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const handleSnackbarOpen = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
   const isMobile = useMediaQuery(`(max-width: ${breakpoints.values.sm}px)`);
   const jsonData = localStorage.getItem("AUTH");
   const parsedData = JSON.parse(jsonData);
@@ -43,28 +55,28 @@ const Submission = (props) => {
     };
 
     try {
-      const response = await customAxios.post("/c4ca/projectTopic/4", requestData, {
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "multipart/form-data",
-        },
+      const response = await customAxios.post(
+        "/c4ca/projectTopic/4", 
+        requestData, 
+        {
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "multipart/form-data",
+          },
       });
 
-      console.log("requestData:", requestData);
-      console.log("authToken:", authToken);
       if (response.status === 200) {
         if (isDraft) {
-          console.log("Draft Data", requestData)
-
           setLinkShow(false);
           setProjectShow(false);
           localStorage.setItem("submissionDraft", JSON.stringify(requestData));
+          handleSnackbarOpen("Draft saved successfully");
         } else {
-          console.log("Save Data", requestData)
           setLinkShow(true);
           setProjectShow(true);
           localStorage.removeItem("submissionDraft");
+          handleSnackbarOpen("Project submitted successfully");
         }
         await handleGetRequest();
       } else {
@@ -103,12 +115,10 @@ const Submission = (props) => {
     try {
       const response = await customAxios.get("c4ca/projectTopic/4", {
         headers: {
-          accept: "application/json",
           Authorization: `Bearer ${authToken}`,
         },
       });
       const projectData = response.data.data;
-      console.log("response", response.data.data);
       setTotalTopic(projectData.totalSubmitTopic);
       setTeamName(projectData.team_name);
       setProjectData(projectData.projects);
@@ -117,8 +127,7 @@ const Submission = (props) => {
       console.log("Error response:", error.response);
     }
   };
-
-  const isSubmitDisabled = !inputControlValue && dragDropZoneValue.length === 0;
+  const isSubmitDisabled = !(projectTopic && projectSummary && dragDropZoneValue.length > 0);
 
   const handleProjectTopicChange = (event) => {
     const value = event.target.value;
@@ -223,14 +232,29 @@ const Submission = (props) => {
                 type="text"
                 onChange={handleProjectTopicChange}
                 value={projectTopic}
-              />
-              <InputControl
-                label="Project Summary"
-                type="text"
-                onChange={handleProjectSummaryChange}
-                value={projectSummary}
-              />
-              <Box sx={{ display: "grid", mt: "32px", gap: 2 }}>
+                mb={"16px"}
+              />        
+              <Box
+                sx={{
+                  display: "grid",
+                  gap: 1,
+                  mt: "16px",
+                  backgroundColor: "pink",
+                }}
+              >
+                <Typography variant="body2" color="text.primary">
+                  Project Summary
+                </Typography>
+                <TextField
+                  type="text"
+                  multiline
+                  rows={5}
+                  onChange={handleProjectSummaryChange}
+                  value={projectSummary}
+                 
+                />
+              </Box>
+              <Box sx={{ display: "grid", mt: "16px", gap: 2 }}>
                 <Typography variant="body2">Or, Upload project file</Typography>
                 <DragDropZone
                   onChange={handleDragDropZoneChange}
@@ -241,7 +265,6 @@ const Submission = (props) => {
           ) : (
             
             <>
-            {/* {console.log("projectData" , projectData)} */}
               {projectData?.projectTopic_file_name != null &&
                 projectData?.projectTopic_file_name !== "" && (
                   <>
@@ -292,7 +315,7 @@ const Submission = (props) => {
                       isSubmitDisabled ? theme.palette.grey[100] : "transparent",
                     width: isMobile && "100%",
                   }}
-                  disabled={!inputControlValue && dragDropZoneValue.length === 0}
+                  disabled={isSubmitDisabled}
                   onClick={() => handleSaveDraftOrSubmit(true)}
                 >
                   <Typography variant="ButtonLarge" pl="35px" pr="35px" pt="8px" pb="8px">
@@ -312,16 +335,30 @@ const Submission = (props) => {
                     pb: isSubmitDisabled && "8px",
                     backgroundColor: (theme) =>
                       isSubmitDisabled ? theme.palette.grey[500] : "transparent",
-                    width: isMobile && "100%",
+                      width: isMobile && "100%",
                   }}
                 >
-                  <Typography variant="ButtonLarge">Submit Project</Typography>
+                  <Typography variant="ButtonLarge">Submit Project Topic</Typography>
                 </Button>
               </Grid>
             </Grid>
           </Container>
         )}
       </Container>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000} 
+        onClose={handleSnackbarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          severity="success"
+          onClose={handleSnackbarClose}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };
