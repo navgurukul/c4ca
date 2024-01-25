@@ -17,6 +17,7 @@ import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import customAxios from "@/api";
 import MuiAlert from "@mui/material/Alert";
+import { format } from 'date-fns';
 
 const Submission = (props) => {
   const [inputControlValue, setInputControlValue] = useState("");
@@ -29,6 +30,7 @@ const Submission = (props) => {
   const [saveDraft, setSaveDraft] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [draftSaveDate, setDraftSaveDate] = useState(null);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -69,7 +71,9 @@ const Submission = (props) => {
         if (isDraft) {
           setLinkShow(false);
           setProjectShow(false);
-          localStorage.setItem("submissionDraft", JSON.stringify(requestData));
+          const currentDate = format(new Date(), 'dd-MMM-yyyy');
+          setDraftSaveDate(currentDate);
+          localStorage.setItem("submissionDraft", JSON.stringify({ ...requestData, draftSaveDate: currentDate }));
           handleSnackbarOpen("Draft saved successfully");
         } else {
           setLinkShow(true);
@@ -96,6 +100,7 @@ const Submission = (props) => {
     if (savedDraftData) {
       const parsedDraftData = JSON.parse(savedDraftData);
       setInputControlValue(parsedDraftData.project_link);
+      setDraftSaveDate(parsedDraftData.draftSaveDate);
       setDragDropZoneValue(
         parsedDraftData.project_file_url
           ? [{ name: parsedDraftData.project_file_url }]
@@ -228,7 +233,7 @@ const Submission = (props) => {
                 <>
                   <Divider />
                   <Typography variant="body1">
-                    Draft saved on 23 Sep 2023
+                    Draft saved on {draftSaveDate}
                   </Typography>
                 </>
               )}
