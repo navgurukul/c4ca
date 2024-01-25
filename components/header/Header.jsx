@@ -171,7 +171,8 @@ const Header = () => {
             )}
 
             {role ? (
-              <Button variant="contained" onClick={handleLogout}>
+              <Button variant="contained" onClick={handleLogout} style={{              backgroundImage: "linear-gradient(to right, rgba(135, 162, 231, 0.72), #192954)",
+            }}>
                 Logout
               </Button>
             ) : (
