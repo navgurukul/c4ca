@@ -123,7 +123,6 @@ const Dashboard = () => {
           >
             <LinearProgress
               variant="determinate"
-              // value={30}
               value={calculateProgress(team) || 0}
               sx={{
                 borderRadius: "6px",
