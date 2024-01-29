@@ -310,6 +310,8 @@ function FacilitatorFilter({ id }) {
             variant="contained"
             sx={{ width: "fit-content" }}
             onClick={handleModalToggle}
+            style={{              backgroundImage: "linear-gradient(to right, rgba(135, 162, 231, 0.72), #192954)",
+          }}
           >
             <Typography>Add Facilitator</Typography>
           </Button>
