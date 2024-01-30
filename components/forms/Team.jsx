@@ -148,7 +148,6 @@ const Team = ({
       })
       .then((response) => {
         if (response.data.status === "success") {
-          console.log("Edited team data:", response.data);
           handleCloseEditDialog();
           handleSnackbarOpen("Team updated successfully");
         } else {

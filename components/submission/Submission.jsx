@@ -30,7 +30,6 @@ const Submission = (props) => {
     setprojectShow(false);
   };
 
-  console.log("value", props.values)
   const isSubmitDisabled = !inputControlValue && dragDropZoneValue.length === 0;
 
   const handleInputControlChange = (value) => {
