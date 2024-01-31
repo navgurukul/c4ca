@@ -53,12 +53,27 @@ const DragDropZone = (props) => {
     props.onChange(updatedList);
   };
 
+  const downloadFile = (file) => {
+    const url = URL.createObjectURL(file);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+  const handleClick = () => {
+    inputRef.current.click();
+  };
+
   return (
     <Box
       ref={wrapperRef}
       onDragEnter={onDragEnter}
       onDragOver={(e) => e.preventDefault()}
       onDragLeave={onDragLeave}
+      onClick={handleClick}
       onDrop={onDrop}
       className={`drop-file-input ${isDragOver ? "dragover" : ""}`}
     >
@@ -68,7 +83,7 @@ const DragDropZone = (props) => {
             <Box key={index} className="drop-file-preview__item">
               <Box className="drop-file-preview__item__info">
                 <img src="/project.svg" alt="" />
-                <Typography variant="body1" color="text.primary">
+                <Typography variant="body1" color="text.primary" onClick={() => downloadFile(item)}>
                   {item.name}
                 </Typography>
               </Box>
@@ -88,7 +103,7 @@ const DragDropZone = (props) => {
             type="file"
             multiple
             onChange={onFileDrop}
-            accept=".sb3"
+            accept=".txt, .docx, .jpg, .pdf, .sb3"
             style={{ display: "none" }}
           />
           <img src="/file_upload.svg" alt="" onClick={() => inputRef.current.click()} />
@@ -97,7 +112,7 @@ const DragDropZone = (props) => {
               Upload or Drag File
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              .sb3 format accepted
+              .txt, .docx, .jpg, .pdf , .sb3 formats accepted
             </Typography>
           </Box>
         </Box>

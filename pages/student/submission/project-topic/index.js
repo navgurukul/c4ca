@@ -13,17 +13,15 @@ import {
 } from "@mui/material";
 import InputControl from "../../../../components/forms/InputControl";
 import { breakpoints } from "@/theme/constant";
-import DragDropZone from "../../../../components/submission/DragDropZone";
 import Divider from "@mui/material/Divider";
-import Link from "@mui/material/Link";
+import Link from "next/link";
 import customAxios from "@/api";
 import MuiAlert from "@mui/material/Alert";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 
 const Submission = (props) => {
   const [projectTopic, setProjectTopic] = useState("");
   const [projectSummary, setProjectSummary] = useState("");
-  const [dragDropZoneValue, setDragDropZoneValue] = useState([]);
   const [linkShow, setLinkShow] = useState(true);
   const [projectShow, setProjectShow] = useState(true);
   const [projectData, setProjectData] = useState(null);
@@ -33,48 +31,45 @@ const Submission = (props) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [draftSaveDate, setDraftSaveDate] = useState(null);
-
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
   const handleSnackbarOpen = (message) => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
   };
   const isMobile = useMediaQuery(`(max-width: ${breakpoints.values.sm}px)`);
   const jsonData = localStorage.getItem("AUTH");
-  const parsedData = JSON.parse(jsonData);
-  const authToken = parsedData.data.token;
-
+const parsedData = jsonData ? JSON.parse(jsonData) : null;
+const authToken = parsedData ? parsedData.data.token : null;
   const handleSaveDraftOrSubmit = async (isDraft) => {
     const requestData = {
       project_title: projectTopic,
       project_summary: projectSummary,
-      project_topic_url: dragDropZoneValue[0]?.name,
       is_submitted: !isDraft,
-      projectTopic_file_name: dragDropZoneValue[0]?.name,
     };
-
     try {
       const response = await customAxios.post(
-        "/c4ca/projectTopic/4", 
-        requestData, 
+        "/c4ca/projectTopic/4",
+        requestData,
         {
           headers: {
             accept: "application/json",
             Authorization: `Bearer ${authToken}`,
             "Content-Type": "multipart/form-data",
           },
-      });
-
+        }
+      );
       if (response.status === 200) {
         if (isDraft) {
           setLinkShow(false);
           setProjectShow(false);
-          const currentDate = format(new Date(), 'dd-MMM-yyyy');
+          const currentDate = format(new Date(), "dd-MMM-yyyy");
           setDraftSaveDate(currentDate);
-          localStorage.setItem("submissionDraft", JSON.stringify({ ...requestData, draftSaveDate: currentDate }));
+          localStorage.setItem(
+            "submissionDraft",
+            JSON.stringify({ ...requestData, draftSaveDate: currentDate })
+          );
           handleSnackbarOpen("Draft saved successfully");
         } else {
           setLinkShow(true);
@@ -84,14 +79,17 @@ const Submission = (props) => {
         }
         await handleGetRequest();
       } else {
-        console.error("Failed to submit data:", response.status, response.statusText);
+        console.error(
+          "Failed to submit data:",
+          response.status,
+          response.statusText
+        );
       }
     } catch (error) {
       console.error("POST request error:", error);
       console.log("Response data:", error.response.data);
     }
   };
-
   useEffect(() => {
     handleGetRequest();
     const savedDraftData = localStorage.getItem("submissionDraft");
@@ -100,22 +98,15 @@ const Submission = (props) => {
       setProjectTopic(parsedDraftData.project_title);
       setProjectSummary(parsedDraftData.project_summary);
       setDraftSaveDate(parsedDraftData.draftSaveDate);
-      setDragDropZoneValue(
-        parsedDraftData.project_topic_url
-          ? [{ name: parsedDraftData.project_topic_url }]
-          : []
-      );
       setSaveDraft(true);
     }
   }, []);
-
   useEffect(() => {
     if (projectData) {
       setLinkShow(!projectData.is_submitted);
       setProjectShow(!projectData.is_submitted);
     }
   }, [projectData]);
-
   const handleGetRequest = async () => {
     try {
       const response = await customAxios.get("c4ca/projectTopic/4", {
@@ -132,22 +123,15 @@ const Submission = (props) => {
       console.log("Error response:", error.response);
     }
   };
-  const isSubmitDisabled = !(projectTopic && projectSummary );
-
+  const isSubmitDisabled = !(projectTopic && projectSummary);
   const handleProjectTopicChange = (event) => {
     const value = event.target.value;
     setProjectTopic(value);
   };
-
   const handleProjectSummaryChange = (event) => {
     const value = event.target.value;
     setProjectSummary(value);
   };
-
-  const handleDragDropZoneChange = (files) => {
-    setDragDropZoneValue(files);
-  };
-
   return (
     <>
       <Container
@@ -155,7 +139,10 @@ const Submission = (props) => {
         disableGutters
         sx={{ display: "grid", placeItems: "center", gap: 4, paddingY: 5 }}
       >
-        <Container maxWidth="sm" sx={{ display: "grid", gap: isMobile ? 2 : "16px" }}>
+        <Container
+          maxWidth="sm"
+          sx={{ display: "grid", gap: isMobile ? 2 : "16px" }}
+        >
           <Typography
             variant="body1"
             sx={{ display: "flex", alignItems: "center", mb: "16px" }}
@@ -185,7 +172,12 @@ const Submission = (props) => {
                     alignItems: "center",
                   }}
                 >
-                  <Box display="flex" alignItems="center" gap={1} sx={{ mb: "16px" }}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap={1}
+                    sx={{ mb: "16px" }}
+                  >
                     <img src="/idea.svg" alt="projects" />
                     <Typography variant="h6">{totalTopic} Projects</Typography>
                   </Box>
@@ -198,7 +190,13 @@ const Submission = (props) => {
           </Grid>
           <Typography
             variant="h6"
-            sx={{ display: "flex", alignItems: "center", gap: 1, mt: "16px", mb: "16px" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              mt: "16px",
+              mb: "16px",
+            }}
           >
             Team
             <Typography variant="h6" component="span" color="#F55C38">
@@ -210,12 +208,14 @@ const Submission = (props) => {
               {saveDraft === true && (
                 <>
                   <Divider />
-                  <Typography variant="body1">Draft saved on {draftSaveDate}</Typography>
+                  <Typography variant="body1">
+                    Draft saved on {draftSaveDate}
+                  </Typography>
                 </>
               )}
             </>
           )}
-          {linkShow ?null: (
+          {linkShow ? null : (
             <>
               <Typography variant="subtitle1">
                 {projectData?.project_title?.charAt(0)?.toUpperCase() +
@@ -229,7 +229,7 @@ const Submission = (props) => {
               </Box>
             </>
           )}
-          {projectShow ? (
+          {projectShow && (
             <>
               <InputControl
                 label="Project Topic"
@@ -237,7 +237,7 @@ const Submission = (props) => {
                 onChange={handleProjectTopicChange}
                 value={projectTopic}
                 mb={"16px"}
-              />        
+              />
               <Box
                 sx={{
                   display: "grid",
@@ -257,42 +257,24 @@ const Submission = (props) => {
                   value={projectSummary}
                 />
               </Box>
-              <Box sx={{ display: "grid", mt: "16px", gap: 2 }}>
-                <Typography variant="body2">Or, Upload project file</Typography>
-                <DragDropZone
-                  onChange={handleDragDropZoneChange}
-                  value={dragDropZoneValue.length > 0 ? dragDropZoneValue : undefined}
-                />
-              </Box>
-            </>
-          ) : (
-            
-            <>
-              {projectData?.projectTopic_file_name != null &&
-                projectData?.projectTopic_file_name !== "" && (
-                  <>
-                    <Typography variant="subtitle1" mt={"16px"}>
-                      Scratch Project File
-                    </Typography>
-                    <Box className="drop-file-preview__item__info">
-                      <img src="/project.svg" alt="" />
-                      <Link
-                        href={projectData?.project_topic_url}
-                        variant="body1"
-                        color="text.primary"
-                        style={{ textDecoration: "none" }}
-                      >
-                        {projectData?.projectTopic_file_name}
-                      </Link>
-                    </Box>
-                  </>
-                )}
             </>
           )}
           {!linkShow && !projectShow && (
             <Grid container spacing={2}>
-              <Grid item xs={12} container justifyContent="center" alignItems="center">
-                <Button sx={{ width: !isMobile ? "50%" : "100%", mt: "16px" }} className="profileBtn">
+              <Grid
+                item
+                xs={12}
+                container
+                justifyContent="center"
+                alignItems="center"
+              >
+               <Button
+                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px", 
+                  "&:hover": {
+                  backgroundColor:  "rgba(41, 69, 140, 0.72)",
+                },}}                    
+                  className="profileBtn"    
+                >
                   <Link
                     href="/student/dashboard"
                     underline="none"
@@ -315,33 +297,45 @@ const Submission = (props) => {
                   variant="outlined"
                   sx={{
                     backgroundColor: (theme) =>
-                      isSubmitDisabled ? theme.palette.grey[100] : "transparent",
+                      isSubmitDisabled
+                        ? theme.palette.grey[100]
+                        : "transparent",
                     width: isMobile && "100%",
                   }}
                   disabled={isSubmitDisabled}
                   onClick={() => handleSaveDraftOrSubmit(true)}
                 >
-                  <Typography variant="ButtonLarge" pl="35px" pr="35px" pt="8px" pb="8px">
+                  <Typography
+                    variant="ButtonLarge"
+                    pl="35px"
+                    pr="35px"
+                    pt="8px"
+                    pb="8px"
+                  >
                     Save Draft
                   </Typography>
                 </Button>
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Button
-                  className={!isSubmitDisabled && "profileBtn"}
-                  onClick={() => handleSaveDraftOrSubmit(false)}
-                  disabled={isSubmitDisabled}
-                  sx={{
-                    pl: isSubmitDisabled && "35px",
-                    pr: isSubmitDisabled && "35px",
-                    pt: isSubmitDisabled && "8px",
-                    pb: isSubmitDisabled && "8px",
-                    backgroundColor: (theme) =>
-                      isSubmitDisabled ? theme.palette.grey[500] : "transparent",
-                      width: isMobile && "100%",
-                  }}
+                   className={!isSubmitDisabled ? "profileBtn" : ""}
+                   onClick={() => handleSaveDraftOrSubmit(false)}
+                   disabled={isSubmitDisabled}
+                   sx={{
+                     pl: isSubmitDisabled ? "35px" : "20px",
+                     pr: isSubmitDisabled ? "35px" : "20px",
+                     pt: isSubmitDisabled ? "8px" : "12px",
+                     pb: isSubmitDisabled ? "8px" : "12px",
+                     width: isMobile ? "100%" : "250px",
+                     "&:hover": {
+                       backgroundColor: isSubmitDisabled ? "transparent" : "rgba(41, 69, 140, 0.72)",
+                     },
+                   }}
                 >
-                  <Typography variant="ButtonLarge">Submit Project Topic</Typography>
+                  <Typography variant="ButtonLarge"
+                     >
+                    Submit Project Topic
+                  </Typography>
                 </Button>
               </Grid>
             </Grid>
@@ -350,7 +344,7 @@ const Submission = (props) => {
       </Container>
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3000} 
+        autoHideDuration={3000}
         onClose={handleSnackbarClose}
       >
         <MuiAlert
@@ -365,5 +359,4 @@ const Submission = (props) => {
     </>
   );
 };
-
 export default Submission;

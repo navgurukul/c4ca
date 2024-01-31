@@ -127,9 +127,13 @@ const Module = () => {
                   <Button variant="outlined" disabled={openedCards < index}>
                     {openedCards >= index ? (
                       module.button_type === "project_solution" ? (
-                        "Submit Project Topic"
+                        <Link href="/student/submission/project-solution">
+                          Submit Project Topic
+                        </Link>
                       ) : module.button_type === "project_topic" ? (
-                        "Share Project Topic"
+                        <Link href="/student/submission/project-topic">
+                          Share Project Topic
+                        </Link>
                       ) : (
                         <>
                           <Link
@@ -183,9 +187,13 @@ const Module = () => {
                 >
                   {openedCards >= index ? (
                     module.button_type === "project_solution" ? (
-                      "Submit Project Topic"
+                      <Link href="/student/submission/project-solution">
+                        Submit Project Topic
+                      </Link>
                     ) : module.button_type === "project_topic" ? (
-                      "Share Project Topic"
+                      <Link href="/student/submission/project-topic">
+                        Share Project Topic
+                      </Link>          
                     ) : (
                       <>
                         <Link

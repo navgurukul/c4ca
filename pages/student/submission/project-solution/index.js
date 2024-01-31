@@ -14,13 +14,13 @@ import InputControl from "../../../../components/forms/InputControl";
 import { breakpoints } from "@/theme/constant";
 import DragDropZone from "../../../../components/submission/DragDropZone";
 import Divider from "@mui/material/Divider";
-import Link from "@mui/material/Link";
+import Link from "next/link";
 import customAxios from "@/api";
 import MuiAlert from "@mui/material/Alert";
 import { format } from 'date-fns';
 
 const Submission = (props) => {
-  const [inputControlValue, setInputControlValue] = useState("");
+  const [inputControlValue, setInputControlValue] = useState(null);
   const [dragDropZoneValue, setDragDropZoneValue] = useState([]);
   const [linkShow, setLinkShow] = useState(true);
   const [projectShow, setProjectShow] = useState(true);
@@ -43,8 +43,8 @@ const Submission = (props) => {
 
   const isMobile = useMediaQuery(`(max-width: ${breakpoints.values.sm}px)`);
   const jsonData = localStorage.getItem("AUTH");
-  const parsedData = JSON.parse(jsonData);
-  const authToken = parsedData.data.token;
+  const parsedData = jsonData ? JSON.parse(jsonData) : null;
+  const authToken = parsedData ? parsedData.data.token : null;
 
   const handleSaveDraftOrSubmit = async (isDraft) => {
     const requestData = {
@@ -53,7 +53,6 @@ const Submission = (props) => {
       project_file_url: dragDropZoneValue[0]?.name,
       project_file_name: dragDropZoneValue[0]?.name,
     };
-
     try {
       const response = await customAxios.post(
         "/c4ca/projectSubmit/4",
@@ -116,6 +115,7 @@ const Submission = (props) => {
       setProjectShow(!projectData.is_submitted);
     }
   }, [projectData]);
+  
 
   const handleGetRequest = async () => {
     try {
@@ -134,7 +134,7 @@ const Submission = (props) => {
     }
   };
 
-  const isSubmitDisabled = !inputControlValue && dragDropZoneValue.length === 0;
+  const isSubmitDisabled = !(inputControlValue || dragDropZoneValue.length > 0 );
 
   const handleInputControlChange = (event) => {
     const value = event.target.value;
@@ -143,6 +143,16 @@ const Submission = (props) => {
 
   const handleDragDropZoneChange = (files) => {
     setDragDropZoneValue(files);
+  };
+  const handleDownloadFile = (event) => {
+    event.preventDefault();
+    const link = document.createElement('a');
+    link.href = projectData?.project_file_url;
+    link.target = '_blank';
+    link.download = projectData?.project_file_name || 'download';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -239,7 +249,7 @@ const Submission = (props) => {
               )}
             </>
           )}
-          {linkShow ? (
+          { linkShow  ?(
             <>
               <InputControl
                 label="Share Scratch Project Link"
@@ -250,10 +260,15 @@ const Submission = (props) => {
             </>
           ) : (
             <>
+            {projectData?.project_link != null &&
+              projectData?.project_link !== "" && 
+            <>
               <Typography variant="subtitle1">Scratch Project Link</Typography>
-              <Link href={projectData?.project_link} variant="body1">
+              <Link href={projectData?.project_link} variant="body1" target="_blank">
                 {projectData?.project_link}
               </Link>
+              </>
+              }
             </>
           )}
           {projectShow ? (
@@ -281,6 +296,7 @@ const Submission = (props) => {
                         variant="body1"
                         color="text.primary"
                         style={{ textDecoration: "none" }}
+                        onClick={handleDownloadFile}
                       >
                         {projectData?.project_file_name}
                       </Link>
@@ -299,8 +315,11 @@ const Submission = (props) => {
                 alignItems="center"
               >
                 <Button
-                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px" }}
-                  className="profileBtn"
+                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px", 
+                  "&:hover": {
+                  backgroundColor:  "rgba(41, 69, 140, 0.72)",
+                },}}                    
+                  className="profileBtn"    
                 >
                   <Link
                     href="/student/dashboard"
@@ -323,14 +342,10 @@ const Submission = (props) => {
                 <Button
                   variant="outlined"
                   sx={{
-                    backgroundColor: (theme) =>
-                      isSubmitDisabled
-                        ? theme.palette.grey[100]
-                        : "transparent",
                     width: isMobile && "100%",
                   }}
                   disabled={
-                    !inputControlValue && dragDropZoneValue.length === 0
+                   isSubmitDisabled
                   }
                   onClick={() => handleSaveDraftOrSubmit(true)}
                 >
@@ -355,12 +370,12 @@ const Submission = (props) => {
                     pr: isSubmitDisabled && "35px",
                     pt: isSubmitDisabled && "8px",
                     pb: isSubmitDisabled && "8px",
-                    backgroundColor: (theme) =>
-                      isSubmitDisabled
-                        ? theme.palette.grey[500]
-                        : "transparent",
+                    "&:hover": {
+                      backgroundColor:  "rgba(41, 69, 140, 0.72)",
+                    },
                     width: isMobile && "100%",
                   }}
+                             
                 >
                   <Typography variant="ButtonLarge">Submit Project</Typography>
                 </Button>
@@ -371,7 +386,7 @@ const Submission = (props) => {
       </Container>
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3000} // Adjust as needed
+        autoHideDuration={3000} 
         onClose={handleSnackbarClose}
       >
         <MuiAlert
