@@ -247,7 +247,7 @@ const authToken = parsedData ? parsedData.data.token : null;
                 }}
               >
                 <Typography variant="body2" color="text.primary">
-                  Project Summary
+                  Project Description
                 </Typography>
                 <TextField
                   type="text"
@@ -269,10 +269,10 @@ const authToken = parsedData ? parsedData.data.token : null;
                 alignItems="center"
               >
                <Button
-                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px", 
-                  "&:hover": {
-                  backgroundColor:  "rgba(41, 69, 140, 0.72)",
-                },}}                    
+                  style={{
+                    backgroundImage: !isSubmitDisabled ? "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)" :"",
+                  }}
+                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px", }}                    
                   className="profileBtn"    
                 >
                   <Link
@@ -318,6 +318,9 @@ const authToken = parsedData ? parsedData.data.token : null;
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Button
+                  style={{
+                    backgroundImage: !isSubmitDisabled ? "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)" :"",
+                  }}
                    className={!isSubmitDisabled ? "profileBtn" : ""}
                    onClick={() => handleSaveDraftOrSubmit(false)}
                    disabled={isSubmitDisabled}
@@ -327,9 +330,7 @@ const authToken = parsedData ? parsedData.data.token : null;
                      pt: isSubmitDisabled ? "8px" : "12px",
                      pb: isSubmitDisabled ? "8px" : "12px",
                      width: isMobile ? "100%" : "250px",
-                     "&:hover": {
-                       backgroundColor: isSubmitDisabled ? "transparent" : "rgba(41, 69, 140, 0.72)",
-                     },
+                     
                    }}
                 >
                   <Typography variant="ButtonLarge"
