@@ -64,6 +64,7 @@ const authToken = parsedData ? parsedData.data.token : null;
         if (isDraft) {
           setLinkShow(false);
           setProjectShow(false);
+          setSaveDraft(true);
           const currentDate = format(new Date(), "dd-MMM-yyyy");
           setDraftSaveDate(currentDate);
           localStorage.setItem(
