@@ -106,9 +106,9 @@ const DragDropZone = (props) => {
             accept=".txt, .docx, .jpg, .pdf, .sb3"
             style={{ display: "none" }}
           />
-          <img src="/file_upload.svg" alt="" onClick={() => inputRef.current.click()} />
+          <img src="/file_upload.svg" alt=""  />
           <Box sx={{ display: "grid", gap: 1 }}>
-            <Typography variant="body1" color="primary" onClick={() => inputRef.current.click()}>
+            <Typography variant="body1" color="primary" >
               Upload or Drag File
             </Typography>
             <Typography variant="caption" color="text.secondary">

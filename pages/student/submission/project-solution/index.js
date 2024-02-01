@@ -70,6 +70,7 @@ const Submission = (props) => {
         if (isDraft) {
           setLinkShow(false);
           setProjectShow(false);
+          setSaveDraft(true);
           const currentDate = format(new Date(), 'dd-MMM-yyyy');
           setDraftSaveDate(currentDate);
           localStorage.setItem("submissionDraft", JSON.stringify({ ...requestData, draftSaveDate: currentDate }));
@@ -315,10 +316,10 @@ const Submission = (props) => {
                 alignItems="center"
               >
                 <Button
-                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px", 
-                  "&:hover": {
-                  backgroundColor:  "rgba(41, 69, 140, 0.72)",
-                },}}                    
+                 style={{
+                    backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",
+                  }}
+                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px",}}                    
                   className="profileBtn"    
                 >
                   <Link
@@ -362,6 +363,9 @@ const Submission = (props) => {
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Button
+                   style={{
+                    backgroundImage: !isSubmitDisabled ? "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)" :"",
+                  }}
                   className={!isSubmitDisabled && "profileBtn"}
                   onClick={() => handleSaveDraftOrSubmit(false)}
                   disabled={isSubmitDisabled}
@@ -370,9 +374,6 @@ const Submission = (props) => {
                     pr: isSubmitDisabled && "35px",
                     pt: isSubmitDisabled && "8px",
                     pb: isSubmitDisabled && "8px",
-                    "&:hover": {
-                      backgroundColor:  "rgba(41, 69, 140, 0.72)",
-                    },
                     width: isMobile && "100%",
                   }}
                              
