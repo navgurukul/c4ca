@@ -50,7 +50,7 @@ const authToken = parsedData ? parsedData.data.token : null;
     };
     try {
       const response = await customAxios.post(
-        "/c4ca/projectTopic/4",
+        "c4ca/projectTopic/3",
         requestData,
         {
           headers: {
@@ -72,6 +72,7 @@ const authToken = parsedData ? parsedData.data.token : null;
             JSON.stringify({ ...requestData, draftSaveDate: currentDate })
           );
           handleSnackbarOpen("Draft saved successfully");
+
         } else {
           setLinkShow(true);
           setProjectShow(true);
@@ -110,7 +111,7 @@ const authToken = parsedData ? parsedData.data.token : null;
   }, [projectData]);
   const handleGetRequest = async () => {
     try {
-      const response = await customAxios.get("c4ca/projectTopic/4", {
+      const response = await customAxios.get("/c4ca/projectTopic/3", {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
