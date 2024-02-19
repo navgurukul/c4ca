@@ -119,6 +119,10 @@ export default function Home() {
             <Stack sx={{ marginTop: 5 }} alignItems={"center"}>
               <Link href="/student/login">
                 <Button
+                  style={{
+                    // width: "100%",
+                    backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",
+                  }}
                   alignItems={"center"}
                   sx={{ pl: 6, pr: 6 }}
                   variant="contained"

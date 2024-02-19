@@ -135,7 +135,7 @@ const Team = ({
         class: member.class,
       })),
     };
-    const authToken = localStorage.getItem("token");    // console.log('Team ID:', team.id);
+    const authToken = localStorage.getItem("token");
     // const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
     // console.log('URL:', url);
 
@@ -404,7 +404,7 @@ const Team = ({
           className="Button"
           color="primary"
           variant="contained"
-          sx={{ minWidth:!isMobile&& 240, display:!isMobile&& "block" }}
+          sx={{ backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",minWidth:!isMobile&& 240, display:!isMobile&& "block" }}
           onClick={team ? handleEditTeam : createTeam}
         >
           {team ? "Update Details" : "Add Team"}

@@ -44,11 +44,13 @@ const Header = () => {
         rolesList?.includes("c4caPartner") ||
         rolesList?.includes("facilitator");
 
+      // hasRoles = isAdmin || isSuperAdmin || isPartner || isFacilitator;
+
       if (hasRoles) {
         setRole(hasRoles);
       }
     } else {
-      console.error("Roles List not found in AUTH data.");
+
     }
   }, [router.pathname]);
 
@@ -173,6 +175,7 @@ const Header = () => {
                       display: "block",
                       width: 100,
                       m: "auto",
+                      backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",
                       fontSize: "15px",
                     }}
                   >
@@ -191,7 +194,8 @@ const Header = () => {
             )}
 
             {role ? (
-              <Button variant="contained" onClick={handleLogout}>
+              <Button variant="contained" onClick={handleLogout} style={{              backgroundImage: "linear-gradient(to right, rgba(135, 162, 231, 0.72), #192954)",
+            }}>
                 Logout
               </Button>
             ) : (
@@ -223,10 +227,9 @@ const Header = () => {
                     onClick={() => {
                       handleClose();
                       router.push(
-                        authData?.c4ca_roles &&
-                          authData.c4ca_roles.indexOf("c4caTeacher") !== -1
-                          ? "/teacher/profile"
-                          : "/student/team-profile"
+                        authData && authData?.role == "student"
+                          ? "/student/team-profile"
+                          : "/teacher/profile"
                       );
                     }}
                   >
