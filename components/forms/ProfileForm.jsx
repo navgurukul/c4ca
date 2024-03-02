@@ -66,7 +66,7 @@ const ProfileForm = () => {
         },
       })
       .then((res) => {
-        if (res.data.data !== null) {
+        if (res.data.data !== null && res.data.data !== "Teacher data not found for the user with c4caTeacher role") {
           setExistingData(true);
           setFormData({
             phone_number: res.data.data.phone_number,
@@ -89,7 +89,6 @@ const ProfileForm = () => {
               },
             })
             .then((response) => {
-              console.log("res", response, "resp....");
               setUserData({
                 name: response.data.user.name,
                 email: response.data.user.email,
