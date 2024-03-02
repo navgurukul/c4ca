@@ -18,13 +18,10 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-
 import customAxios from "@/api";
 import Link from "next/link";
 
 const TeacherDashboard = ({ authToken }) => {
-  const router = useRouter();
   const BASE_URL= "https://www.merd-bhanwaridevi.merakilearn.org";
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teams, setTeams] = useState([]);
@@ -45,7 +42,6 @@ const TeacherDashboard = ({ authToken }) => {
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
-    console.log("authToken", authToken);
     if (teacherId && authToken) {
       customAxios
         .get(`/c4ca/teams/${teacherId}`, {
@@ -66,7 +62,7 @@ const TeacherDashboard = ({ authToken }) => {
   };
 
   useEffect(() => {
-    console.log(BASE_URL, process.env, "BASE_URL")
+    console.log(BASE_URL, "BASE_URL")
     refreshTeams();
   }, []);
 
@@ -261,7 +257,6 @@ const TeacherDashboard = ({ authToken }) => {
                   borderSpacing: "5px",
                   cursor: "pointer",
                 }}
-                // onClick={handleAddTeam}
                 onClick={handleOpenDialog}
               >
                 <AddCircleOutlinedIcon color="primary" />
@@ -272,8 +267,6 @@ const TeacherDashboard = ({ authToken }) => {
             </Grid>
           )}
         </Grid>
-
-        {/* Awards and Certifications... */}
       </Container>
       <Dialog
         open={openDialog}
@@ -377,25 +370,22 @@ const TeacherDashboard = ({ authToken }) => {
             <Typography variant="body1" color="dark">
               Code for Climate Action Lessons with Scratch
             </Typography>
-            {/* <Button size="large" sx={{ marginTop: 2 }} variant="outlined">
-              Go To Meraki <OpenInNewOutlined />
-            </Button> */}
-            <Button size="large" sx={{ marginTop: 2 }} variant="outlined">
             <Link style={{display: 'flex', alignItems: 'center', gap: '8px'}}
               href={`${BASE_URL}`}
               passHref
               target="_blank"
               rel="noopener noreferrer"
             >
+            <Button size="large" sx={{ marginTop: 2 }} variant="outlined">
              Go To Meraki <OpenInNewOutlined />
-            </Link>
             </Button>
+            </Link>
           </Grid>
         </Grid>
       </Container>
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3000} // Adjust as needed
+        autoHideDuration={3000} 
         onClose={handleSnackbarClose}
       >
         <MuiAlert
