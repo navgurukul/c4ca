@@ -52,7 +52,6 @@ const TeamDetail = () => {
   }, [params]);
 
   const teamMemberData = data.team_members || [];
-
   useEffect(() => {
     const authToken = localStorage.getItem("token");
     console.log("authToken", authToken);
