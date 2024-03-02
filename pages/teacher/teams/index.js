@@ -22,7 +22,10 @@ import customAxios from "@/api";
 import Link from "next/link";
 
 const TeacherDashboard = ({ authToken }) => {
-  const BASE_URL= "https://www.merd-bhanwaridevi.merakilearn.org";
+  const [BASE_URL, setBASE_URL] = useState(
+    "https://www.merd-bhanwaridevi.merakilearn.org"
+  );
+
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teams, setTeams] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -36,9 +39,16 @@ const TeacherDashboard = ({ authToken }) => {
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
-
+  
   const refreshTeams = () => {
     const authToken = localStorage.getItem("token");
+    if (
+      window.location.origin === "https://dev-c4ca.c4ca.in"
+    ) {
+      setBASE_URL("https://www.merd-bhanwaridevi.merakilearn.org");
+    } else {
+      setBASE_URL("https://www.merakilearn.org");
+    }
     const teacherData = JSON.parse(localStorage.getItem("teacherData"));
     const teacherId = teacherData?.id;
 
