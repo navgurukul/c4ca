@@ -390,7 +390,10 @@ const ProfileForm = () => {
               </Box>
             </Container>
             {partner_id ? (
-              <Button className="profileBtn" onClick={handleSaveProfile}>
+              <Button style={{
+                    backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",
+                  }}
+                   className="profileBtn" onClick={handleSaveProfile}>
                 <Typography variant="ButtonLarge">Save & Proceed</Typography>
               </Button>
             ) : (
