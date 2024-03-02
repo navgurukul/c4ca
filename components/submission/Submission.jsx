@@ -22,7 +22,6 @@ const Submission = (props) => {
   const [dragDropZoneValue, setDragDropZoneValue] = useState([]);
   const [linkShow , setLinkShow ] = useState(true);
   const [projectShow , setprojectShow ] = useState(true);
-  
 
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px");
   const handleSubmit = () => {
@@ -40,7 +39,7 @@ const Submission = (props) => {
 
   const handleDragDropZoneChange = (files) => {
     setDragDropZoneValue(files);
-    console.log("file" , dragDropZoneValue)
+   
     // file data is not showing. 
   };
 
@@ -190,8 +189,3 @@ const Submission = (props) => {
 };
 
 export default Submission;
-
-
-
-
-  

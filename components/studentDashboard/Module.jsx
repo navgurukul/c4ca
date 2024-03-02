@@ -132,9 +132,13 @@ const Module = () => {
                     <Button variant="outlined" disabled={!isOpened}>
                       {isOpened ? (
                         module.button_type === "project_solution" ? (
-                          "Submit Project Topic"
+                          <Link href="/student/submission/project-solution">
+                            Submit Project Topic
+                          </Link>
                         ) : module.button_type === "project_topic" ? (
-                          "Share Project Topic"
+                            <Link href="/student/submission/project-topic">
+                              Share Project Topic
+                            </Link>
                         ) : (
                           <>
                             <Link
@@ -170,7 +174,7 @@ const Module = () => {
                       module.button_type === "project_solution" ? (
                         "Submit Project Topic"
                       ) : module.button_type === "project_topic" ? (
-                        "Share Project Topic"
+                          "Share Project Topic " 
                       ) : (
                         <>
                           <Link
