@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }) {
   let c4ca_partner_id, c4ca_facilitator_id, c4ca_roles, userRoleArray;
   let partner_id;
   let referrer = "";
-  
+
   function reverseJwtBody(jwt) {
     const [header, body, signature] = jwt.split(".");
     const reversedBody = body.split("").reverse().join("");
@@ -101,7 +101,6 @@ export default function App({ Component, pageProps }) {
             );
 
             partner_id = res.data.user.c4ca_partner_id;
-
             res.data.role = "teacher";
             localStorage.setItem("AUTH", JSON.stringify(res.data));
             setCookie("user", JSON.stringify(res.data), {
@@ -119,9 +118,29 @@ export default function App({ Component, pageProps }) {
           } else {
             return userRoleArray?.length === 0 ? setOpen(true) : null;
           }
-        } else if (typeof resp.data.data === "string" && ( !c4ca_roles.includes("superAdmin") &&
-        !c4ca_roles.includes("facilitator") &&
-        !c4ca_roles.includes("c4caPartner"))) {
+        } else if (typeof resp.data.data === "string" && referrer) {
+          const res = await customAxios.put(
+            "/users/me",
+            { referrer: referrer },
+            {
+              headers: {
+                accept: "application/json",
+                Authorization: userToken,
+              },
+            }
+          );
+
+          partner_id = res.data.user.c4ca_partner_id;
+          res.data.role = "teacher";
+          localStorage.setItem("AUTH", JSON.stringify(res.data));
+          setCookie("user", JSON.stringify(res.data), {
+            path: "/",
+            maxAge: 604800, // Expires after 1hr
+            sameSite: true,
+          });
+
+          return router.push(`/teacher/profile?partner_id=${partner_id}`);
+        } else if (typeof resp.data.data === "string" && !referrer) {
           setError(
             "It seems you have not used the referral link to sign up. Please use referral link to sign up."
           );
