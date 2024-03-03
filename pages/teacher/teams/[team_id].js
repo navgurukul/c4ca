@@ -53,23 +53,6 @@ const TeamDetail = () => {
 
   const teamMemberData = data.team_members || [];
 
-  useEffect(() => {
-    const authToken = localStorage.getItem("token");
-    console.log("authToken", authToken);
-    customAxios
-      .get("/c4ca/projectTopic", {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
-      .then((response) => {
-        console.log("Projct Topic:", response);
-      })
-      .catch((error) => {
-        // console.error("Error fetching data:", error);
-      });
-  }, []);
-
   const handleSnackbarOpen = (message) => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
@@ -191,18 +174,12 @@ const TeamDetail = () => {
               <Typography
                 variant="body1"
                 component="div"
-                sx={{ display: "flex" }}
+                sx={{ display: "flex", gap:1 }}
               >
-                Currently at Lesson:
-                <Link
-                  href="{team.current_lesson}"
-                  underline="none"
-                  sx={{ display: "flex", alignItems: "flex-start", ml: 1 }}
-                >
-                  <Typography variant="body1">
-                    Intro to Scratch of Module 1
-                  </Typography>
-                </Link>
+                Currently at  
+                <Typography variant="body1" sx={{ color: "#29458C",}}>
+                  {data.course_name}
+                </Typography>
               </Typography>
             </Grid>
           </Box>
@@ -210,14 +187,32 @@ const TeamDetail = () => {
           <Box sx={{ display: "flex", mr: 2, alignItems: "baseline" }}>
             <Grid container sx={{ mb: "16px", mt: "32px", display: "flex" }}>
               <Box sx={{ display: "flex", marginLeft: 2 }}>
-                {projectTopic && projectTopic.data !== null ? (
+                {data.projectSubmit === true ? (
                   <>
-                    <Typography variant="subtitle1">Project Status:</Typography>
-                    <FiberManualRecordIcon
-                      color="success"
-                      sx={{ paddingTop: "4px", fontSize: "28px" }}
-                    />
-                    <Typography variant="body1">Submitted</Typography>
+                    <Box >
+                      <Grid container  sx={{mb:"16px"}}>
+                        <Typography variant="subtitle1" sx={{ mr: 2 }}>Project Status:</Typography>
+                        <FiberManualRecordIcon
+                          color="success"
+                          sx={{ paddingTop: "4px", fontSize: "28px", mr:1 }}
+                        />
+                        <Typography variant="body1" sx={{ mr: 3 }}>Submitted</Typography>
+                      </Grid>
+                      {data.projectLink &&
+                      <Grid container>
+                        <Typography
+                          variant="body1"
+                          component="div"
+                          sx={{ display: "flex", gap:1 }}
+                        >
+                          Link :  
+                          <Typography variant="body1" sx={{ color: "#29458C",}}>
+                            {data.projectLink}
+                          </Typography>
+                        </Typography>
+                      </Grid>
+                      }
+                  </Box>
                   </>
                 ) : (
                   <>
