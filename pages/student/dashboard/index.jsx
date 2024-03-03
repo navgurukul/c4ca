@@ -27,9 +27,7 @@ const images = [
 const Dashboard = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [showAllTeams, setShowAllTeams] = useState(false);
-
   const [Leaderboard, setLeaderboard] = useState([]);
-
   const [token, setToken] = useState("");
 
   const initialTeamCount = 3;
