@@ -59,7 +59,6 @@ const Dashboard = () => {
         },
       })
       .then((res) => {
-        console.log(res.data.data, "leaderboard");
         setLeaderboard(res.data.data);
       })
       .catch((err) => {
@@ -79,17 +78,17 @@ const Dashboard = () => {
         },
       })
       .then((res) => {
-        console.log(res.data, "team data");
         setTeam(res.data.data);
       });
   }, []);
-   const highlightedTeamName = team.team_name;
-   const highlightedTeamIndex = Leaderboard.findIndex((item) => item.team_name === highlightedTeamName);
+
+   const highlightedTeamName = team?.team_name;
+   const highlightedTeamIndex = Leaderboard.findIndex((item) =>{
+    item.team_name === highlightedTeamName});
    const calculateProgress = (team) => {
-    const teamData = Leaderboard.find((item) => item.team_name === team.team_name);
+    const teamData = Leaderboard.find((item) => item?.team_name === team?.team_name);
     return teamData ? teamData.completed_portion : 0;
   };
-  console.log("highlightedTeamIndex",highlightedTeamIndex<3)
 
   return (
     <Container sx={{ marginTop: "3%" }} maxWidth="lg">
@@ -104,7 +103,7 @@ const Dashboard = () => {
                 component="span"
                 color="#F55C38"
               >
-                {team.team_name}
+                {team?.team_name}
               </Typography>
             </Typography>
           </Box>
