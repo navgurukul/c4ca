@@ -257,6 +257,16 @@ const authToken = parsedData ? parsedData.data.token : null;
                   rows={5}
                   onChange={handleProjectSummaryChange}
                   value={projectSummary}
+                  fullWidth={true}
+                  inputProps={{style: { padding: '2px' }, }}
+                  sx={{
+                    '&:hover': {
+                      '& fieldset': {
+                        borderColor: 'black !important',
+                        borderWidth: '1px !important',
+                      },
+                    },
+                  }}
                 />
               </Box>
             </>
