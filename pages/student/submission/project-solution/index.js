@@ -17,7 +17,7 @@ import Divider from "@mui/material/Divider";
 import Link from "next/link";
 import customAxios from "@/api";
 import MuiAlert from "@mui/material/Alert";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 
 const Submission = (props) => {
   const [inputControlValue, setInputControlValue] = useState(null);
@@ -71,9 +71,12 @@ const Submission = (props) => {
           setLinkShow(false);
           setProjectShow(false);
           setSaveDraft(true);
-          const currentDate = format(new Date(), 'dd-MMM-yyyy');
+          const currentDate = format(new Date(), "dd-MMM-yyyy");
           setDraftSaveDate(currentDate);
-          localStorage.setItem("submissionDraft", JSON.stringify({ ...requestData, draftSaveDate: currentDate }));
+          localStorage.setItem(
+            "submissionDraft",
+            JSON.stringify({ ...requestData, draftSaveDate: currentDate })
+          );
           handleSnackbarOpen("Draft saved successfully");
         } else {
           setLinkShow(true);
@@ -116,7 +119,6 @@ const Submission = (props) => {
       setProjectShow(!projectData.is_submitted);
     }
   }, [projectData]);
-  
 
   const handleGetRequest = async () => {
     try {
@@ -135,7 +137,7 @@ const Submission = (props) => {
     }
   };
 
-  const isSubmitDisabled = !(inputControlValue || dragDropZoneValue.length > 0 );
+  const isSubmitDisabled = !(inputControlValue || dragDropZoneValue.length > 0);
 
   const handleInputControlChange = (event) => {
     const value = event.target.value;
@@ -147,10 +149,10 @@ const Submission = (props) => {
   };
   const handleDownloadFile = (event) => {
     event.preventDefault();
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = projectData?.project_file_url;
-    link.target = '_blank';
-    link.download = projectData?.project_file_name || 'download';
+    link.target = "_blank";
+    link.download = projectData?.project_file_name || "download";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -167,15 +169,15 @@ const Submission = (props) => {
           maxWidth="sm"
           sx={{ display: "grid", gap: isMobile ? 2 : "16px" }}
         >
-          <Typography
-            variant="body1"
-            sx={{ display: "flex", alignItems: "center", mb: "16px" }}
-          >
-            Dashboard /{" "}
-            <Typography variant="body1" component="span" color="#29458C">
+          <Box sx={{ display: "flex", alignItems: "center", mb: "16px" }}>
+          <Link href="/student/dashboard" underline="none">
+            <Typography variant="body1" color="#29458C">Dashboard / </Typography>
+          </Link>
+            <Typography variant="body1" component="span" >
               Submit Project Solution
             </Typography>
-          </Typography>
+          </Box>
+
           <Grid container spacing={1}>
             <Grid item xs={12} sm={12} md={12}>
               <Card
@@ -250,7 +252,7 @@ const Submission = (props) => {
               )}
             </>
           )}
-          { linkShow  ?(
+          {linkShow ? (
             <>
               <InputControl
                 label="Share Scratch Project Link"
@@ -261,15 +263,21 @@ const Submission = (props) => {
             </>
           ) : (
             <>
-            {projectData?.project_link != null &&
-              projectData?.project_link !== "" && 
-            <>
-              <Typography variant="subtitle1">Scratch Project Link</Typography>
-              <Link href={projectData?.project_link} variant="body1" target="_blank">
-                {projectData?.project_link}
-              </Link>
-              </>
-              }
+              {projectData?.project_link != null &&
+                projectData?.project_link !== "" && (
+                  <>
+                    <Typography variant="subtitle1">
+                      Scratch Project Link
+                    </Typography>
+                    <Link
+                      href={projectData?.project_link}
+                      variant="body1"
+                      target="_blank"
+                    >
+                      {projectData?.project_link}
+                    </Link>
+                  </>
+                )}
             </>
           )}
           {projectShow ? (
@@ -316,11 +324,12 @@ const Submission = (props) => {
                 alignItems="center"
               >
                 <Button
-                 style={{
-                    backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",
                   }}
-                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px",}}                    
-                  className="profileBtn"    
+                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px" }}
+                  className="profileBtn"
                 >
                   <Link
                     href="/student/dashboard"
@@ -345,9 +354,7 @@ const Submission = (props) => {
                   sx={{
                     width: isMobile && "100%",
                   }}
-                  disabled={
-                   isSubmitDisabled
-                  }
+                  disabled={isSubmitDisabled}
                   onClick={() => handleSaveDraftOrSubmit(true)}
                 >
                   <Typography
@@ -363,8 +370,10 @@ const Submission = (props) => {
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Button
-                   style={{
-                    backgroundImage: !isSubmitDisabled ? "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)" :"",
+                  style={{
+                    backgroundImage: !isSubmitDisabled
+                      ? "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)"
+                      : "",
                   }}
                   className={!isSubmitDisabled && "profileBtn"}
                   onClick={() => handleSaveDraftOrSubmit(false)}
@@ -376,7 +385,6 @@ const Submission = (props) => {
                     pb: isSubmitDisabled && "8px",
                     width: isMobile && "100%",
                   }}
-                             
                 >
                   <Typography variant="ButtonLarge">Submit Project</Typography>
                 </Button>
@@ -387,7 +395,7 @@ const Submission = (props) => {
       </Container>
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3000} 
+        autoHideDuration={3000}
         onClose={handleSnackbarClose}
       >
         <MuiAlert

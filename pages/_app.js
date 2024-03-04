@@ -19,7 +19,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [showComponent, setShowComponent] = useState(true);
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(
     "Apologies, the entered Gmail ID is not linked with a C4CA partner."
@@ -87,7 +86,7 @@ export default function App({ Component, pageProps }) {
         });
 
         if (resp.data.data === null) {
-          setLoading(false);
+          // setLoading(false);
           if (referrer && referrer !== "null") {
             const res = await customAxios.put(
               "/users/me",
