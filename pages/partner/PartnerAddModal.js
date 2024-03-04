@@ -49,9 +49,19 @@ function PartnerAddModal({ boolean, onOpen, partnerAddSuccessMessage }) {
 
   // const { isValidEmail } = useValidEmail(values.email);
 
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   const updatedValues = { ...values, [name]: value };
+  //   setValues(updatedValues);
+  // };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedValues = { ...values, [name]: value };
+    let updatedValue = value; 
+    if (name === "phone_number") { 
+        updatedValue = updatedValue.replace(/\D/g, '');  
+    }
+    const updatedValues = { ...values, [name]: updatedValue };
     setValues(updatedValues);
   };
 
@@ -189,7 +199,8 @@ function PartnerAddModal({ boolean, onOpen, partnerAddSuccessMessage }) {
               margin="dense"
               // label="Phone Number"
               name="phone_number"
-              value={values.phone}
+              // value={values.phone}
+              value={values.phone_number} 
               onChange={handleChange}
               fullWidth
               InputProps={{
