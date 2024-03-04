@@ -105,7 +105,7 @@ export default function App({ Component, pageProps }) {
             localStorage.setItem("AUTH", JSON.stringify(res.data));
             setCookie("user", JSON.stringify(res.data), {
               path: "/",
-              maxAge: 604800, // Expires after 1hr
+              maxAge: 6048000, // Expires after 1hr
               sameSite: true,
             });
 
