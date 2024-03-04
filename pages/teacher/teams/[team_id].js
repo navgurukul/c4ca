@@ -174,12 +174,18 @@ const TeamDetail = () => {
               <Typography
                 variant="body1"
                 component="div"
-                sx={{ display: "flex", gap:1 }}
+                sx={{ display: "flex", gap: 1 }}
               >
-                Currently at  
-                <Typography variant="body1" sx={{ color: "#29458C",}}>
-                  {data.course_name}
-                </Typography>
+                Currently at
+                {data.course_name ? (
+                  <Typography variant="body1" sx={{ color: "#29458C" }}>
+                    {data.course_name}
+                  </Typography>
+                ) : (
+                  <Typography variant="body1" sx={{ color: "red" }}>
+                    Not started course.
+                  </Typography>
+                )}
               </Typography>
             </Grid>
           </Box>
@@ -188,32 +194,40 @@ const TeamDetail = () => {
             <Grid container sx={{ mb: "16px", mt: "32px", display: "flex" }}>
               <Box sx={{ display: "flex", marginLeft: 2 }}>
                 {data.projectSubmit === true ? (
-                  <>
-                    <Box >
-                      <Grid container  sx={{mb:"16px"}}>
-                        <Typography variant="subtitle1" sx={{ mr: 2 }}>Project Status:</Typography>
-                        <FiberManualRecordIcon
-                          color="success"
-                          sx={{ paddingTop: "4px", fontSize: "28px", mr:1 }}
-                        />
-                        <Typography variant="body1" sx={{ mr: 3 }}>Submitted</Typography>
-                      </Grid>
-                      {data.projectLink &&
+                  <Box>
+                    <Grid container sx={{ mb: "16px" }}>
+                      <Typography variant="subtitle1" sx={{ mr: 2 }}>
+                        Project Status:
+                      </Typography>
+                      <FiberManualRecordIcon
+                        color="success"
+                        sx={{ paddingTop: "4px", fontSize: "28px", mr: 1 }}
+                      />
+                      <Typography variant="body1" sx={{ mr: 3 }}>
+                        Submitted
+                      </Typography>
+                    </Grid>
+                    {data.projectLink && (
                       <Grid container>
                         <Typography
                           variant="body1"
                           component="div"
-                          sx={{ display: "flex", gap:1 }}
+                          sx={{ display: "flex", gap: 1 }}
                         >
-                          Link :  
-                          <Typography variant="body1" sx={{ color: "#29458C",}}>
-                            {data.projectLink}
+                          Link :
+                          <Typography variant="body1" sx={{ color: "#29458C" }}>
+                            <a
+                              href={data.projectLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {data.projectLink}
+                            </a>
                           </Typography>
                         </Typography>
                       </Grid>
-                      }
+                    )}
                   </Box>
-                  </>
                 ) : (
                   <>
                     <Typography variant="subtitle1">Project Status:</Typography>
@@ -226,25 +240,6 @@ const TeamDetail = () => {
                 )}
               </Box>
             </Grid>
-
-            {/* <Grid container mb="32px">
-              <Typography
-                variant="body1"
-                component="div"
-                sx={{ display: "flex" }}
-              >
-                Link:
-                <Link
-                  href="{team.current_lesson}"
-                  underline="none"
-                  sx={{ display: "flex", alignItems: "flex-start", ml: 1 }}
-                >
-                  <Typography variant="body1">
-                    https://scratch.merakilearn.org/team2
-                  </Typography>
-                </Link>
-              </Typography>
-            </Grid> */}
           </Box>
         </Grid>
         <Grid item xs={12} md={4} lg={4} mt={9}>

@@ -145,15 +145,15 @@ const authToken = parsedData ? parsedData.data.token : null;
           maxWidth="sm"
           sx={{ display: "grid", gap: isMobile ? 2 : "16px" }}
         >
-          <Typography
-            variant="body1"
-            sx={{ display: "flex", alignItems: "center", mb: "16px" }}
-          >
-            Dashboard /{" "}
-            <Typography variant="body1" component="span" color="#29458C">
-              Submit Project Topic
+           <Box sx={{ display: "flex", alignItems: "center", mb: "16px" }}>
+          <Link href="/student/dashboard" underline="none">
+            <Typography variant="body1" color="#29458C">Dashboard / </Typography>
+          </Link>
+            <Typography variant="body1" component="span" >
+            Submit Project Topic
             </Typography>
-          </Typography>
+          </Box>
+        
           <Grid container spacing={1}>
             <Grid item xs={12} sm={12} md={12}>
               <Card
