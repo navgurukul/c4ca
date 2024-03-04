@@ -31,6 +31,7 @@ const Dashboard = () => {
   const [Leaderboard, setLeaderboard] = useState([]);
 
   const [token, setToken] = useState("");
+  const[progress, setprogress] = useState(0)
 
   const initialTeamCount = 3;
   const handleSeeAllTeamsClick = () => {
@@ -79,6 +80,7 @@ const Dashboard = () => {
       })
       .then((res) => {
         setTeam(res.data.data);
+        setprogress(res.data.data.completed_portion)
       });
   }, []);
 
@@ -109,7 +111,7 @@ const Dashboard = () => {
           </Box>
           <Box sx={{ display: "flex", mt: 2, mb: "32px" }}>
             <Typography variant="h6">
-              Overall Progress: {calculateProgress(team)}%
+              Overall Progress: {progress}%
             </Typography>
           </Box>
           <Box
@@ -122,7 +124,7 @@ const Dashboard = () => {
           >
             <LinearProgress
               variant="determinate"
-              value={calculateProgress(team) || 0}
+              value={progress || 0}
               sx={{
                 borderRadius: "6px",
                 backgroundColor: "white",

@@ -79,7 +79,6 @@ const LoginForm = () => {
                 password: res.data.status,
               });
             }
-            console.log(res);
             // Only redirect if the request is successful
             setLoading(false);
             res.data.role = "student";
