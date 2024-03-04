@@ -27,9 +27,7 @@ const images = [
 const Dashboard = () => {
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [showAllTeams, setShowAllTeams] = useState(false);
-
   const [Leaderboard, setLeaderboard] = useState([]);
-
   const [token, setToken] = useState("");
   const[progress, setprogress] = useState(0)
 
@@ -278,6 +276,7 @@ const Dashboard = () => {
                   className="btn-lg"
                   sx={{
                     borderRadius: 0,
+                    color:'#049796',
                   }}
                 >
                   <a
