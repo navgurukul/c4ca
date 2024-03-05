@@ -87,7 +87,7 @@ export default function App({ Component, pageProps }) {
         });
 
         if (resp.data.data === null) {
-          setLoading(false);
+          // setLoading(false);
           if (referrer && referrer !== "null") {
             const res = await customAxios.put(
               "/users/me",

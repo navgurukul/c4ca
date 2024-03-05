@@ -133,7 +133,7 @@ const Module = () => {
                       {isOpened ? (
                         module.button_type === "project_solution" ? (
                           <Link href="/student/submission/project-solution">
-                            Submit Project Topic
+                            Submit Project Solution
                           </Link>
                         ) : module.button_type === "project_topic" ? (
                             <Link href="/student/submission/project-topic">
@@ -156,7 +156,7 @@ const Module = () => {
                           <LockIcon />
                           &nbsp;
                           {module.button_type === "project_solution"
-                            ? "Submit Project Topic"
+                            ? "Submit Project Solution"
                             : module.button_type === "project_topic"
                             ? "Share Project Topic"
                             : "Learn on Meraki"}
@@ -172,7 +172,7 @@ const Module = () => {
                   >
                     {isOpened ? (
                       module.button_type === "project_solution" ? (
-                        "Submit Project Topic"
+                        "Submit Project Solution"
                       ) : module.button_type === "project_topic" ? (
                           "Share Project Topic " 
                       ) : (
@@ -192,7 +192,7 @@ const Module = () => {
                         <LockIcon />
                         &nbsp;
                         {module.button_type === "project_solution"
-                          ? "Submit Project Topic"
+                          ? "Submit Project Solution"
                           : module.button_type === "project_topic"
                           ? "Share Project Topic"
                           : "Learn on Meraki"}
