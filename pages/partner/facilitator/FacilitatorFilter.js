@@ -54,6 +54,10 @@ function FacilitatorFilter({ id }) {
       setSeverity("info")
       setFacilitatorCreatedMessage("Email must be a valid email");
       setOpen(true);
+    }else if(message.status === "This point of contact is already associated with another partner!"){
+      setSeverity("error")
+      setFacilitatorCreatedMessage(message?.status);
+      setOpen(true);
     }else if(message?.status){
       setSeverity("success")
       setFacilitatorCreatedMessage(message?.status);
