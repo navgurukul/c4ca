@@ -46,7 +46,7 @@ function FacilitatorFilter({ id }) {
   });
 
   const facilitatorAddSuccessMessage = (message) => { 
-    if(message === "Fill all fields"){
+    if(message === "Fill all fields" ){
       setSeverity("info")
       setFacilitatorCreatedMessage("Please fill all fields");
       setOpen(true); 
