@@ -127,6 +127,8 @@ const Team = ({
   };
 
   const handleEditTeam = () => {
+    clearErrors();
+    if (validateInputs()) {
     const updatedTeam = {
       team_name: teamName,
       team_size: teamMembers.length,
@@ -158,6 +160,7 @@ const Team = ({
         console.error("Error editing team data:", error);
         console.log("Response:", error.response);
       });
+    }
   };
   const validateInputs = () => {
     const newErrors = {};
@@ -208,10 +211,6 @@ const Team = ({
     });
   };
   
-  useEffect(() => {
-    validateInputs();
-  }, [teamMembers]);
-
   return (
     <Container
       maxWidth="sm"
@@ -342,7 +341,7 @@ const Team = ({
               Class
             </InputLabel>
             <SelectControl
-              sx={{ mt: 1, mb: 1 }}
+              sx={{ mt: 1, mb: 2 }}
               value={teamMembers[index] ? teamMembers[index].class : ""}
               onChange={(e) =>
                 updateTeamMember(
