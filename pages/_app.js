@@ -19,7 +19,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [showComponent, setShowComponent] = useState(true);
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(
     "Apologies, the entered Gmail ID is not linked with a C4CA partner."
@@ -105,7 +104,7 @@ export default function App({ Component, pageProps }) {
             localStorage.setItem("AUTH", JSON.stringify(res.data));
             setCookie("user", JSON.stringify(res.data), {
               path: "/",
-              maxAge: 604800, // Expires after 1hr
+              maxAge: 6048000, // Expires after 1hr
               sameSite: true,
             });
 

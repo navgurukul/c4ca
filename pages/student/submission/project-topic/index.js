@@ -3,23 +3,23 @@ import {
   Container,
   Typography,
   Box,
-  Button,
   Grid,
   Card,
   CardContent,
   useMediaQuery,
-  Snackbar,
   TextField,
 } from "@mui/material";
 import InputControl from "../../../../components/forms/InputControl";
 import { breakpoints } from "@/theme/constant";
 import Divider from "@mui/material/Divider";
-import Link from "next/link";
 import customAxios from "@/api";
-import MuiAlert from "@mui/material/Alert";
 import { format } from "date-fns";
+import FormHeading from "../FormHeading";
+import CustomSnackbar from "../Snackbar";
+import SubmitButtonGroup from "../SubmitBttonGroup";
+import DashboardButton from "../Dashboard";
 
-const Submission = (props) => {
+const Submission = () => {
   const [projectTopic, setProjectTopic] = useState("");
   const [projectSummary, setProjectSummary] = useState("");
   const [linkShow, setLinkShow] = useState(true);
@@ -31,17 +31,22 @@ const Submission = (props) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [draftSaveDate, setDraftSaveDate] = useState(null);
+  const isMobile = useMediaQuery(`(max-width: ${breakpoints.values.sm}px)`);
+
+  const isSubmitDisabled = !(projectTopic && projectSummary);
+  const jsonData = localStorage.getItem("AUTH");
+  const parsedData = jsonData ? JSON.parse(jsonData) : null;
+  const authToken = parsedData ? parsedData.data.token : null;
+
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+  
   const handleSnackbarOpen = (message) => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
   };
-  const isMobile = useMediaQuery(`(max-width: ${breakpoints.values.sm}px)`);
-  const jsonData = localStorage.getItem("AUTH");
-const parsedData = jsonData ? JSON.parse(jsonData) : null;
-const authToken = parsedData ? parsedData.data.token : null;
+
   const handleSaveDraftOrSubmit = async (isDraft) => {
     const requestData = {
       project_title: projectTopic,
@@ -81,34 +86,14 @@ const authToken = parsedData ? parsedData.data.token : null;
         }
         await handleGetRequest();
       } else {
-        console.error(
-          "Failed to submit data:",
-          response.status,
-          response.statusText
-        );
+        console.error("Failed to submit data:", response.status,response.statusText );
       }
     } catch (error) {
       console.error("POST request error:", error);
       console.log("Response data:", error.response.data);
     }
   };
-  useEffect(() => {
-    handleGetRequest();
-    const savedDraftData = localStorage.getItem("submissionDraft");
-    if (savedDraftData) {
-      const parsedDraftData = JSON.parse(savedDraftData);
-      setProjectTopic(parsedDraftData.project_title);
-      setProjectSummary(parsedDraftData.project_summary);
-      setDraftSaveDate(parsedDraftData.draftSaveDate);
-      setSaveDraft(true);
-    }
-  }, []);
-  useEffect(() => {
-    if (projectData) {
-      setLinkShow(!projectData.is_submitted);
-      setProjectShow(!projectData.is_submitted);
-    }
-  }, [projectData]);
+
   const handleGetRequest = async () => {
     try {
       const response = await customAxios.get("/c4ca/projectTopic/3", {
@@ -125,15 +110,36 @@ const authToken = parsedData ? parsedData.data.token : null;
       console.log("Error response:", error.response);
     }
   };
-  const isSubmitDisabled = !(projectTopic && projectSummary);
+
   const handleProjectTopicChange = (event) => {
     const value = event.target.value;
     setProjectTopic(value);
   };
+
   const handleProjectSummaryChange = (event) => {
     const value = event.target.value;
     setProjectSummary(value);
   };
+
+  useEffect(() => {
+    handleGetRequest();
+    const savedDraftData = localStorage.getItem("submissionDraft");
+    if (savedDraftData) {
+      const parsedDraftData = JSON.parse(savedDraftData);
+      setProjectTopic(parsedDraftData.project_title);
+      setProjectSummary(parsedDraftData.project_summary);
+      setDraftSaveDate(parsedDraftData.draftSaveDate);
+      setSaveDraft(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (projectData) {
+      setLinkShow(!projectData.is_submitted);
+      setProjectShow(!projectData.is_submitted);
+    }
+  }, [projectData]);
+
   return (
     <>
       <Container
@@ -145,14 +151,7 @@ const authToken = parsedData ? parsedData.data.token : null;
           maxWidth="sm"
           sx={{ display: "grid", gap: isMobile ? 2 : "16px" }}
         >
-           <Box sx={{ display: "flex", alignItems: "center", mb: "16px" }}>
-          <Link href="/student/dashboard" underline="none">
-            <Typography variant="body1" color="#29458C">Dashboard / </Typography>
-          </Link>
-            <Typography variant="body1" component="span" >
-            Submit Project Topic
-            </Typography>
-          </Box>
+          <FormHeading name = "Submit Project Topic" />
         
           <Grid container spacing={1}>
             <Grid item xs={12} sm={12} md={12}>
@@ -274,101 +273,34 @@ const authToken = parsedData ? parsedData.data.token : null;
           {!linkShow && !projectShow && (
             <Grid container spacing={2}>
               <Grid
-                item
-                xs={12}
-                container
-                justifyContent="center"
-                alignItems="center"
-              >
-               <Button
-                  style={{
-                    backgroundImage: !isSubmitDisabled ? "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)" :"",
-                  }}
-                  sx={{ width: !isMobile ? "50%" : "100%", mt: "16px", }}                    
-                  className="profileBtn"    
+                  item
+                  xs={12}
+                  container
+                  justifyContent="center"
+                  alignItems="center"
                 >
-                  <Link
-                    href="/student/dashboard"
-                    underline="none"
-                    color="white"
-                    pl="16px"
-                    pr="16px"
-                  >
-                    Return to Dashboard
-                  </Link>
-                </Button>
-              </Grid>
+                  <DashboardButton onClick={() => console.log("Dashboard button clicked")} />
+                </Grid>
             </Grid>
           )}
         </Container>
         {linkShow && (
           <Container maxWidth="sm" align="center">
-            <Grid container spacing={1}>
-              <Grid item xs={12} sm={6} md={6}>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    backgroundColor: (theme) =>
-                      isSubmitDisabled
-                        ? theme.palette.grey[100]
-                        : "transparent",
-                    width: isMobile && "100%",
-                  }}
-                  disabled={isSubmitDisabled}
-                  onClick={() => handleSaveDraftOrSubmit(true)}
-                >
-                  <Typography
-                    variant="ButtonLarge"
-                    pl="35px"
-                    pr="35px"
-                    pt="8px"
-                    pb="8px"
-                  >
-                    Save Draft
-                  </Typography>
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={6} md={6}>
-                <Button
-                  style={{
-                    backgroundImage: !isSubmitDisabled ? "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)" :"",
-                  }}
-                   className={!isSubmitDisabled ? "profileBtn" : ""}
-                   onClick={() => handleSaveDraftOrSubmit(false)}
-                   disabled={isSubmitDisabled}
-                   sx={{
-                     pl: isSubmitDisabled ? "35px" : "20px",
-                     pr: isSubmitDisabled ? "35px" : "20px",
-                     pt: isSubmitDisabled ? "8px" : "12px",
-                     pb: isSubmitDisabled ? "8px" : "12px",
-                     width: isMobile ? "100%" : "250px",
-                     
-                   }}
-                >
-                  <Typography variant="ButtonLarge"
-                     >
-                    Submit Project Topic
-                  </Typography>
-                </Button>
-              </Grid>
-            </Grid>
+            <SubmitButtonGroup
+              onSave={() => handleSaveDraftOrSubmit(true)}
+              onSaveText="Save Draft"
+              onSubmit={() => handleSaveDraftOrSubmit(false)}
+              onSubmitText="Submit Project Topic"
+              isSubmitDisabled={isSubmitDisabled}
+            />
           </Container>
         )}
       </Container>
-      <Snackbar
+      <CustomSnackbar
         open={snackbarOpen}
-        autoHideDuration={3000}
+        message={snackbarMessage}
         onClose={handleSnackbarClose}
-      >
-        <MuiAlert
-          elevation={6}
-          variant="filled"
-          severity="success"
-          onClose={handleSnackbarClose}
-        >
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
+      />
     </>
   );
 };
