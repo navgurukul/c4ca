@@ -15,10 +15,10 @@ import Divider from "@mui/material/Divider";
 import Link from "next/link";
 import customAxios from "@/api";
 import { format } from "date-fns";
-import Header from "./Header";
 import CustomSnackbar from "../Snackbar";
 import DashboardButton from "../Dashboard";
 import SubmitButtonGroup from "../SubmitBttonGroup";
+import FormHeading from "../FormHeading";
 
 const Submission = () => {
   const [inputControlValue, setInputControlValue] = useState(null);
@@ -169,7 +169,7 @@ const Submission = () => {
           maxWidth="sm"
           sx={{ display: "grid", gap: isMobile ? 2 : "16px" }}
         >
-          <Header name = "Submit Project Solution" />
+          <FormHeading name = "Submit Project Solution" />
 
           <Grid container spacing={1}>
             <Grid item xs={12} sm={12} md={12}>

@@ -4,6 +4,7 @@ import { breakpoints } from "@/theme/constant";
 
 const DashboardButton = ({ onClick }) => {
     const isMobile = useMediaQuery(`(max-width: ${breakpoints.values.sm}px)`);
+
   return (
     <Button
       style={{
