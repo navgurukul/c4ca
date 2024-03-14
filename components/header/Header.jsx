@@ -35,6 +35,8 @@ const Header = () => {
     // console.log("loggedOut in Header component ", shouldLogOut);
   });
 
+  
+
   useEffect(() => {
     const authData = reactLocalStorage.getObject("AUTH");
     if (authData && authData.rolesList) {
