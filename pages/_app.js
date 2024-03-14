@@ -112,6 +112,7 @@ export default function App({ Component, pageProps }) {
             return router.push(`/teacher/profile?partner_id=${partner_id}`);
           } else if (!referrer) {
             setOpen(true);
+            setLoading(false);
             return setError(
               "Apologies, the entered Gmail ID is not linked with a C4CA partner. Please use referral link to sign up."
             );
