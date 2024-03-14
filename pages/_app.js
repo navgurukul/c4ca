@@ -15,7 +15,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   return (
@@ -40,15 +40,3 @@ function App({ Component, pageProps }) {
     </>
   );
 }
-
-function withLoggedOutState(Component) {
-  return function WrappedComponent(props) {
-    return (
-      <LoggedOutState>
-        <Component {...props} />
-      </LoggedOutState>
-    );
-  };
-}
-
-export default withLoggedOutState(App);
