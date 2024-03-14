@@ -22,7 +22,7 @@ const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
-  const [loggedOut, setLoggedOut] = useState("");
+  const [loggedOut, setLoggedOut] = useState("true");
   const [isFirstLogin, setIsFirstLogin] = useState("");
   const [authData, setAuthData] = useState({});
   const [role, setRole] = useState(false);
@@ -32,6 +32,8 @@ const Header = () => {
   useEffect(() => {
     setIsFirstLogin(localStorage.getItem("isFirstLogin"));
     setLoggedOut(localStorage.getItem("loggedOut"));
+    console.log("loggedOut is changed ", loggedOut);
+    console.log(document.referrer, "referrer");
   }, [loggedOut, isFirstLogin]);
 
   useEffect(() => {
@@ -83,9 +85,9 @@ const Header = () => {
         customAxios
           .get(`/users/checkSessionToken?token=${token}`)
           .then((res) => {
-            console.log(res.data, "response from checking api");
+            // console.log(res.data, "response from checking api");
             if (res.data === false) {
-              console.log("session expired");
+              // console.log("session expired");
               localStorage.clear();
               localStorage.setItem("loggedOut", false);
               removeCookie("user", { path: "/" });
