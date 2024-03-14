@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -17,24 +17,23 @@ import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import { breakpoints } from "@/theme/constant";
 import { reactLocalStorage } from "reactjs-localstorage";
+import { loggedOutContext } from "@/components/context/LoggedOutContext";
 
 const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
-  const [loggedOut, setLoggedOut] = useState("true");
-  const [isFirstLogin, setIsFirstLogin] = useState("");
+  const [loggedOut, setLoggedOut] = useState("");
   const [authData, setAuthData] = useState({});
   const [role, setRole] = useState(false);
   const [reloadCount, setReloadCount] = useState(0);
   const isMobile = useMediaQuery(`(max-width: ${breakpoints.values.sm}px)`);
+  const {shouldLogOut, setShouldLogOut} = useContext(loggedOutContext);
 
   useEffect(() => {
-    setIsFirstLogin(localStorage.getItem("isFirstLogin"));
-    setLoggedOut(localStorage.getItem("loggedOut"));
-    console.log("loggedOut is changed ", loggedOut);
-    console.log(document.referrer, "referrer");
-  }, [loggedOut, isFirstLogin]);
+    setLoggedOut(shouldLogOut)
+    console.log("loggedOut in Header component ", shouldLogOut);
+  });
 
   useEffect(() => {
     const authData = reactLocalStorage.getObject("AUTH");
