@@ -32,7 +32,7 @@ const Header = () => {
 
   useEffect(() => {
     setLoggedOut(shouldLogOut)
-    console.log("loggedOut in Header component ", shouldLogOut);
+    // console.log("loggedOut in Header component ", shouldLogOut);
   });
 
   useEffect(() => {
