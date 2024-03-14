@@ -21,7 +21,7 @@ const Team = ({
   team,
   handleCloseEditDialog,
   handleSnackbarOpen = null,
-}) => {
+  }) => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:" + breakpoints.values.sm + "px)");
   const [teamSize, setTeamSize] = useState(3);
@@ -70,7 +70,7 @@ const Team = ({
         .then((response) => {
           const teamData = response.data;
           setTeamName(teamData.data.team_name);
-          setTeamSize(teamData.data.team_size);
+          setTeamSize(teamData.data.team_members.length);
           setTeamMembers(teamData.data.team_members);
         })
         .catch((err) => {
@@ -78,7 +78,7 @@ const Team = ({
         });
     }
   }, [team]);
-
+  
   const createTeam = async () => {
     clearErrors();
     if (validateInputs()) {
@@ -88,7 +88,7 @@ const Team = ({
         const filteredTeamMembers = teamMembers.filter(
           (member) => member.name.trim() !== "" && member.class !== ""
         );
-
+      
         const response = await customAxios.post(
           "/c4ca/team",
           {
@@ -129,12 +129,12 @@ const Team = ({
   const handleEditTeam = () => {
     const updatedTeam = {
       team_name: teamName,
-      team_size: teamSize,
+      team_size: teamMembers.length,
       team_members: teamMembers.map((member) => ({
         name: member.name,
         class: member.class,
       })),
-    };
+    };   
     const authToken = localStorage.getItem("token");
     // const url = `https://merd-api.merakilearn.org/c4ca/team/update/${team.id}`;
     // console.log('URL:', url);
@@ -148,7 +148,6 @@ const Team = ({
       })
       .then((response) => {
         if (response.data.status === "success") {
-          console.log("Edited team data:", response.data);
           handleCloseEditDialog();
           handleSnackbarOpen("Team updated successfully");
         } else {
@@ -208,6 +207,10 @@ const Team = ({
       return newMembers;
     });
   };
+  
+  useEffect(() => {
+    validateInputs();
+  }, [teamMembers]);
 
   return (
     <Container

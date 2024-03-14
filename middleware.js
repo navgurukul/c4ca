@@ -75,7 +75,6 @@ const routeValidator = (req) => {
 };
 
 export default async function middleware(req) {
-  console.log("Middleware", req.nextUrl.pathname);
   const { pathname } = req.nextUrl;
   const loggedIn = req.cookies.has("user");
   if (pathname == "/" && loggedIn) {

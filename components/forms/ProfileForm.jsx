@@ -66,7 +66,7 @@ const ProfileForm = () => {
         },
       })
       .then((res) => {
-        if (res.data.data !== null) {
+        if (res.data.data !== null && res.data.data !== "Teacher data not found for the user with c4caTeacher role") {
           setExistingData(true);
           setFormData({
             phone_number: res.data.data.phone_number,
@@ -89,7 +89,6 @@ const ProfileForm = () => {
               },
             })
             .then((response) => {
-              console.log("res", response, "resp....");
               setUserData({
                 name: response.data.user.name,
                 email: response.data.user.email,
@@ -390,7 +389,10 @@ const ProfileForm = () => {
               </Box>
             </Container>
             {partner_id ? (
-              <Button className="profileBtn" onClick={handleSaveProfile}>
+              <Button style={{
+                    backgroundImage: "linear-gradient(to right, rgba(135 162 231 / 72%)  , #192954)",
+                  }}
+                   className="profileBtn" onClick={handleSaveProfile}>
                 <Typography variant="ButtonLarge">Save & Proceed</Typography>
               </Button>
             ) : (

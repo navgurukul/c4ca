@@ -49,15 +49,17 @@ function PartnerFilter() {
       setSeverity("success")
       setPartnerCreatedMessage(message?.message);
       setOpen(true);
-    } else if("Phone number should be of 10 digits"){
+    }else if(message === "This point of contact is already associated with another c4caPartner!"){
       setSeverity("error")
-      setPartnerCreatedMessage("Phone number should be of 10 digits");
+      setPartnerCreatedMessage("This point of contact is already associated with another c4caPartner!");
+      setOpen(true);
+    }else if("Phone number should be of 10 digits."){
+      setSeverity("error")
+      setPartnerCreatedMessage("Phone number should be of 10 digits.");
       setOpen(true);
     }else {
       setSeverity("error")
-      setPartnerCreatedMessage(
-        "Email must be a valid email, Phone number must be a 10 digit"
-      );
+      setPartnerCreatedMessage("Email must be a valid email, Phone number must be a 10 digit");
       setOpen(true);
     }
   };
