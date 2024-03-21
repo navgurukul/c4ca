@@ -165,8 +165,8 @@ const PartnerTable = ({data}) => {
     router.push(`partner/facilitator/${partnerId}`);
   };
 
-  sessionStorage.removeItem("id");
-  sessionStorage.removeItem("partnerName");
+  // sessionStorage.removeItem("id");
+  // sessionStorage.removeItem("partnerName");
 
   return (
     <Box>
