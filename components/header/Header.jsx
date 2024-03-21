@@ -18,7 +18,8 @@ import { useCookies } from "react-cookie";
 import { breakpoints } from "@/theme/constant";
 import { reactLocalStorage } from "reactjs-localstorage";
 
-const Header = () => {
+import customAxios from "@/api";
+const Header = ({ props }) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user"]);
@@ -55,6 +56,10 @@ const Header = () => {
     }
   }, [router.pathname]);
 
+  let loggedOutMemo = React.useMemo(() => {
+    return props.loggedOut;
+  }, [props.loggedOut, loggedOut]);
+
   useEffect(() => {
     const partnerId = new URLSearchParams(window.location.search)?.get(
       "referrer"
@@ -76,6 +81,29 @@ const Header = () => {
         setAuthData(data);
       }
     };
+  
+     setInterval(() => {
+        const token =
+          JSON.parse(localStorage?.getItem("loggedOutToken")) ?? null;
+
+        if (token) {
+          customAxios
+            .get(`/users/checkSessionToken?token=${token}`)
+            .then((res) => {
+              if (res.data === false) {
+                localStorage.clear();
+                localStorage.setItem("loggedOut", false);
+                removeCookie("user", { path: "/" });
+                setUser(null);
+                setTimeout(() => window.location.replace("/"), 200);
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+      }, 1000); // Call the API every 60 seconds
+    
 
     router.events.on("routeChangeComplete", handleRouteChange);
 
@@ -96,15 +124,19 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.clear();
     localStorage.setItem("loggedOut", true);
-    localStorage.setItem("isFirstLogin", false);
     removeCookie("user", { path: "/" });
     setUser(null);
+
+    let url = window.location.href;
+    !url.includes("student")
+      ? (window.location.href =
+          "https://dev.dcckrjm3h0sxm.amplifyapp.com/?loggedOut=true")
+      : console.log("URL contains 'student'");
+
     setTimeout(() => {
-      // router.push("/");
       window.location.replace("/");
     }, 200);
   };
-
   return (
     <>
       <header className="header">
@@ -125,7 +157,9 @@ const Header = () => {
               {" "}
               {!isMobile && (
                 <a
-                  href={`https://accounts.navgurukul.org/?loggeOut=${loggedOut}&isFirstLogin=${isFirstLogin}`}
+                  href={`https://dev.dcckrjm3h0sxm.amplifyapp.com/?loggedOut=${
+                    loggedOutMemo ?? loggedOut
+                  }`}
                 >
                   {/* <Link href="/teacher/login"> */}
                   <Button

@@ -19,8 +19,8 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [showComponent, setShowComponent] = useState(true);
   const [open, setOpen] = useState(false);
+  const [loggedOut, setLoggedOut] = useState(false);
   const [error, setError] = useState(
     "Apologies, the entered Gmail ID is not linked with a C4CA partner."
   );
@@ -53,73 +53,32 @@ export default function App({ Component, pageProps }) {
   const sendGoogleUserData = async (token) => {
     setLoading(true);
 
-    try {
-      const res = await customAxios.post(
-        "/users/auth/google",
-        { idToken: token, mode: "web" },
-        {
-          headers: { Authorization: token },
-        }
-      );
+    const res = await customAxios.get("/users/me", {
+      headers: {
+        accept: "application/json",
+        Authorization: token,
+      },
+    });
+    const userToken = res.data.token;
+    localStorage.setItem("token", userToken);
+    localStorage.setItem("AUTH", JSON.stringify(res.data.user));
+    c4ca_facilitator_id = res.data.user.c4ca_facilitator_id;
+    c4ca_partner_id = res.data.user.c4ca_partner_id;
+    c4ca_roles = res.data.user.c4ca_roles;
+    userRoleArray = res.data.user.c4ca_roles;
 
-      userRoleArray = res.data.user.c4ca_roles;
-      const userToken = res.data.token;
-      localStorage.setItem("token", userToken);
-
-      const resp = await customAxios.get("/users/me", {
+    localStorage.setItem("token", userToken);
+    if (c4ca_roles.length === 0 || c4ca_roles.includes("c4caTeacher")) {
+      const resp = await customAxios.get("/c4ca/teacher_Data", {
         headers: {
           accept: "application/json",
           Authorization: res?.data?.token,
         },
       });
 
-      localStorage.setItem("AUTH", JSON.stringify(res.data.user));
-      c4ca_facilitator_id = resp.data.user.c4ca_facilitator_id;
-      c4ca_partner_id = resp.data.user.c4ca_partner_id;
-      c4ca_roles = resp.data.user.c4ca_roles;
-
-      if (c4ca_roles.length === 0 || c4ca_roles.includes("c4caTeacher")) {
-        const resp = await customAxios.get("/c4ca/teacher_Data", {
-          headers: {
-            accept: "application/json",
-            Authorization: res?.data?.token,
-          },
-        });
-
-        if (resp.data.data === null) {
-          // setLoading(false);
-          if (referrer && referrer !== "null") {
-            const res = await customAxios.put(
-              "/users/me",
-              { referrer: referrer },
-              {
-                headers: {
-                  accept: "application/json",
-                  Authorization: userToken,
-                },
-              }
-            );
-
-            partner_id = res.data.user.c4ca_partner_id;
-            res.data.role = "teacher";
-            localStorage.setItem("AUTH", JSON.stringify(res.data));
-            setCookie("user", JSON.stringify(res.data), {
-              path: "/",
-              maxAge: 604800, // Expires after 1hr
-              sameSite: true,
-            });
-
-            return router.push(`/teacher/profile?partner_id=${partner_id}`);
-          } else if (!referrer) {
-            setOpen(true);
-            setLoading(false);
-            return setError(
-              "Apologies, the entered Gmail ID is not linked with a C4CA partner. Please use referral link to sign up."
-            );
-          } else {
-            return userRoleArray?.length === 0 ? setOpen(true) : null;
-          }
-        } else if (typeof resp.data.data === "string" && referrer) {
+      if (resp.data.data === null) {
+        setLoading(false);
+        if (referrer && referrer !== "null") {
           const res = await customAxios.put(
             "/users/me",
             { referrer: referrer },
@@ -132,6 +91,7 @@ export default function App({ Component, pageProps }) {
           );
 
           partner_id = res.data.user.c4ca_partner_id;
+
           res.data.role = "teacher";
           localStorage.setItem("AUTH", JSON.stringify(res.data));
           setCookie("user", JSON.stringify(res.data), {
@@ -141,87 +101,91 @@ export default function App({ Component, pageProps }) {
           });
 
           return router.push(`/teacher/profile?partner_id=${partner_id}`);
-        } else if (typeof resp.data.data === "string" && !referrer) {
-          setError(
-            "It seems you have not used the referral link to sign up. Please use referral link to sign up."
-          );
+        } else if (!referrer) {
           setOpen(true);
-          setLoading(false);
-        } else {
-          res.data.role = "teacher";
-          localStorage.setItem("AUTH", JSON.stringify(res.data));
-          setCookie("user", JSON.stringify(res.data), {
-            path: "/",
-            maxAge: 604800, // Expires after 1hr
-            sameSite: true,
-          });
 
-          if (resp.data.data.school) {
-            localStorage.setItem("teacherData", JSON.stringify(resp.data.data));
-            return router.push("/teacher/teams");
-          }
+          setLoggedOut(true);
+          return setError(
+            "Apologies, the entered Gmail ID is not linked with a C4CA partner. Please use referral link to sign up."
+          );
+        } else {
+          return userRoleArray?.length === 0 ? setOpen(true) : null;
+        }
+      } else if (
+        typeof resp.data.data === "string" &&
+        !c4ca_roles.includes("superAdmin") &&
+        !c4ca_roles.includes("facilitator") &&
+        !c4ca_roles.includes("c4caPartner")
+      ) {
+        setLoggedOut(true);
+        setError(
+          "It seems you have not used the referral link to sign up. Please use referral link to sign up."
+        );
+        setOpen(true);
+        setLoading(false);
+      } else {
+        res.data.role = "teacher";
+        localStorage.setItem("AUTH", JSON.stringify(res.data));
+        setCookie("user", JSON.stringify(res.data), {
+          path: "/",
+          maxAge: 604800, // Expires after 1hr
+          sameSite: true,
+        });
+
+        if (resp.data.data.school) {
+          localStorage.setItem("teacherData", JSON.stringify(resp.data.data));
+          return router.push("/teacher/teams");
         }
       }
-      if (c4ca_roles.includes("superAdmin")) {
-        resp.data.role = "superAdmin";
+    }
+    if (c4ca_roles.includes("superAdmin")) {
+      res.data.role = "superAdmin";
 
-        setCookie("user", JSON.stringify(resp.data), {
-          path: "/",
-          maxAge: 604800, // Expires after 1hr
-          sameSite: true,
-        });
-        setFlag(true);
-        return router.push(`/partner`);
-      } else if (c4ca_roles.includes("facilitator")) {
-        resp.data.role = "facilitator";
-        setCookie("user", JSON.stringify(resp.data), {
-          path: "/",
-          maxAge: 604800, // Expires after 1hr
-          sameSite: true,
-        });
+      setCookie("user", JSON.stringify(res.data), {
+        path: "/",
+        maxAge: 604800, // Expires after 1hr
+        sameSite: true,
+      });
 
-        setFlag(true);
-        return router.push(`/partner/teacherList/${c4ca_facilitator_id}`);
-      } else if (c4ca_roles.includes("c4caPartner")) {
-        resp.data.role = "c4caPartner";
-        setCookie("user", JSON.stringify(resp.data), {
-          path: "/",
-          maxAge: 604800, // Expires after 1hr
-          sameSite: true,
-        });
-        setFlag(true);
-        return router.push(`/partner/facilitator/${c4ca_partner_id}`);
-      }
+      return router.push(`/partner`);
+    } else if (c4ca_roles.includes("facilitator")) {
+      res.data.role = "facilitator";
+      setCookie("user", JSON.stringify(res.data), {
+        path: "/",
+        maxAge: 604800, // Expires after 1hr
+        sameSite: true,
+      });
 
-      if (flag == false) {
-      }
-    } catch (err) {
-      setError("Failed to log you in, Please Try Again");
-      setOpen(true);
-      setLoading(false);
+      return router.push(`/partner/teacherList/${c4ca_facilitator_id}`);
+    } else if (c4ca_roles.includes("c4caPartner")) {
+      res.data.role = "c4caPartner";
+      setCookie("user", JSON.stringify(res.data), {
+        path: "/",
+        maxAge: 604800, // Expires after 1hr
+        sameSite: true,
+      });
+      return router.push(`/partner/facilitator/${c4ca_partner_id}`);
     }
   };
+
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     referrer = localStorage.getItem("referrer");
     let tokenVal = urlParams?.get("token");
+    let loggedOutToken = urlParams?.get("loggedOutToken");
     if (tokenVal) {
       setLoading(true);
+      localStorage.setItem("loggedOutToken", JSON.stringify(loggedOutToken));
       localStorage.setItem("token", reverseJwtBody(tokenVal));
       sendGoogleUserData(reverseJwtBody(tokenVal));
     } else {
       setLoading(false);
     }
-
     !localStorage.getItem("token") && localStorage.setItem("token", null);
     !localStorage.getItem("loggedOut") &&
       localStorage.setItem("loggedOut", null);
-    !localStorage.getItem("isFirstLogin") &&
-      localStorage.setItem("isFirstLogin", true);
-
     router.events.on("routeChangeComplete", handleRouteChange);
-
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
@@ -238,7 +202,7 @@ export default function App({ Component, pageProps }) {
 
       <ThemeProvider theme={theme}>
         {router.pathname.split("/").reverse()[0] === "login" ? null : (
-          <Header />
+          <Header props = {loggedOut ? { loggedOut } : {}} />
         )}{" "}
         <>
           {loading ? (
