@@ -46,13 +46,17 @@ function FacilitatorFilter({ id }) {
   });
 
   const facilitatorAddSuccessMessage = (message) => { 
-    if(message === "Fill all fields"){
+    if(message === "Fill all fields" ){
       setSeverity("info")
       setFacilitatorCreatedMessage("Please fill all fields");
       setOpen(true); 
     } else if(message === `"Email" must be a valid email`){
       setSeverity("info")
       setFacilitatorCreatedMessage("Email must be a valid email");
+      setOpen(true);
+    }else if(message.status === "This point of contact is already associated with another partner!"){
+      setSeverity("error")
+      setFacilitatorCreatedMessage(message?.status);
       setOpen(true);
     }else if(message?.status){
       setSeverity("success")
