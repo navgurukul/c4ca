@@ -168,7 +168,7 @@ const Module = () => {
                   <Button
                     variant="outlined"
                     sx={{ width: isMobile && "100%" }}
-                    disabled={isOpened}
+                    // disabled={isOpened}
                   >
                     {isOpened ? (
                       module.button_type === "project_solution" ? (
